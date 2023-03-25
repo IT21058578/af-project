@@ -1,10 +1,15 @@
 import express from "express";
+
 import dotenv from "dotenv";
 import helmet from "helmet";
 import cors from "cors";
 import mongoose from "mongoose";
+
 import initializeLogger from "./utils/logger.js";
 import requestLogger from "./middleware/request-logger.js";
+import authRoutes from "./routes/auth-routes.js";
+import userRoutes from "./routes/user-routes";
+
 dotenv.config();
 
 const log = initializeLogger(import.meta.url.split("/").pop() || "");
@@ -22,6 +27,8 @@ app.use(requestLogger());
 
 // Routes
 log.info("Configuring routes...");
+app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
 
 // Database Connection
 log.info("Connecting to MongoDB Atlas...");

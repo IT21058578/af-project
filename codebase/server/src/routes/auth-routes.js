@@ -16,6 +16,13 @@ router.post(
 	AuthController.loginUser
 );
 
+router.patch(
+	"/refresh",
+	...validateSchema({ refreshToken: { isJWT: true, optional: false } }, [
+		"body",
+	])
+);
+
 router.delete(
 	"/logout",
 	...validateSchema({ email: { isEmail: true, option: false } }, ["body"]),
