@@ -10,10 +10,22 @@ router.delete("/logout", ...validateSchema({}), AuthController.logoutUser);
 
 router.post("/register", ...validateSchema({}), AuthController.registerUser);
 
-router.post("/reset-password", ...validateSchema({}), AuthController.resetPassword);
+router.post(
+	"/reset-password",
+	...validateSchema({}),
+	AuthController.resetPassword
+);
 
-router.post("/forgot-password", ...validateSchema({}), AuthController.forgotPassword);
+router.post(
+	"/forgot-password",
+	...validateSchema({}),
+	AuthController.forgotPassword
+);
 
-router.post("/change-password", ...validateSchema({}), AuthController.changePassword);
+router.post(
+	"/change-password",
+	...validateSchema({}),
+	AuthController.changePassword
+);
 
 export default router;

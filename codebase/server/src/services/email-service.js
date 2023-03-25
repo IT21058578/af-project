@@ -1,5 +1,5 @@
-const sendRegistrationEmail = () => { };
+const sendRegistrationEmail = () => {};
 
-const sendForgotPasswordEmail = () => { };
+const sendForgotPasswordEmail = () => {};
 
 export const EmailService = { sendRegistrationEmail, sendForgotPasswordEmail };

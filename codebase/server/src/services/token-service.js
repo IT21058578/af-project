@@ -1,9 +1,14 @@
-const decodeAccessToken = () => { };
+const decodeAccessToken = () => {};
 
-const decodeRefreshToken = () => { };
+const decodeRefreshToken = () => {};
 
-const generateAccessToken = (id, roles) => { };
+const generateAccessToken = (id, roles) => {};
 
-const generateRefreshToken = (id) => { };
+const generateRefreshToken = (id) => {};
 
-export const TokenService = { decodeAccessToken, decodeRefreshToken, generateAccessToken, generateRefreshToken }
+export const TokenService = {
+	decodeAccessToken,
+	decodeRefreshToken,
+	generateAccessToken,
+	generateRefreshToken,
+};

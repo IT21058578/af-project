@@ -26,7 +26,6 @@ log.info("Connecting to MongoDB Atlas...");
 await mongoose.connect(MONGODB_URI);
 log.info("Established connection");
 
-app.listen(
-    PORT || 3000,
-    () => { log.info(`Started listening to port ${PORT}`) }
-);
+app.listen(PORT || 3000, () => {
+	log.info(`Started listening to port ${PORT}`);
+});

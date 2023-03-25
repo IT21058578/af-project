@@ -1,13 +1,20 @@
-const loginUser = async (email, password) => { };
+const loginUser = async (email, password) => {};
 
-const logoutUser = async (email) => { };
+const logoutUser = async (email) => {};
 
-const registerUser = async (user) => { };
+const registerUser = async (user) => {};
 
-const forgotPassword = async (email) => { };
+const forgotPassword = async (email) => {};
 
-const resetPassword = async (resetToken, newPassword) => { };
+const resetPassword = async (resetToken, newPassword) => {};
 
-const changePassword = async (email, newPassword, oldPassword) => { };
+const changePassword = async (email, newPassword, oldPassword) => {};
 
-export const AuthService = { loginUser, logoutUser, registerUser, forgotPassword, resetPassword, changePassword };
+export const AuthService = {
+	loginUser,
+	logoutUser,
+	registerUser,
+	forgotPassword,
+	resetPassword,
+	changePassword,
+};
