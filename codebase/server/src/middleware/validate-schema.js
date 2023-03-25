@@ -1,7 +1,8 @@
 import { checkSchema, validationResult } from "express-validator";
 
-const validateSchema = (schema) => {
-	const first = checkSchema(schema);
+const validateSchema = (schema, defaultLocations) => {
+	const first = checkSchema(schema, defaultLocations);
+	checkSchema({ "": {} });
 	const second = (req, res, next) => {
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
