@@ -4,6 +4,7 @@ import helmet from "helmet";
 import cors from "cors";
 import mongoose from "mongoose";
 import initializeLogger from "./utils/logger.js";
+import requestLogger from "./middleware/request-logger.js";
 dotenv.config();
 
 const log = initializeLogger(import.meta.url.split("/").pop() || "");
@@ -17,6 +18,7 @@ const app = express();
 log.info("Configuring middleware...");
 app.use(helmet());
 app.use(cors());
+app.use(requestLogger());
 
 // Routes
 log.info("Configuring routes...");
