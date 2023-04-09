@@ -4,6 +4,10 @@ import helmet from "helmet";
 import cors from "cors";
 import mongoose from "mongoose";
 import initializeLogger from "./utils/logger.js";
+
+import blogRoutes from './routes/blogs.js';
+import userRouter from "./routes/user.js";
+
 dotenv.config();
 
 const log = initializeLogger(import.meta.url.split("/").pop() || "");
@@ -30,3 +34,9 @@ app.listen(
     PORT || 3000,
     () => { log.info(`Started listening to port ${PORT}`) }
 );
+
+app.use(express.json({ limit: '30mb', extended: true }))
+app.use(express.urlencoded({ limit: '30mb', extended: true }))
+
+app.use("/user", userRouter);
+app.use('/blogs', blogRoutes);
