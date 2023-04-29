@@ -1,8 +1,10 @@
-import { Schema, model } from "mongoose";
+import { Schema, Types, model } from "mongoose";
 
 export const commentSchema = new Schema(
 	{
-		userId: String,
+		postId: { type: Types.ObjectId, required: true },
+		userId: { type: Types.ObjectId, required: true },
+		parentId: Types.ObjectId,
 		text: String,
 		likes: [String],
 		dislikes: [String],

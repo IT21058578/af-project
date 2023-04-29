@@ -15,7 +15,11 @@ const transporter = nodemailer.createTransport({
 	},
 });
 
-const sendRegistrationEmail = async (email, firstName, authorizationToken) => {
+const sendRegistrationEmail = async (
+	email: string,
+	firstName: string,
+	authorizationToken: string
+) => {
 	log.info("Attempting to send registration email...");
 	await transporter.sendMail({
 		to: email,
@@ -25,7 +29,11 @@ const sendRegistrationEmail = async (email, firstName, authorizationToken) => {
 	log.info("Succesfully sent registration email");
 };
 
-const sendForgotPasswordEmail = async (email, firstName, resetToken) => {
+const sendForgotPasswordEmail = async (
+	email: string,
+	firstName: string,
+	resetToken: string
+) => {
 	log.info("Attempting to send forgot password email...");
 	await transporter.sendMail({
 		to: email,
@@ -35,7 +43,7 @@ const sendForgotPasswordEmail = async (email, firstName, resetToken) => {
 	log.info("Succesfully sent forgot password email");
 };
 
-const sendPasswordChangedEmail = async (email, firstName) => {
+const sendPasswordChangedEmail = async (email: string, firstName: string) => {
 	log.info("Attempting to send password changed email...");
 	await transporter.sendMail({
 		to: email,

@@ -18,15 +18,15 @@ router
 	.delete(authorizeRequest([Role.ADMIN]), PostController.deletePost);
 
 // Post Like-Dislike routes
-// Here reactionType can be: like, dislike
+// Here reactionType can be: likes, dislikes
 router.post(
 	"/:postId/:reactionType/",
 	authorizeRequest([Role.USER]),
 	PostController.createlikeDislikePost
 );
+
 router
 	.route("/:postId/:reactionType/:userId")
-	.put(authorizeRequest([Role.USER]), PostController.editlikeDislikePost)
 	.delete(authorizeRequest([Role.USER]), PostController.deleteLikeDislikePost);
 
 // Post-Comment routes

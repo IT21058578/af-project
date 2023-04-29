@@ -2,15 +2,16 @@ import * as jose from "jose";
 import fs from "fs/promises";
 
 import initializeLogger from "../utils/logger.js";
+import { TRoleValue } from "../types/constant-types.js";
 
 const log = initializeLogger(import.meta.url.split("/").pop() || "");
 const algorithm = "RS256";
 const jwtIssuer = "af-project-csse-we-07";
 
-let accessTokenPrivateKey;
-let accessTokenPublicKey;
-let refreshTokenPrivateKey;
-let refreshTokenPublicKey;
+let accessTokenPrivateKey: jose.KeyLike;
+let accessTokenPublicKey: jose.KeyLike;
+let refreshTokenPrivateKey: jose.KeyLike;
+let refreshTokenPublicKey: jose.KeyLike;
 
 const loadKeys = async () => {
 	try {
@@ -51,7 +52,7 @@ const loadKeys = async () => {
 
 loadKeys();
 
-const decodeAccessToken = async (accessToken) => {
+const decodeAccessToken = async (accessToken: string) => {
 	try {
 		log.info("Attempting to decode access token...");
 		const verifyResult = await jose.jwtVerify(
@@ -66,7 +67,7 @@ const decodeAccessToken = async (accessToken) => {
 	}
 };
 
-const decodeRefreshToken = async (refreshToken) => {
+const decodeRefreshToken = async (refreshToken: string) => {
 	try {
 		log.info("Attempting to decode refresh token...");
 		const verifyResult = await jose.jwtVerify(
@@ -81,7 +82,7 @@ const decodeRefreshToken = async (refreshToken) => {
 	}
 };
 
-const generateAccessToken = async (id, roles) => {
+const generateAccessToken = async (id: string, roles: TRoleValue[]) => {
 	try {
 		log.info("Attempting to generate access token...");
 		const accessToken = await new jose.SignJWT({ id, roles })
@@ -90,7 +91,7 @@ const generateAccessToken = async (id, roles) => {
 			.setIssuer(jwtIssuer)
 			.setAudience(id)
 			.setExpirationTime("2h")
-			.secret(accessTokenPrivateKey);
+			.sign(accessTokenPrivateKey);
 		log.info("Succesfully generated access token");
 		return accessToken;
 	} catch (error) {
@@ -99,16 +100,16 @@ const generateAccessToken = async (id, roles) => {
 	}
 };
 
-const generateRefreshToken = async (id) => {
+const generateRefreshToken = async (id: string) => {
 	try {
 		log.info("Attempting to generate refresh token...");
-		const refreshToken = await new jose.SignJWT({ id, roles })
+		const refreshToken = await new jose.SignJWT({ id })
 			.setProtectedHeader({ alg: algorithm })
 			.setIssuedAt()
 			.setIssuer(jwtIssuer)
 			.setAudience(id)
 			.setExpirationTime("7d")
-			.secret(refreshTokenPrivateKey);
+			.sign(refreshTokenPrivateKey);
 		log.info("Succesfully generated refresh token");
 		return refreshToken;
 	} catch (error) {

@@ -23,7 +23,7 @@ const logger = createLogger({
 	transports: [new transports.Console()],
 });
 
-const initializeLogger = (moduleName) =>
+const initializeLogger = (moduleName: string) =>
 	logger.child({ moduleName: moduleName });
 
 export default initializeLogger;

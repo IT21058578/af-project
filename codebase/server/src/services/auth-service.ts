@@ -1,29 +1,33 @@
 import bcrypt from "bcrypt";
 import * as uuid from "uuid";
 
-import { User } from "../models/user-model.js";
-import { TokenService } from "../services/token-service.js";
-import { EmailService } from "../services/email-service.js";
-import { Role } from "../constants/constants.js";
-import initializeLogger from "../utils/logger.js";
+import { User } from "../models/user-model";
+import { TokenService } from "./token-service";
+import { EmailService } from "./email-service";
+import { Role } from "../constants/constants";
+import initializeLogger from "../utils/logger";
+import { TUser } from "../types/model-types";
 
 const log = initializeLogger(import.meta.url.split("/").pop() || "");
 
-const loginUser = async (email, password) => {
+const loginUser = async (email: string, password: string) => {
 	log.info("Validating user details...");
 	const user = await User.findOne({ email }).exec();
 	if (!user) {
 		throw new Error("User does not exist");
 	}
 
-	const isValidPassword = await bcrypt.compare(password, user.password);
+	const isValidPassword = await bcrypt.compare(password, user?.password || "");
 	if (!isValidPassword) {
 		throw new Error("Password is incorrect");
 	}
 
 	const tokenFamily = {
-		latestAccessToken: TokenService.generateAccessToken(),
-		latestRefreshToken: TokenService.generateRefreshToken(),
+		latestAccessToken: await TokenService.generateAccessToken(
+			user.id,
+			user.roles
+		),
+		latestRefreshToken: await TokenService.generateRefreshToken(user.id),
 		oldAccessTokens: [],
 		oldRefreshTokens: [],
 	};
@@ -42,9 +46,9 @@ const loginUser = async (email, password) => {
 	};
 };
 
-const refreshUser = async (refreshToken) => {};
+const refreshUser = async (refreshToken: string) => {};
 
-const logoutUser = async (email) => {
+const logoutUser = async (email: string) => {
 	const user = await User.findOne({ email }).exec();
 	if (!user) {
 		throw new Error("User does not exist");
@@ -54,14 +58,14 @@ const logoutUser = async (email) => {
 	await user.save();
 };
 
-const registerUser = async (user) => {
+const registerUser = async (user: TUser) => {
 	const existingUser = await User.findOne({ email: user.email }).exec();
 	if (existingUser) {
 		throw new Error("User already exists");
 	}
 
 	const newUser = new User({ ...user });
-	newUser.password = await bcrypt.hash(user.password, 10);
+	newUser.password = await bcrypt.hash(user.password || "", 10);
 	newUser.roles = [Role.USER, Role.ADMIN];
 	newUser.resetToken = uuid.v4();
 	newUser.isAuthorized = false;
@@ -81,7 +85,7 @@ const registerUser = async (user) => {
 	await newUser.save();
 };
 
-const forgotPassword = async (email) => {
+const forgotPassword = async (email: string) => {
 	const user = await User.findOne({ email }).exec();
 	if (!user) {
 		throw new Error("User does not exist");
@@ -102,7 +106,11 @@ const forgotPassword = async (email) => {
 	await user.save();
 };
 
-const resetPassword = async (email, resetToken, newPassword) => {
+const resetPassword = async (
+	email: string,
+	resetToken: string,
+	newPassword: string
+) => {
 	const user = await User.findOne({ email }).exec();
 	if (!user) {
 		throw new Error("User does not exist");
@@ -124,13 +132,20 @@ const resetPassword = async (email, resetToken, newPassword) => {
 	await user.save();
 };
 
-const changePassword = async (email, newPassword, oldPassword) => {
+const changePassword = async (
+	email: string,
+	newPassword: string,
+	oldPassword: string
+) => {
 	const user = await User.findOne({ email }).exec();
 	if (!user) {
 		throw new Error("User does not exist");
 	}
 
-	const isValidPassword = await bcrypt.compare(oldPassword, user.password);
+	const isValidPassword = await bcrypt.compare(
+		oldPassword,
+		user.password || ""
+	);
 	if (!isValidPassword) {
 		throw new Error("Password is incorrect");
 	}
@@ -141,7 +156,7 @@ const changePassword = async (email, newPassword, oldPassword) => {
 		log.error("Failed to send registration email");
 	}
 
-	user.password = bcrypt.hash(newPassword, 10);
+	user.password = await bcrypt.hash(newPassword, 10);
 	await user.save();
 };
 

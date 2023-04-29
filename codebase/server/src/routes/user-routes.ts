@@ -8,8 +8,8 @@ router.delete(
 	"/",
 	...validateSchema(
 		{
-			email: { isEmail: true, optional: false },
-			password: { isString: true, optional: false },
+			email: { isEmail: true },
+			password: { isString: true },
 		},
 		["body"]
 	),

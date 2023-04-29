@@ -1,9 +1,10 @@
-import { AuthService } from "../services/auth-service.js";
-import initializeLogger from "../utils/logger.js";
+import { Request, Response } from "express";
+import { AuthService } from "../services/auth-service";
+import initializeLogger from "../utils/logger";
 
 const log = initializeLogger(import.meta.url.split("/").pop() || "");
 
-const loginUser = async (req, res) => {
+const loginUser = async (req: Request, res: Response) => {
 	try {
 		log.info("Intercepted login request");
 		const { email, password } = req.body;
@@ -19,7 +20,7 @@ const loginUser = async (req, res) => {
 	}
 };
 
-const logoutUser = async (req, res) => {
+const logoutUser = async (req: Request, res: Response) => {
 	try {
 		log.info("Intercepted logout request");
 		const { email } = req.body;
@@ -35,7 +36,7 @@ const logoutUser = async (req, res) => {
 	}
 };
 
-const registerUser = async (req, res) => {
+const registerUser = async (req: Request, res: Response) => {
 	try {
 		log.info("Intercepted register request");
 		const {
@@ -67,7 +68,7 @@ const registerUser = async (req, res) => {
 	}
 };
 
-const forgotPassword = async (req, res) => {
+const forgotPassword = async (req: Request, res: Response) => {
 	try {
 		log.info("Intercepted forgot password request");
 		const { email } = req.body;
@@ -85,7 +86,7 @@ const forgotPassword = async (req, res) => {
 	}
 };
 
-const resetPassword = async (req, res) => {
+const resetPassword = async (req: Request, res: Response) => {
 	try {
 		log.info("Intercepted reset passsword request");
 		const { email, resetToken, password } = req.body;
@@ -103,7 +104,7 @@ const resetPassword = async (req, res) => {
 	}
 };
 
-const changePassword = async (req, res) => {
+const changePassword = async (req: Request, res: Response) => {
 	try {
 		log.info("Intercepted change password request");
 		const { email, newPassword, oldPassword } = req.body;
