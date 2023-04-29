@@ -25,7 +25,7 @@ const searchCommentsByPost = async (
 	return buildPage(paginationResult, commentSearchOptions);
 };
 
-const createComment = async (comment: TComment) => {
+const createComment = async (comment: Partial<TComment>) => {
 	const newComment = new Comment(comment);
 	return await newComment.save();
 };

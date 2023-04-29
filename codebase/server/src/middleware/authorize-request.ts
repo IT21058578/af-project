@@ -4,7 +4,7 @@ import { TRoleValue } from "../types/constant-types";
 import { NextFunction, Request, Response } from "express";
 import initializeLogger from "../utils/logger";
 
-const log = initializeLogger(import.meta.url.split("/").pop() || "");
+const log = initializeLogger(__filename.split("\\").pop() || "");
 
 const authorizeRequest =
 	(allowedRoles: TRoleValue[]) =>

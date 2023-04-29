@@ -5,7 +5,7 @@ import { buildErrorMessage } from "../utils/misc-utils";
 import { NextFunction, Request, Response } from "express";
 import { TRoleValue } from "../types/constant-types";
 
-const log = initializeLogger(import.meta.url.split("/").pop() || "");
+const log = initializeLogger(__filename.split("\\").pop() || "");
 
 const decodeToken =
 	() => async (req: Request, _res: Response, next: NextFunction) => {
@@ -26,7 +26,7 @@ const decodeToken =
 				log.error(`An error occurred while decoding access token : ${error}`);
 				next(
 					buildErrorMessage(
-						StatusCodes.UNAUTHORIZED,
+						ReasonPhrases.UNAUTHORIZED,
 						"User has an access token but it is invalid",
 						"TOKEN_DECODING",
 						error

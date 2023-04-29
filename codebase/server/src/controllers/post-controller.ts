@@ -1,10 +1,11 @@
 import { PostService } from "../services/post-service";
 import initializeLogger from "../utils/logger";
-import { StatusCodes } from "http-status-codes";
+import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { buildErrorMessage } from "../utils/misc-utils";
 import { NextFunction, Request, Response } from "express";
+import { TRoleValue } from "../types/constant-types";
 
-const log = initializeLogger(import.meta.url.split("/").pop() || "");
+const log = initializeLogger(__filename.split("\\").pop() || "");
 
 const getPost = async (req: Request, res: Response, next: NextFunction) => {
 	try {
@@ -17,7 +18,7 @@ const getPost = async (req: Request, res: Response, next: NextFunction) => {
 		log.error(`An error occurred: ${error}`);
 		next(
 			buildErrorMessage(
-				StatusCodes.INTERNAL_SERVER_ERROR,
+				ReasonPhrases.INTERNAL_SERVER_ERROR,
 				"An unknown error occurred while trying to process your request",
 				"CONTROLLER_SERVICE",
 				error
@@ -37,7 +38,7 @@ const searchPosts = async (req: Request, res: Response, next: NextFunction) => {
 		log.error(`An error occurred: ${error}`);
 		next(
 			buildErrorMessage(
-				StatusCodes.INTERNAL_SERVER_ERROR,
+				ReasonPhrases.INTERNAL_SERVER_ERROR,
 				"An unknown error occurred while trying to process your request",
 				"CONTROLLER_SERVICE",
 				error
@@ -61,7 +62,7 @@ const createPost = async (req: Request, res: Response, next: NextFunction) => {
 		log.error(`An error occurred: ${error}`);
 		next(
 			buildErrorMessage(
-				StatusCodes.INTERNAL_SERVER_ERROR,
+				ReasonPhrases.INTERNAL_SERVER_ERROR,
 				"An unknown error occurred while trying to process your request",
 				"CONTROLLER_SERVICE",
 				error
@@ -73,13 +74,13 @@ const createPost = async (req: Request, res: Response, next: NextFunction) => {
 const editPost = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		log.info("Attempting to process editPost request");
-		const userId = req.headers["user-id"];
-		const userRoles = req.headers["user-roles"];
+		const userId = req.headers["user-id"] as string | undefined;
+		const userRoles = req.headers["user-roles"] as TRoleValue[] | undefined;
 		const { postId } = req.params;
 		const data = req.body;
 		const editedPost = await PostService.editPost(
 			postId,
-			{ id: userId, roles: userRoles },
+			{ id: userId || "", roles: userRoles || [] },
 			data
 		);
 		log.info("Successfully processed editPost request");
@@ -88,7 +89,7 @@ const editPost = async (req: Request, res: Response, next: NextFunction) => {
 		log.error(`An error occurred: ${error}`);
 		next(
 			buildErrorMessage(
-				StatusCodes.INTERNAL_SERVER_ERROR,
+				ReasonPhrases.INTERNAL_SERVER_ERROR,
 				"An unknown error occurred while trying to process your request",
 				"CONTROLLER_SERVICE",
 				error
@@ -100,12 +101,12 @@ const editPost = async (req: Request, res: Response, next: NextFunction) => {
 const deletePost = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		log.info("Attempting to process deletePost request");
-		const userId = req.headers["user-id"];
-		const userRoles = req.headers["user-roles"];
+		const userId = req.headers["user-id"] as string | undefined;
+		const userRoles = req.headers["user-roles"] as TRoleValue[] | undefined;
 		const { postId } = req.params;
 		await PostService.deletePost(postId, {
-			id: userId,
-			roles: userRoles,
+			id: userId || "",
+			roles: userRoles || [],
 		});
 		log.info("Successfully processed deletePost request");
 		return res.status(StatusCodes.NO_CONTENT).send();
@@ -113,7 +114,7 @@ const deletePost = async (req: Request, res: Response, next: NextFunction) => {
 		log.error(`An error occurred: ${error}`);
 		next(
 			buildErrorMessage(
-				StatusCodes.INTERNAL_SERVER_ERROR,
+				ReasonPhrases.INTERNAL_SERVER_ERROR,
 				"An unknown error occurred while trying to process your request",
 				"CONTROLLER_SERVICE",
 				error
@@ -129,12 +130,12 @@ const createlikeDislikePost = async (
 ) => {
 	try {
 		log.info("Attempting to process createlikeDislikePost request");
-		const userId = req.headers["user-id"];
+		const userId = req.headers["user-id"] as string | undefined;
 		const { postId, reactionType } = req.params;
 		const editedPost = await PostService.createlikeDislikePost(
 			postId,
-			userId,
-			reactionType
+			userId || "",
+			reactionType as "likes" | "dislikes"
 		);
 		log.info("Successfully processed createlikeDislikePost request");
 		return res.status(StatusCodes.OK).json(editedPost);
@@ -142,7 +143,7 @@ const createlikeDislikePost = async (
 		log.error(`An error occurred: ${error}`);
 		next(
 			buildErrorMessage(
-				StatusCodes.INTERNAL_SERVER_ERROR,
+				ReasonPhrases.INTERNAL_SERVER_ERROR,
 				"An unknown error occurred while trying to process your request",
 				"CONTROLLER_SERVICE",
 				error
@@ -158,16 +159,20 @@ const deleteLikeDislikePost = async (
 ) => {
 	try {
 		log.info("Attempting to process deleteLikeDislikePost request");
-		const userId = req.headers["user-id"];
+		const userId = req.headers["user-id"] as string | undefined;
 		const { postId, reactionType } = req.params;
-		await PostService.deleteLikeDislikePost(postId, userId, reactionType);
+		await PostService.deleteLikeDislikePost(
+			postId,
+			userId || "",
+			reactionType as "likes" | "dislikes"
+		);
 		log.info("Successfully processed deleteLikeDislikePost request");
 		return res.status(StatusCodes.NO_CONTENT).send();
 	} catch (error) {
 		log.error(`An error occurred: ${error}`);
 		next(
 			buildErrorMessage(
-				StatusCodes.INTERNAL_SERVER_ERROR,
+				ReasonPhrases.INTERNAL_SERVER_ERROR,
 				"An unknown error occurred while trying to process your request",
 				"CONTROLLER_SERVICE",
 				error

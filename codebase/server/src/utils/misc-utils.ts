@@ -1,4 +1,9 @@
-export const buildErrorMessage = (type, cause, location, errors) => ({
+export const buildErrorMessage = (
+	type: string,
+	cause: string,
+	location: string,
+	errors: any
+) => ({
 	type,
 	cause,
 	location,

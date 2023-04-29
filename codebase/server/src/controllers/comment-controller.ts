@@ -1,10 +1,11 @@
 import { CommentService } from "../services/comment-service";
 import initializeLogger from "../utils/logger";
-import { StatusCodes } from "http-status-codes";
+import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { buildErrorMessage } from "../utils/misc-utils";
 import { Response, Request, NextFunction } from "express";
+import { TRoleValue } from "../types/constant-types";
 
-const log = initializeLogger(import.meta.url.split("/").pop() || "");
+const log = initializeLogger(__filename.split("\\").pop() || "");
 
 const getComment = async (req: Request, res: Response, next: NextFunction) => {
 	try {
@@ -17,7 +18,7 @@ const getComment = async (req: Request, res: Response, next: NextFunction) => {
 		log.error(`An error occurred: ${error}`);
 		next(
 			buildErrorMessage(
-				StatusCodes.INTERNAL_SERVER_ERROR,
+				ReasonPhrases.INTERNAL_SERVER_ERROR,
 				"An unknown error occurred while trying to process your request",
 				"CONTROLLER_SERVICE",
 				error
@@ -33,7 +34,7 @@ const createComment = async (
 ) => {
 	try {
 		log.info("Attempting to process createComment request");
-		const userId = req.headers["user-id"];
+		const userId = req.headers["user-id"] as string | undefined;
 		const { postId } = req.params;
 		const { parentId, text } = req.body;
 		const createdComment = await CommentService.createComment({
@@ -48,7 +49,7 @@ const createComment = async (
 		log.error(`An error occurred: ${error}`);
 		next(
 			buildErrorMessage(
-				StatusCodes.INTERNAL_SERVER_ERROR,
+				ReasonPhrases.INTERNAL_SERVER_ERROR,
 				"An unknown error occurred while trying to process your request",
 				"CONTROLLER_SERVICE",
 				error
@@ -60,13 +61,13 @@ const createComment = async (
 const editComment = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		log.info("Attempting to process editComment request");
-		const userId = req.headers["user-id"];
-		const userRoles = req.headers["user-roles"];
+		const userId = req.headers["user-id"] as string | undefined;
+		const userRoles = req.headers["user-roles"] as TRoleValue[] | undefined;
 		const { commentId } = req.params;
 		const { text } = req.body;
 		const editedComment = await CommentService.editComment(
 			commentId,
-			{ id: userId, roles: userRoles },
+			{ id: userId || "", roles: userRoles || [] },
 			{
 				text,
 			}
@@ -77,7 +78,7 @@ const editComment = async (req: Request, res: Response, next: NextFunction) => {
 		log.error(`An error occurred: ${error}`);
 		next(
 			buildErrorMessage(
-				StatusCodes.INTERNAL_SERVER_ERROR,
+				ReasonPhrases.INTERNAL_SERVER_ERROR,
 				"An unknown error occurred while trying to process your request",
 				"CONTROLLER_SERVICE",
 				error
@@ -93,12 +94,12 @@ const deleteComment = async (
 ) => {
 	try {
 		log.info("Attempting to process deleteComment request");
-		const userId = req.headers["user-id"];
-		const userRoles = req.headers["user-roles"];
+		const userId = req.headers["user-id"] as string | undefined;
+		const userRoles = req.headers["user-roles"] as TRoleValue[] | undefined;
 		const { commentId } = req.params;
 		await CommentService.deleteComment(commentId, {
-			id: userId,
-			roles: userRoles,
+			id: userId || "",
+			roles: userRoles || [],
 		});
 		log.info("Successfully processed deleteComment request");
 		return res.status(StatusCodes.NO_CONTENT).send();
@@ -106,7 +107,7 @@ const deleteComment = async (
 		log.error(`An error occurred: ${error}`);
 		next(
 			buildErrorMessage(
-				StatusCodes.INTERNAL_SERVER_ERROR,
+				ReasonPhrases.INTERNAL_SERVER_ERROR,
 				"An unknown error occurred while trying to process your request",
 				"CONTROLLER_SERVICE",
 				error
@@ -122,12 +123,12 @@ const createlikeDislikeComment = async (
 ) => {
 	try {
 		log.info("Attempting to process createlikeDislikeComment request");
-		const userId = req.headers["user-id"];
+		const userId = req.headers["user-id"] as string | undefined;
 		const { commentId, reactionType } = req.params;
 		const editedComment = await CommentService.createlikeDislikeComment(
 			commentId,
-			userId,
-			reactionType
+			userId || "",
+			reactionType as "likes" | "dislikes"
 		);
 		log.info("Successfully processed createlikeDislikeComment request");
 		return res.status(StatusCodes.OK).json(editedComment);
@@ -135,7 +136,7 @@ const createlikeDislikeComment = async (
 		log.error(`An error occurred: ${error}`);
 		next(
 			buildErrorMessage(
-				StatusCodes.INTERNAL_SERVER_ERROR,
+				ReasonPhrases.INTERNAL_SERVER_ERROR,
 				"An unknown error occurred while trying to process your request",
 				"CONTROLLER_SERVICE",
 				error
@@ -151,12 +152,12 @@ const deleteLikeDislikeComment = async (
 ) => {
 	try {
 		log.info("Attempting to process deleteLikeDislikeComment request");
-		const userId = req.headers["user-id"];
+		const userId = req.headers["user-id"] as string | undefined;
 		const { commentId, reactionType } = req.params;
 		await CommentService.deleteLikeDislikeComment(
 			commentId,
-			userId,
-			reactionType
+			userId || "",
+			reactionType as "likes" | "dislikes"
 		);
 		log.info("Successfully processed deleteLikeDislikeComment request");
 		return res.status(StatusCodes.NO_CONTENT).send();
@@ -164,7 +165,7 @@ const deleteLikeDislikeComment = async (
 		log.error(`An error occurred: ${error}`);
 		next(
 			buildErrorMessage(
-				StatusCodes.INTERNAL_SERVER_ERROR,
+				ReasonPhrases.INTERNAL_SERVER_ERROR,
 				"An unknown error occurred while trying to process your request",
 				"CONTROLLER_SERVICE",
 				error

@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import { AuthService } from "../services/auth-service";
 import initializeLogger from "../utils/logger";
+import { TUser } from "../types/model-types";
 
-const log = initializeLogger(import.meta.url.split("/").pop() || "");
+const log = initializeLogger(__filename.split("\\").pop() || "");
 
 const loginUser = async (req: Request, res: Response) => {
 	try {
@@ -40,14 +41,14 @@ const registerUser = async (req: Request, res: Response) => {
 	try {
 		log.info("Intercepted register request");
 		const {
-			email,
-			password,
-			dateOfBirth,
-			isSubscribed,
-			firstName,
-			lastName,
-			mobile,
-		} = req.body;
+			email = "",
+			password = "",
+			dateOfBirth = new Date(),
+			isSubscribed = false,
+			firstName = "",
+			lastName = "",
+			mobile = "",
+		}: Partial<TUser> = req.body;
 		await AuthService.registerUser({
 			email,
 			password,

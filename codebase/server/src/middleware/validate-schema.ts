@@ -5,12 +5,12 @@ import {
 	Schema,
 	Location,
 } from "express-validator";
-import initializeLogger from "../utils/logger.js";
+import initializeLogger from "../utils/logger";
 import { NextFunction, Request, Response } from "express";
-import { buildErrorMessage } from "../utils/misc-utils.js";
+import { buildErrorMessage } from "../utils/misc-utils";
 import { ReasonPhrases } from "http-status-codes";
 
-const log = initializeLogger(import.meta.url.split("/").pop() || "");
+const log = initializeLogger(__filename.split("\\").pop() || "");
 
 const validateSchema = (
 	schema: Schema,

@@ -7,8 +7,9 @@ import { EmailService } from "./email-service";
 import { Role } from "../constants/constants";
 import initializeLogger from "../utils/logger";
 import { TUser } from "../types/model-types";
+import { TRoleValue } from "../types/constant-types";
 
-const log = initializeLogger(import.meta.url.split("/").pop() || "");
+const log = initializeLogger(__filename.split("\\").pop() || "");
 
 const loginUser = async (email: string, password: string) => {
 	log.info("Validating user details...");
@@ -25,7 +26,7 @@ const loginUser = async (email: string, password: string) => {
 	const tokenFamily = {
 		latestAccessToken: await TokenService.generateAccessToken(
 			user.id,
-			user.roles
+			user.roles as TRoleValue[]
 		),
 		latestRefreshToken: await TokenService.generateRefreshToken(user.id),
 		oldAccessTokens: [],
@@ -58,7 +59,7 @@ const logoutUser = async (email: string) => {
 	await user.save();
 };
 
-const registerUser = async (user: TUser) => {
+const registerUser = async (user: Partial<TUser>) => {
 	const existingUser = await User.findOne({ email: user.email }).exec();
 	if (existingUser) {
 		throw new Error("User already exists");
@@ -74,8 +75,8 @@ const registerUser = async (user: TUser) => {
 
 	try {
 		EmailService.sendRegistrationEmail(
-			newUser.email,
-			newUser.firstName,
+			newUser.email || "",
+			newUser.firstName || "",
 			newUser.authorizationToken
 		);
 	} catch (error) {
@@ -96,7 +97,7 @@ const forgotPassword = async (email: string) => {
 	try {
 		EmailService.sendForgotPasswordEmail(
 			email,
-			user.firstName,
+			user.firstName || "",
 			user.resetToken
 		);
 	} catch (error) {
@@ -124,7 +125,10 @@ const resetPassword = async (
 	user.resetToken = uuid.v4();
 
 	try {
-		EmailService.sendPasswordChangedEmail(user.email, user.firstName);
+		EmailService.sendPasswordChangedEmail(
+			user.email || "",
+			user.firstName || ""
+		);
 	} catch (error) {
 		log.error("Failed to send registration email");
 	}
@@ -151,7 +155,10 @@ const changePassword = async (
 	}
 
 	try {
-		EmailService.sendPasswordChangedEmail(user.email, user.firstName);
+		EmailService.sendPasswordChangedEmail(
+			user.email || "",
+			user.firstName || ""
+		);
 	} catch (error) {
 		log.error("Failed to send registration email");
 	}

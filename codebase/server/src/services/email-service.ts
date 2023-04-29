@@ -1,8 +1,8 @@
 import nodemailer from "nodemailer";
-import { SMTP_PASS, SMTP_USER } from "../constants/constants.js";
-import initializeLogger from "../utils/logger.js";
+import { SMTP_PASS, SMTP_USER } from "../constants/constants";
+import initializeLogger from "../utils/logger";
 
-const log = initializeLogger(import.meta.url.split("/").pop() || "");
+const log = initializeLogger(__filename.split("\\").pop() || "");
 
 const transporter = nodemailer.createTransport({
 	service: "gmail",

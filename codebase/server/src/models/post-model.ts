@@ -2,7 +2,7 @@ import { Schema, Types, model } from "mongoose";
 
 export const postSchema = new Schema(
 	{
-		userId: Types.ObjectId,
+		userId: String,
 		title: String,
 		text: String,
 		image: String,

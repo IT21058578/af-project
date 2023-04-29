@@ -2,9 +2,9 @@ import { Schema, Types, model } from "mongoose";
 
 export const commentSchema = new Schema(
 	{
-		postId: { type: Types.ObjectId, required: true },
-		userId: { type: Types.ObjectId, required: true },
-		parentId: Types.ObjectId,
+		postId: String,
+		userId: String,
+		parentId: String,
 		text: String,
 		likes: [String],
 		dislikes: [String],
