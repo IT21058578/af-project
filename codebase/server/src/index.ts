@@ -1,4 +1,4 @@
-import express from "express";
+import express, { json, urlencoded } from "express";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import cors from "cors";
@@ -11,6 +11,8 @@ import userRoutes from "./routes/user-routes";
 
 import decodeToken from "./middleware/decode-token";
 import { MONGODB_URI, PORT } from "./constants/constants";
+import requestLogger from "./middleware/request-logger";
+import errorHandler from "./middleware/error-handler";
 dotenv.config();
 
 const log = initializeLogger(__filename.split("\\").pop() || "");
@@ -23,8 +25,9 @@ const app = express();
 log.info("Configuring middleware...");
 app.use(helmet());
 app.use(cors());
-app.use(express.json({ limit: "30mb" }));
-app.use(express.urlencoded({ limit: "30mb", extended: true }));
+app.use(json());
+app.use(urlencoded());
+app.use(requestLogger());
 app.use(decodeToken());
 
 // Routes
@@ -32,6 +35,9 @@ log.info("Configuring routes...");
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/posts", postRoutes);
+
+app.use(errorHandler());
+export const server = app;
 
 // Database Connection
 log.info("Connecting to MongoDB Atlas...");

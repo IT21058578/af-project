@@ -6,10 +6,10 @@ import { TPost } from "../types/model-types";
 export const buildPaginationPipeline = <T>({
 	sortField = "",
 	sortDir = "asc",
-	pageNum,
-	pageSize,
+	pageNum = 1,
+	pageSize = 10,
 	...searchOptions
-}: Partial<TExtendedPageOptions<T>>): PipelineStage[] => {
+}: TExtendedPageOptions<T>): PipelineStage[] => {
 	let formattedSearchOptions: FilterQuery<any>[] = [];
 	Object.entries(searchOptions).forEach(([key, value]) => {
 		if (value instanceof Array) {
@@ -43,7 +43,7 @@ export const buildPaginationPipeline = <T>({
 export const buildPostPaginationPipeline = ({
 	author,
 	...rest
-}: Partial<TExtendedPageOptions<TPost & { author?: string }>>) => {
+}: TExtendedPageOptions<TPost & { author?: string }>) => {
 	const paginationPipeline = buildPaginationPipeline<TPost>(rest);
 	paginationPipeline.splice(1, 0, {
 		$lookup: {

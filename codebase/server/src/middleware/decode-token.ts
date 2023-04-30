@@ -34,6 +34,7 @@ const decodeToken =
 				);
 			}
 		}
+		next();
 	};
 
 export default decodeToken;

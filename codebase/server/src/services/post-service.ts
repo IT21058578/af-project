@@ -1,6 +1,10 @@
 import { Post } from "../models/post-model";
 import { ReasonPhrases } from "http-status-codes";
-import { buildPage, buildPaginationPipeline } from "../utils/mongoose-utils";
+import {
+	buildPage,
+	buildPaginationPipeline,
+	buildPostPaginationPipeline,
+} from "../utils/mongoose-utils";
 import {
 	IAuthorizedUser,
 	IPaginationResult,
@@ -19,7 +23,7 @@ const searchPosts = async (
 	postSearchOptions: Partial<TExtendedPageOptions<TPost>>
 ) => {
 	const paginationResult = (await Post.aggregate(
-		buildPaginationPipeline(postSearchOptions)
+		buildPostPaginationPipeline(postSearchOptions as any)
 	).exec()) as any as IPaginationResult<TPost>;
 	return buildPage(paginationResult, postSearchOptions);
 };

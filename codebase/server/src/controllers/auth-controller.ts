@@ -15,13 +15,13 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
 		log.info("Succesfully processed login request");
 		return res.status(200).send(user);
 	} catch (error) {
-		log.error(`Error occurred when processing login request\n\t${error}`);
+		log.error(`Error occurred when processing login request. ERR: ${error}`);
 		next(
 			buildErrorMessage(
 				ReasonPhrases.INTERNAL_SERVER_ERROR,
 				"An unknown error occurred while trying to process your request",
 				"CONTROLLER_SERVICE",
-				error
+				(error as typeof Error).toString()
 			)
 		);
 	}
@@ -35,13 +35,13 @@ const logoutUser = async (req: Request, res: Response, next: NextFunction) => {
 		log.info("Succesfully processed logout request");
 		return res.status(200).send();
 	} catch (error) {
-		log.error(`An error occurred: ${error}`);
+		log.error(`Error occurred when processing login request. ERR: ${error}`);
 		next(
 			buildErrorMessage(
 				ReasonPhrases.INTERNAL_SERVER_ERROR,
 				"An unknown error occurred while trying to process your request",
 				"CONTROLLER_SERVICE",
-				error
+				(error as typeof Error).toString()
 			)
 		);
 	}

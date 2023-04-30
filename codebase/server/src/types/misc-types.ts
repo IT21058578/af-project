@@ -19,3 +19,10 @@ export interface IPaginationResult<T> {
 	countInPage: number;
 	countInQuery: number;
 }
+
+export interface IServerError {
+	type?: string;
+	cause?: string;
+	location?: string;
+	errors?: any;
+}

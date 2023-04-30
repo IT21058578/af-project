@@ -3,9 +3,8 @@ import { PostController } from "../controllers/post-controller";
 import commentRoutes from "./comment-routes";
 import authorizeRequest from "../middleware/authorize-request";
 import { Role } from "../constants/constants";
-
+import supertest from "supertest";
 const router = express.Router();
-
 // Post routes
 router.post("/", PostController.createPost);
 

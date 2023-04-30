@@ -2,8 +2,8 @@
 	"compilerOptions": {
 		"outDir": "./dist",
 		"rootDir": "./src",
-		"target": "ES6",
-		"module": "CommonJS",
+		"target": "es2017",
+		"module": "commonjs",
 		"moduleResolution": "node",
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
