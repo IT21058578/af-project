@@ -1,8 +1,8 @@
 # Constraints for HTTP Codes
 
-- 200 - Request went through fine
-- 204 - Succesfully deleted something
-- 404 - Was not able to find resource to do anything to it
+- 200 - OK - Request went through fine
+- 204 - NO_CONTENT - Succesfully deleted something
+- 404 - NOT_FOUND - Was not able to find resource to do anything to it
 - 500 - An unhandled or miscellaneous error
 
 # Handling Errors

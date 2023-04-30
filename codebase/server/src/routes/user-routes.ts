@@ -5,7 +5,7 @@ import validateSchema from "../middleware/validate-schema";
 const router = Router();
 
 router.delete(
-	"/",
+	"/:id",
 	...validateSchema(
 		{
 			email: { isEmail: true },
@@ -16,8 +16,8 @@ router.delete(
 	UserController.deleteUser
 );
 
-router.patch(
-	"/",
+router.put(
+	"/:id",
 	...validateSchema(
 		{
 			firstName: { isString: true },
@@ -38,8 +38,5 @@ router.get(
 	...validateSchema({ id: { isMongoId: true } }, ["params"]),
 	UserController.getUser
 );
-
-// TODO: Create user search validation schema
-router.get("/", ...validateSchema({}), UserController.getUsers);
 
 export default router;

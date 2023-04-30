@@ -2,6 +2,7 @@
 	"scripts": {
 		"test": "jest",
 		"build": "tsc",
+		"gen-data": "ts-node-esm src/utils/setup-test-data.ts",
 		"dev": "nodemon src/index.ts",
 		"start": "node src/index.js"
 	},
@@ -9,6 +10,11 @@
 		"execMap": {
 			"ts": "ts-node-esm"
 		}
+	},
+	"jest": {
+		"verbose": true,
+		"globalSetup": "./src/utils/test-utils/global-before-all.ts",
+		"globalTeardown": "./src/utils/test-utils/global-after-all.ts"
 	},
 	"dependencies": {
 		"axios": "^1.4.0",
@@ -24,10 +30,12 @@
 		"jsonwebtoken": "^9.0.0",
 		"mongoose": "^7.0.2",
 		"nodemailer": "^6.9.1",
+		"openai": "^3.2.1",
 		"uuid": "^9.0.0",
 		"winston": "^3.8.2"
 	},
 	"devDependencies": {
+		"@faker-js/faker": "^7.6.0",
 		"@types/axios": "^0.14.0",
 		"@types/bcrypt": "^5.0.0",
 		"@types/cors": "^2.8.13",
@@ -38,9 +46,12 @@
 		"@types/jest": "^29.5.1",
 		"@types/mongoose": "^5.11.97",
 		"@types/nodemailer": "^6.4.7",
+		"@types/supertest": "^2.0.12",
 		"@types/uuid": "^9.0.1",
 		"@types/winston": "^2.4.4",
 		"jest": "^29.5.0",
-		"nodemon": "^2.0.21"
+		"nodemon": "^2.0.21",
+		"supertest": "^6.3.3",
+		"ts-jest": "^29.1.0"
 	}
 }

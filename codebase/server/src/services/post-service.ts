@@ -15,7 +15,9 @@ const getPost = async (id: string) => {
 	return post.toObject();
 };
 
-const searchPosts = async (postSearchOptions: TExtendedPageOptions<TPost>) => {
+const searchPosts = async (
+	postSearchOptions: Partial<TExtendedPageOptions<TPost>>
+) => {
 	const paginationResult = (await Post.aggregate(
 		buildPaginationPipeline(postSearchOptions)
 	).exec()) as any as IPaginationResult<TPost>;

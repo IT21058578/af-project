@@ -35,7 +35,7 @@ app.use("/api/v1/posts", postRoutes);
 
 // Database Connection
 log.info("Connecting to MongoDB Atlas...");
-mongoose.connect(MONGODB_URI || "").then(() => {
+mongoose.connect(MONGODB_URI || "", { dbName: "af-project" }).then(() => {
 	log.info("Established connection");
 	app.listen(PORT || 3000, () => {
 		log.info(`Started listening to port ${PORT}`);

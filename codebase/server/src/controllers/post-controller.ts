@@ -4,6 +4,8 @@ import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { buildErrorMessage } from "../utils/misc-utils";
 import { NextFunction, Request, Response } from "express";
 import { TRoleValue } from "../types/constant-types";
+import { TExtendedPageOptions } from "../types/misc-types";
+import { TPost } from "../types/model-types";
 
 const log = initializeLogger(__filename.split("\\").pop() || "");
 
@@ -30,7 +32,9 @@ const getPost = async (req: Request, res: Response, next: NextFunction) => {
 const searchPosts = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		log.info("Attempting to process searchPosts request");
-		const postSearchOptions = req.body;
+		const postSearchOptions = req.params as Partial<
+			TExtendedPageOptions<TPost>
+		>;
 		const postPage = await PostService.searchPosts(postSearchOptions);
 		log.info("Successfully processed searchPosts request");
 		return res.send(StatusCodes.OK).json(postPage);

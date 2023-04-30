@@ -13,7 +13,7 @@ router.post(
 	AuthController.loginUser
 );
 
-router.patch("/refresh", ...validateSchema({ refreshToken: { isJWT: true } }));
+router.put("/refresh", ...validateSchema({ refreshToken: { isJWT: true } }));
 
 router.delete(
 	"/logout",
@@ -35,7 +35,7 @@ router.post(
 	AuthController.registerUser
 );
 
-router.post(
+router.put(
 	"/reset-password",
 	...validateSchema({
 		resetToken: { isUUID: true },
@@ -44,7 +44,7 @@ router.post(
 	AuthController.resetPassword
 );
 
-router.post(
+router.put(
 	"/forgot-password",
 	...validateSchema({
 		email: { isEmail: true },
@@ -52,7 +52,7 @@ router.post(
 	AuthController.forgotPassword
 );
 
-router.post(
+router.put(
 	"/change-password",
 	...validateSchema({
 		email: { isEmail: true },

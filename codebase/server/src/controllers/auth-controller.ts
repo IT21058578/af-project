@@ -1,11 +1,13 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { AuthService } from "../services/auth-service";
 import initializeLogger from "../utils/logger";
 import { TUser } from "../types/model-types";
+import { buildErrorMessage } from "../utils/misc-utils";
+import { ReasonPhrases } from "http-status-codes";
 
 const log = initializeLogger(__filename.split("\\").pop() || "");
 
-const loginUser = async (req: Request, res: Response) => {
+const loginUser = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		log.info("Intercepted login request");
 		const { email, password } = req.body;
@@ -14,30 +16,42 @@ const loginUser = async (req: Request, res: Response) => {
 		return res.status(200).send(user);
 	} catch (error) {
 		log.error(`Error occurred when processing login request\n\t${error}`);
-		if (false) {
-		} else {
-			return res.status(500).send();
-		}
+		next(
+			buildErrorMessage(
+				ReasonPhrases.INTERNAL_SERVER_ERROR,
+				"An unknown error occurred while trying to process your request",
+				"CONTROLLER_SERVICE",
+				error
+			)
+		);
 	}
 };
 
-const logoutUser = async (req: Request, res: Response) => {
+const logoutUser = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		log.info("Intercepted logout request");
-		const { email } = req.body;
-		await AuthService.logoutUser(email);
+		const userId = req.headers["user-id"] as string | undefined;
+		await AuthService.logoutUser(userId || "");
 		log.info("Succesfully processed logout request");
 		return res.status(200).send();
 	} catch (error) {
-		log.error(`Error occurred when processing logout request\n\t${error}`);
-		if (false) {
-		} else {
-			return res.status(500).send();
-		}
+		log.error(`An error occurred: ${error}`);
+		next(
+			buildErrorMessage(
+				ReasonPhrases.INTERNAL_SERVER_ERROR,
+				"An unknown error occurred while trying to process your request",
+				"CONTROLLER_SERVICE",
+				error
+			)
+		);
 	}
 };
 
-const registerUser = async (req: Request, res: Response) => {
+const registerUser = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
 	try {
 		log.info("Intercepted register request");
 		const {
@@ -62,14 +76,22 @@ const registerUser = async (req: Request, res: Response) => {
 		return res.status(200).send();
 	} catch (error) {
 		log.error(`Error occurred when processing register request\n\t${error}`);
-		if (false) {
-		} else {
-			return res.status(500).send();
-		}
+		next(
+			buildErrorMessage(
+				ReasonPhrases.INTERNAL_SERVER_ERROR,
+				"An unknown error occurred while trying to process your request",
+				"CONTROLLER_SERVICE",
+				error
+			)
+		);
 	}
 };
 
-const forgotPassword = async (req: Request, res: Response) => {
+const forgotPassword = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
 	try {
 		log.info("Intercepted forgot password request");
 		const { email } = req.body;
@@ -80,14 +102,22 @@ const forgotPassword = async (req: Request, res: Response) => {
 		log.error(
 			`Error occurred when processing forgot passowrd request\n\t${error}`
 		);
-		if (false) {
-		} else {
-			return res.status(500).send();
-		}
+		next(
+			buildErrorMessage(
+				ReasonPhrases.INTERNAL_SERVER_ERROR,
+				"An unknown error occurred while trying to process your request",
+				"CONTROLLER_SERVICE",
+				error
+			)
+		);
 	}
 };
 
-const resetPassword = async (req: Request, res: Response) => {
+const resetPassword = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
 	try {
 		log.info("Intercepted reset passsword request");
 		const { email, resetToken, password } = req.body;
@@ -98,28 +128,41 @@ const resetPassword = async (req: Request, res: Response) => {
 		log.error(
 			`Error occurred when processing reset password request\n\t${error}`
 		);
-		if (false) {
-		} else {
-			return res.status(500).send();
-		}
+		next(
+			buildErrorMessage(
+				ReasonPhrases.INTERNAL_SERVER_ERROR,
+				"An unknown error occurred while trying to process your request",
+				"CONTROLLER_SERVICE",
+				error
+			)
+		);
 	}
 };
 
-const changePassword = async (req: Request, res: Response) => {
+const changePassword = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
 	try {
 		log.info("Intercepted change password request");
-		const { email, newPassword, oldPassword } = req.body;
-		await AuthService.changePassword(email, newPassword, oldPassword);
+		const userId = req.headers["user-id"] as string | undefined;
+		const { newPassword, oldPassword } = req.body;
+		await AuthService.changePassword(userId || "", newPassword, oldPassword);
 		log.info("Succesfully processed change password request");
 		return res.status(200).send();
 	} catch (error) {
 		log.error(
 			`Error occurred when processing change password request\n\t${error}`
 		);
-		if (false) {
-		} else {
-			return res.status(500).send();
-		}
+		next(
+			buildErrorMessage(
+				ReasonPhrases.INTERNAL_SERVER_ERROR,
+				"An unknown error occurred while trying to process your request",
+				"CONTROLLER_SERVICE",
+				error
+			)
+		);
 	}
 };
 

@@ -49,8 +49,8 @@ const loginUser = async (email: string, password: string) => {
 
 const refreshUser = async (refreshToken: string) => {};
 
-const logoutUser = async (email: string) => {
-	const user = await User.findOne({ email }).exec();
+const logoutUser = async (id: string) => {
+	const user = await User.findById(id).exec();
 	if (!user) {
 		throw new Error("User does not exist");
 	}
@@ -137,11 +137,11 @@ const resetPassword = async (
 };
 
 const changePassword = async (
-	email: string,
+	userId: string,
 	newPassword: string,
 	oldPassword: string
 ) => {
-	const user = await User.findOne({ email }).exec();
+	const user = await User.findById(userId).exec();
 	if (!user) {
 		throw new Error("User does not exist");
 	}
