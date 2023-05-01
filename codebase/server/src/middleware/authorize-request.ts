@@ -8,7 +8,7 @@ const log = initializeLogger(__filename.split("\\").pop() || "");
 
 const authorizeRequest =
 	(allowedRoles: TRoleValue[]) =>
-	(req: Request, _res: Response, next: NextFunction) => {
+	async (req: Request, _res: Response, next: NextFunction) => {
 		let hasAllowedRole = false;
 		const userRoles = req.headers["user-roles"] as TRoleValue[] | undefined;
 		const userId = req.headers["user-id"] as string | undefined;
@@ -22,6 +22,7 @@ const authorizeRequest =
 		else {
 			log.warn(`A user with id ${userId} tried to access a protected route`);
 			next(
+				
 				buildErrorMessage(
 					ReasonPhrases.UNAUTHORIZED,
 					"User does not have the appropriate roles to access this route",

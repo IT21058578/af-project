@@ -13,11 +13,18 @@ router.post(
 	AuthController.loginUser
 );
 
-router.put("/refresh", ...validateSchema({ refreshToken: { isJWT: true } }));
+router.put(
+	"/refresh",
+	...validateSchema({
+		refreshToken: { isJWT: true },
+		"user-id": { in: ["headers"], isMongoId: true },
+	}),
+	AuthController.refreshTokens
+);
 
 router.delete(
 	"/logout",
-	...validateSchema({ email: { isEmail: true } }),
+	...validateSchema({ "user-id": { in: ["headers"], isMongoId: true } }),
 	AuthController.logoutUser
 );
 

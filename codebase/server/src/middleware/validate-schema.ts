@@ -9,6 +9,7 @@ import initializeLogger from "../utils/logger";
 import { NextFunction, Request, Response } from "express";
 import { buildErrorMessage } from "../utils/misc-utils";
 import { ReasonPhrases } from "http-status-codes";
+import { IServerError } from "../types/misc-types";
 
 const log = initializeLogger(__filename.split("\\").pop() || "");
 
@@ -17,17 +18,16 @@ const validateSchema = (
 	defaultLocations: Location[] = ["body"]
 ) => {
 	const first = checkSchema(schema, defaultLocations);
-	const second = async (req: Request, _res: Response, next: NextFunction) => {
+	const second = (req: Request, _res: Response, next: NextFunction) => {
 		const errors = validationResult(req);
+		let errorMessage: IServerError | undefined;
 		if (!errors.isEmpty()) {
 			log.warn("Rejected request due to bad data");
-			next(
-				buildErrorMessage(
-					ReasonPhrases.BAD_REQUEST,
-					"Request does not have appropriate fields in valid formats",
-					"REQUEST_VALIDATION",
-					errors
-				)
+			errorMessage = buildErrorMessage(
+				ReasonPhrases.BAD_REQUEST,
+				"Request does not have appropriate fields in valid formats",
+				"REQUEST_VALIDATION",
+				errors.mapped()
 			);
 		} else {
 			log.info("Filtering out unvalidated data from request body");
@@ -35,8 +35,8 @@ const validateSchema = (
 				includeOptionals: true,
 				locations: ["body"],
 			});
-			next();
 		}
+		next(errorMessage);
 	};
 	return [first, second];
 };

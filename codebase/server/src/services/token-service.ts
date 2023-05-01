@@ -54,12 +54,11 @@ loadKeys();
 
 const decodeAccessToken = async (accessToken: string) => {
 	try {
-		log.info("Attempting to decode access token...");
 		const verifyResult = await jose.jwtVerify(
 			accessToken,
 			accessTokenPublicKey
 		);
-		log.info("Successfully decoded access token");
+		log.info("Decoded access token");
 		return verifyResult;
 	} catch (error) {
 		log.error(`Failed to decode access token ${error}`);
@@ -69,12 +68,11 @@ const decodeAccessToken = async (accessToken: string) => {
 
 const decodeRefreshToken = async (refreshToken: string) => {
 	try {
-		log.info("Attempting to decode refresh token...");
 		const verifyResult = await jose.jwtVerify(
 			refreshToken,
 			refreshTokenPublicKey
 		);
-		log.info("Successfully decoded refresh token");
+		log.info("Decoded refresh token");
 		return verifyResult;
 	} catch (error) {
 		log.error(`Failed to decode refresh token ${error}`);
@@ -84,7 +82,6 @@ const decodeRefreshToken = async (refreshToken: string) => {
 
 const generateAccessToken = async (id: string, roles: TRoleValue[]) => {
 	try {
-		log.info("Attempting to generate access token...");
 		const accessToken = await new jose.SignJWT({ id, roles })
 			.setProtectedHeader({ alg: algorithm })
 			.setIssuedAt()
@@ -92,7 +89,7 @@ const generateAccessToken = async (id: string, roles: TRoleValue[]) => {
 			.setAudience(id)
 			.setExpirationTime("2h")
 			.sign(accessTokenPrivateKey);
-		log.info("Succesfully generated access token");
+		log.info("Generated access token");
 		return accessToken;
 	} catch (error) {
 		log.error(`Failed to generate access token ${error}`);
@@ -102,7 +99,6 @@ const generateAccessToken = async (id: string, roles: TRoleValue[]) => {
 
 const generateRefreshToken = async (id: string) => {
 	try {
-		log.info("Attempting to generate refresh token...");
 		const refreshToken = await new jose.SignJWT({ id })
 			.setProtectedHeader({ alg: algorithm })
 			.setIssuedAt()
@@ -110,7 +106,7 @@ const generateRefreshToken = async (id: string) => {
 			.setAudience(id)
 			.setExpirationTime("7d")
 			.sign(refreshTokenPrivateKey);
-		log.info("Succesfully generated refresh token");
+		log.info("Generated refresh token");
 		return refreshToken;
 	} catch (error) {
 		log.error(`Failed to generate refressh token ${error}`);

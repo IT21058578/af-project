@@ -10,9 +10,10 @@ import postRoutes from "./routes/post-routes";
 import userRoutes from "./routes/user-routes";
 
 import decodeToken from "./middleware/decode-token";
-import { MONGODB_URI, PORT } from "./constants/constants";
+import { PORT } from "./constants/constants";
 import requestLogger from "./middleware/request-logger";
 import errorHandler from "./middleware/error-handler";
+import { getDbName, getDbUri } from "./utils/misc-utils";
 dotenv.config();
 
 const log = initializeLogger(__filename.split("\\").pop() || "");
@@ -37,13 +38,15 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/posts", postRoutes);
 
 app.use(errorHandler());
-export const server = app;
 
 // Database Connection
-log.info("Connecting to MongoDB Atlas...");
-mongoose.connect(MONGODB_URI || "", { dbName: "af-project" }).then(() => {
+log.info("Connecting to MongoDB...");
+let server: any;
+mongoose.connect(await getDbUri(), { dbName: getDbName() }).then(() => {
 	log.info("Established connection");
-	app.listen(PORT || 3000, () => {
+	server = app.listen(PORT || 3000, () => {
 		log.info(`Started listening to port ${PORT}`);
 	});
 });
+
+export { server };

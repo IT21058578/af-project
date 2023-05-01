@@ -1,17 +1,17 @@
 import { NextFunction, Request, Response } from "express";
 import { IServerError } from "../types/misc-types";
-import { ReasonPhrases, StatusCodes } from "http-status-codes";
+import { ReasonPhrases, StatusCodes, getStatusCode } from "http-status-codes";
 
 const errorHandler =
 	() =>
-	(
+	async (
 		err: IServerError | any,
 		_req: Request,
 		res: Response,
 		_next: NextFunction
 	) => {
 		if (err.type && err.cause && err.location) {
-			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(err);
+			return res.status(getStatusCode(err.type)).json(err);
 		} else {
 			const errorMessage: IServerError = {
 				cause: "Unknown",

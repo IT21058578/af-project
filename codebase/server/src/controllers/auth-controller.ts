@@ -2,8 +2,9 @@ import { NextFunction, Request, Response } from "express";
 import { AuthService } from "../services/auth-service";
 import initializeLogger from "../utils/logger";
 import { TUser } from "../types/model-types";
-import { buildErrorMessage } from "../utils/misc-utils";
-import { ReasonPhrases } from "http-status-codes";
+import { buildErrorMessage, handleControllerError } from "../utils/misc-utils";
+import { ReasonPhrases, StatusCodes } from "http-status-codes";
+import { EAuthErrors } from "../constants/auth-constants";
 
 const log = initializeLogger(__filename.split("\\").pop() || "");
 
@@ -16,14 +17,19 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
 		return res.status(200).send(user);
 	} catch (error) {
 		log.error(`Error occurred when processing login request. ERR: ${error}`);
-		next(
-			buildErrorMessage(
-				ReasonPhrases.INTERNAL_SERVER_ERROR,
-				"An unknown error occurred while trying to process your request",
-				"CONTROLLER_SERVICE",
-				(error as typeof Error).toString()
-			)
-		);
+		handleControllerError(next, error, [
+			{
+				reasons: [EAuthErrors.NOT_AUTHORIZED_YET],
+				type: ReasonPhrases.CONFLICT,
+				cause:
+					"User exists but is not authorized yet. Please check the given email",
+			},
+			{
+				reasons: [EAuthErrors.WRONG_PASSWORD, EAuthErrors.USER_NOT_FOUND],
+				type: ReasonPhrases.UNAUTHORIZED,
+				cause: "Invalid credentials",
+			},
+		]);
 	}
 };
 
@@ -33,17 +39,21 @@ const logoutUser = async (req: Request, res: Response, next: NextFunction) => {
 		const userId = req.headers["user-id"] as string | undefined;
 		await AuthService.logoutUser(userId || "");
 		log.info("Succesfully processed logout request");
-		return res.status(200).send();
+		return res.status(StatusCodes.NO_CONTENT).send();
 	} catch (error) {
-		log.error(`Error occurred when processing login request. ERR: ${error}`);
-		next(
-			buildErrorMessage(
-				ReasonPhrases.INTERNAL_SERVER_ERROR,
-				"An unknown error occurred while trying to process your request",
-				"CONTROLLER_SERVICE",
-				(error as typeof Error).toString()
-			)
-		);
+		log.error(`Error occurred when processing logout request ERR: ${error}`);
+		handleControllerError(next, error, [
+			{
+				reasons: [EAuthErrors.USER_NOT_FOUND],
+				type: ReasonPhrases.UNAUTHORIZED,
+				cause: "Invalid credentials",
+			},
+			{
+				reasons: [EAuthErrors.USER_LOGGED_OUT],
+				type: ReasonPhrases.CONFLICT,
+				cause: "User has already logged out.",
+			},
+		]);
 	}
 };
 
@@ -75,15 +85,46 @@ const registerUser = async (
 		log.info("Succesfully processed register request");
 		return res.status(200).send();
 	} catch (error) {
-		log.error(`Error occurred when processing register request\n\t${error}`);
-		next(
-			buildErrorMessage(
-				ReasonPhrases.INTERNAL_SERVER_ERROR,
-				"An unknown error occurred while trying to process your request",
-				"CONTROLLER_SERVICE",
-				error
-			)
+		log.error(`Error occurred when processing register request ERR: ${error}`);
+		handleControllerError(next, error, [
+			{
+				reasons: [EAuthErrors.USER_ALREADY_EXISTS],
+				type: ReasonPhrases.CONFLICT,
+				cause: "User with this email already exists.",
+			},
+		]);
+	}
+};
+
+const refreshTokens = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		log.info("Intercepted refreshTokens request");
+		const { refreshToken } = req.body;
+		const userId = req.headers["user-id"] as string | undefined;
+		const user = await AuthService.refreshTokens(userId || "", refreshToken);
+		log.info("Succesfully processed refreshTokens request");
+		return res.status(200).json(user);
+	} catch (error) {
+		log.error(
+			`Error occurred when processing refreshTokens request. ERR: ${error}`
 		);
+		handleControllerError(next, error, [
+			{
+				reasons: [EAuthErrors.USER_NOT_FOUND],
+				type: ReasonPhrases.UNAUTHORIZED,
+				cause: "Invalid Credentials",
+			},
+			{
+				reasons: [EAuthErrors.USER_INVALID_TOKEN],
+				type: ReasonPhrases.UNAUTHORIZED,
+				cause:
+					"User's refresh token is outdated or does not match with access token",
+			},
+		]);
 	}
 };
 
@@ -170,6 +211,7 @@ export const AuthController = {
 	loginUser,
 	logoutUser,
 	registerUser,
+	refreshTokens,
 	forgotPassword,
 	resetPassword,
 	changePassword,
