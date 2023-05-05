@@ -29,8 +29,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  background: #ffe4c4;
-	background-image: radial-gradient(#d2691e 1px, transparent 0);
+  background: #ffffff;
 	background-size: 40px 40px;
 	background-position: -19px -19px;
 }

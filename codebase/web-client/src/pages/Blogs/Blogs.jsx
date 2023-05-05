@@ -28,6 +28,7 @@ import SL from '../../assets/SL.png';
 import { Link } from 'react-router-dom';
 import TourGuideLink from '../../components/TourGuideLink';
 
+
 const sections = [
   { title: 'Technology', url: '#' },
   { title: 'Design', url: '#' },
