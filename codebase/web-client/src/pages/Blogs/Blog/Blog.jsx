@@ -46,7 +46,7 @@ function FeaturedPost(props) {
   return (
     <Grid item xs={12} md={6}>
       <CardActionArea component="a" href="#">
-        <Card sx={{ display: 'flex' }}>
+        <Card sx={{ display: 'flex', borderRadius: '20px' }}>
           <CardContent sx={{ flex: 1 }}>
             <Typography component="h2" variant="h5">
               {post.title}
@@ -62,14 +62,16 @@ function FeaturedPost(props) {
             </Typography>
             {/* <Button size="small" color="primary" disabled={!user?.result} onClick={handleLike}>
               <Likes />
-            </Button> */}
-            <Button size="small" color="primary" onClick={handleLike} sx={{ marginLeft: '80%' }}>
+            </Button> */}<br></br>
+            <Button size="small" color="primary" onClick={handleLike} sx={{ marginLeft: '0%' }}>
               <Likes />
             </Button>
           </CardContent>
           <CardMedia
             component="img"
-            sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+            sx={{ width: 400, display: { xs: 'none', sm: 'block' }, transition: 'transform .2s', '&:hover': {
+              transform: 'scale(1.1)', 
+            }, }}
             image={post.image}
             alt={post.imageLabel}
           />
