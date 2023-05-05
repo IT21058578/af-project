@@ -1,12 +1,12 @@
-import { TokenService } from "../services/token-service";
-import initializeLogger from "../utils/logger";
+import { TokenService } from "../services/token-service.js";
+import initializeLogger from "../utils/logger.js";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
-import { buildErrorMessage } from "../utils/misc-utils";
+import { buildErrorMessage } from "../utils/misc-utils.js";
 import { NextFunction, Request, Response } from "express";
-import { TRoleValue } from "../types/constant-types";
-import { IServerError } from "../types/misc-types";
+import { TRoleValue } from "../types/constant-types.js";
+import { IServerError } from "../types/misc-types.js";
 
-const log = initializeLogger(__filename.split("\\").pop() || "");
+const log = initializeLogger(import.meta.url.split("/").pop() || "");
 
 const decodeToken =
 	() => async (req: Request, _res: Response, next: NextFunction) => {

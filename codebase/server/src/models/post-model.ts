@@ -9,6 +9,7 @@ export const postSchema = new Schema(
 		tags: [String],
 		likes: [String],
 		dislikes: [String],
+		views: {type: Number, default: 0}
 	},
 	{ timestamps: true }
 );

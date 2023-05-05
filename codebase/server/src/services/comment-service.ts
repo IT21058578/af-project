@@ -1,14 +1,14 @@
-import { Comment } from "../models/comment-model";
-import { Post } from "../models/post-model";
+import { Comment } from "../models/comment-model.js";
+import { Post } from "../models/post-model.js";
 import { ReasonPhrases } from "http-status-codes";
-import { buildPage, buildPaginationPipeline } from "../utils/mongoose-utils";
-import { TComment } from "../types/model-types";
+import { buildPage, buildPaginationPipeline } from "../utils/mongoose-utils.js";
+import { TComment } from "../types/model-types.js";
 import {
 	IAuthorizedUser,
 	IPaginationResult,
 	TExtendedPageOptions,
-} from "../types/misc-types";
-import { Role } from "../constants/constants";
+} from "../types/misc-types.js";
+import { Role } from "../constants/constants.js";
 
 const getComment = async (id: string) => {
 	const comment = await Comment.findById(id).exec();

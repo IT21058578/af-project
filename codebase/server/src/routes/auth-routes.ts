@@ -1,6 +1,8 @@
 import { Router } from "express";
-import { AuthController } from "../controllers/auth-controller";
-import validateSchema from "../middleware/validate-schema";
+import { AuthController } from "../controllers/auth-controller.js";
+import validateSchema from "../middleware/validate-schema.js";
+import authorizeRequest from "../middleware/authorize-request.js";
+import { Role } from "../constants/constants.js";
 
 const router = Router();
 
@@ -15,6 +17,7 @@ router.post(
 
 router.put(
 	"/refresh",
+	authorizeRequest([Role.USER]),
 	...validateSchema({
 		refreshToken: { isJWT: true },
 		"user-id": { in: ["headers"], isMongoId: true },
@@ -24,6 +27,7 @@ router.put(
 
 router.delete(
 	"/logout",
+	authorizeRequest([Role.USER]),
 	...validateSchema({ "user-id": { in: ["headers"], isMongoId: true } }),
 	AuthController.logoutUser
 );
@@ -31,13 +35,16 @@ router.delete(
 router.post(
 	"/register",
 	...validateSchema({
-		firstName: { isString: true },
-		lastName: { isString: true },
-		mobile: { isString: true },
-		dateOfBirth: { toDate: true },
-		isSubscribed: { isBoolean: true },
-		email: { isEmail: true },
-		password: { isString: true },
+		firstName: { isString: true, errorMessage: "First Name cannot be empty" },
+		lastName: { isString: true, errorMessage: "Last Name Cannot be empty" },
+		mobile: { isString: true, errorMessage: "Mobile number must be valid" },
+		dateOfBirth: { toDate: true, errorMessage: "Date of Birth must be a date" },
+		isSubscribed: {
+			isBoolean: true,
+			errorMessage: "isSubscribed must be a boolean",
+		},
+		email: { isEmail: true, errorMessage: "Email must be valid" },
+		password: { isString: true, errorMessage: "Password cannot be empty" },
 	}),
 	AuthController.registerUser
 );
@@ -45,6 +52,7 @@ router.post(
 router.put(
 	"/reset-password",
 	...validateSchema({
+		email: { isString: true },
 		resetToken: { isUUID: true },
 		newPassword: { isString: true },
 	}),
@@ -61,8 +69,9 @@ router.put(
 
 router.put(
 	"/change-password",
+	authorizeRequest([Role.USER]),
 	...validateSchema({
-		email: { isEmail: true },
+		"user-id": { in: ["headers"], isMongoId: true },
 		oldPassword: { isString: true },
 		newPassword: { isString: true },
 	}),

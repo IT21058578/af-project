@@ -1,4 +1,5 @@
-import { TRoleValue } from "./constant-types";
+import { TRoleValue } from "./constant-types.js";
+import { TPost } from "./model-types.js";
 
 export interface IAuthorizedUser {
 	roles: TRoleValue[];
@@ -13,6 +14,16 @@ export type TExtendedPageOptions<T> = {
 } & {
 	[Property in keyof T]: string;
 };
+
+export interface IPostPageOptions extends TExtendedPageOptions<TPost> {
+	/** Most comments and views per second */
+	isHot?: true;
+	/** Most views */
+	isPopular?: true;
+	/** Most comments per view */
+	isControversial?: true;
+	authorName?: string;
+}
 
 export interface IPaginationResult<T> {
 	data: T[];

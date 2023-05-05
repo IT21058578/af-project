@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"scripts": {
-		"test": "jest",
+		"test": "jest --forceExit",
 		"build": "tsc",
 		"gen-data": "ts-node-esm src/utils/setup-test-data.ts",
 		"dev": "nodemon src/index.ts",

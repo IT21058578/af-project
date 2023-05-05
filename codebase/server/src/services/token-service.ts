@@ -1,10 +1,10 @@
 import * as jose from "jose";
 import fs from "fs/promises";
 
-import initializeLogger from "../utils/logger";
-import { TRoleValue } from "../types/constant-types";
+import initializeLogger from "../utils/logger.js";
+import { TRoleValue } from "../types/constant-types.js";
 
-const log = initializeLogger(__filename.split("\\").pop() || "");
+const log = initializeLogger(import.meta.url.split("/").pop() || "");
 const algorithm = "RS256";
 const jwtIssuer = "af-project-csse-we-07";
 

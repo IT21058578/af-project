@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { IServerError } from "../types/misc-types";
+import { IServerError } from "../types/misc-types.js";
 import { ReasonPhrases, StatusCodes, getStatusCode } from "http-status-codes";
 
 const errorHandler =

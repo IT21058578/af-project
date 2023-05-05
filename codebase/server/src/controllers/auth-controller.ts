@@ -1,12 +1,15 @@
 import { NextFunction, Request, Response } from "express";
-import { AuthService } from "../services/auth-service";
-import initializeLogger from "../utils/logger";
-import { TUser } from "../types/model-types";
-import { buildErrorMessage, handleControllerError } from "../utils/misc-utils";
+import { AuthService } from "../services/auth-service.js";
+import initializeLogger from "../utils/logger.js";
+import { TUser } from "../types/model-types.js";
+import {
+	buildErrorMessage,
+	handleControllerError,
+} from "../utils/misc-utils.js";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { EAuthErrors } from "../constants/auth-constants";
+import { EAuthErrors } from "../constants/auth-constants.js";
 
-const log = initializeLogger(__filename.split("\\").pop() || "");
+const log = initializeLogger(import.meta.url.split("/").pop() || "");
 
 const loginUser = async (req: Request, res: Response, next: NextFunction) => {
 	try {
@@ -141,16 +144,9 @@ const forgotPassword = async (
 		return res.status(200).send();
 	} catch (error) {
 		log.error(
-			`Error occurred when processing forgot passowrd request\n\t${error}`
+			`Error occurred when processing forgot passowrd request ERR: ${error}`
 		);
-		next(
-			buildErrorMessage(
-				ReasonPhrases.INTERNAL_SERVER_ERROR,
-				"An unknown error occurred while trying to process your request",
-				"CONTROLLER_SERVICE",
-				error
-			)
-		);
+		handleControllerError(next, error, []);
 	}
 };
 
@@ -161,22 +157,16 @@ const resetPassword = async (
 ) => {
 	try {
 		log.info("Intercepted reset passsword request");
-		const { email, resetToken, password } = req.body;
-		await AuthService.resetPassword(email, resetToken, password);
+		console.log(req.body);
+		const { email, resetToken, newPassword } = req.body;
+		await AuthService.resetPassword(email, resetToken, newPassword);
 		log.info("Succesfully processed reset password request");
 		return res.status(200).send();
 	} catch (error) {
 		log.error(
-			`Error occurred when processing reset password request\n\t${error}`
+			`Error occurred when processing reset password request ERR: ${error}`
 		);
-		next(
-			buildErrorMessage(
-				ReasonPhrases.INTERNAL_SERVER_ERROR,
-				"An unknown error occurred while trying to process your request",
-				"CONTROLLER_SERVICE",
-				error
-			)
-		);
+		handleControllerError(next, error, []);
 	}
 };
 
@@ -194,16 +184,9 @@ const changePassword = async (
 		return res.status(200).send();
 	} catch (error) {
 		log.error(
-			`Error occurred when processing change password request\n\t${error}`
+			`Error occurred when processing change password request ERR: ${error}`
 		);
-		next(
-			buildErrorMessage(
-				ReasonPhrases.INTERNAL_SERVER_ERROR,
-				"An unknown error occurred while trying to process your request",
-				"CONTROLLER_SERVICE",
-				error
-			)
-		);
+		handleControllerError(next, error, []);
 	}
 };
 

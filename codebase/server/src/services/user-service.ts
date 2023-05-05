@@ -1,4 +1,4 @@
-import { TUser } from "../types/model-types";
+import { TUser } from "../types/model-types.js";
 
 const getUser = async (id: string) => {};
 

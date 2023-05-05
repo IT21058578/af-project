@@ -3,20 +3,22 @@ import dotenv from "dotenv";
 import helmet from "helmet";
 import cors from "cors";
 import mongoose from "mongoose";
-import initializeLogger from "./utils/logger";
+import initializeLogger from "./utils/logger.js";
 
-import authRoutes from "./routes/auth-routes";
-import postRoutes from "./routes/post-routes";
-import userRoutes from "./routes/user-routes";
+import authRoutes from "./routes/auth-routes.js";
+import postRoutes from "./routes/post-routes.js";
+import userRoutes from "./routes/user-routes.js";
+import packageRoutes from "./routes/package-routes.js";
+import locationRoutes from "./routes/location-routes.js";
 
-import decodeToken from "./middleware/decode-token";
-import { PORT } from "./constants/constants";
-import requestLogger from "./middleware/request-logger";
-import errorHandler from "./middleware/error-handler";
-import { getDbName, getDbUri } from "./utils/misc-utils";
+import decodeToken from "./middleware/decode-token.js";
+import { PORT } from "./constants/constants.js";
+import requestLogger from "./middleware/request-logger.js";
+import errorHandler from "./middleware/error-handler.js";
+import { getDbName, getDbUri } from "./utils/misc-utils.js";
 dotenv.config();
 
-const log = initializeLogger(__filename.split("\\").pop() || "");
+const log = initializeLogger(import.meta.url.split("/").pop() || "");
 
 log.info("Starting server...");
 
@@ -33,20 +35,24 @@ app.use(decodeToken());
 
 // Routes
 log.info("Configuring routes...");
+
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/posts", postRoutes);
+app.use("/api/v1/locations", locationRoutes);
+app.use("/api/v1/packages", packageRoutes);
 
 app.use(errorHandler());
 
 // Database Connection
 log.info("Connecting to MongoDB...");
-let server: any;
-mongoose.connect(await getDbUri(), { dbName: getDbName() }).then(() => {
-	log.info("Established connection");
-	server = app.listen(PORT || 3000, () => {
-		log.info(`Started listening to port ${PORT}`);
+(async () => {
+	mongoose.connect(await getDbUri(), { dbName: getDbName() }).then(() => {
+		log.info("Established connection");
+		app.listen(PORT || 3000, () => {
+			log.info(`Started listening to port ${PORT}`);
+		});
 	});
-});
+})();
 
-export { server };
+export const server = app;

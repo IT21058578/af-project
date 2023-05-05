@@ -1,16 +1,16 @@
 import bcrypt from "bcrypt";
 import * as uuid from "uuid";
 
-import { User } from "../models/user-model";
-import { TokenService } from "./token-service";
-import { EmailService } from "./email-service";
-import { Role } from "../constants/constants";
-import initializeLogger from "../utils/logger";
-import { TUser } from "../types/model-types";
-import { TRoleValue } from "../types/constant-types";
-import { EAuthErrors } from "../constants/auth-constants";
+import { User } from "../models/user-model.js";
+import { TokenService } from "./token-service.js";
+import { EmailService } from "./email-service.js";
+import { Role } from "../constants/constants.js";
+import initializeLogger from "../utils/logger.js";
+import { TUser } from "../types/model-types.js";
+import { TRoleValue } from "../types/constant-types.js";
+import { EAuthErrors } from "../constants/auth-constants.js";
 
-const log = initializeLogger(__filename.split("\\").pop() || "");
+const log = initializeLogger(import.meta.url.split("/").pop() || "");
 
 const loginUser = async (email: string, password: string) => {
 	log.info("Validating user details...");
@@ -143,16 +143,11 @@ const forgotPassword = async (email: string) => {
 
 	user.resetToken = uuid.v4();
 
-	try {
-		EmailService.sendForgotPasswordEmail(
-			email,
-			user.firstName || "",
-			user.resetToken
-		);
-	} catch (error) {
-		log.error("Failed to send registration email");
-	}
-
+	EmailService.sendForgotPasswordEmail(
+		email,
+		user.firstName || "",
+		user.resetToken
+	);
 	await user.save();
 };
 
@@ -173,15 +168,7 @@ const resetPassword = async (
 	user.password = await bcrypt.hash(newPassword, 10);
 	user.resetToken = uuid.v4();
 
-	try {
-		EmailService.sendPasswordChangedEmail(
-			user.email || "",
-			user.firstName || ""
-		);
-	} catch (error) {
-		log.error("Failed to send registration email");
-	}
-
+	EmailService.sendPasswordChangedEmail(user.email || "", user.firstName || "");
 	await user.save();
 };
 
@@ -203,14 +190,7 @@ const changePassword = async (
 		throw new Error("Password is incorrect");
 	}
 
-	try {
-		EmailService.sendPasswordChangedEmail(
-			user.email || "",
-			user.firstName || ""
-		);
-	} catch (error) {
-		log.error("Failed to send registration email");
-	}
+	EmailService.sendPasswordChangedEmail(user.email || "", user.firstName || "");
 
 	user.password = await bcrypt.hash(newPassword, 10);
 	await user.save();

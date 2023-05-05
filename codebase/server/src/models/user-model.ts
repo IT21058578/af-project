@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { tokenFamilySchema } from "./token-family-model";
+import { tokenFamilySchema } from "./token-family-model.js";
 
 export const userSchema = new Schema(
 	{

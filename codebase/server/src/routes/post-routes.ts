@@ -1,8 +1,8 @@
 import express from "express";
-import { PostController } from "../controllers/post-controller";
-import commentRoutes from "./comment-routes";
-import authorizeRequest from "../middleware/authorize-request";
-import { Role } from "../constants/constants";
+import { PostController } from "../controllers/post-controller.js";
+import commentRoutes from "./comment-routes.js";
+import authorizeRequest from "../middleware/authorize-request.js";
+import { Role } from "../constants/constants.js";
 import supertest from "supertest";
 const router = express.Router();
 // Post routes

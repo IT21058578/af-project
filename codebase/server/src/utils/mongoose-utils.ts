@@ -1,6 +1,10 @@
 import { Aggregate, FilterQuery, PipelineStage } from "mongoose";
-import { IPaginationResult, TExtendedPageOptions } from "../types/misc-types";
-import { TPost } from "../types/model-types";
+import {
+	IPaginationResult,
+	IPostPageOptions,
+	TExtendedPageOptions,
+} from "../types/misc-types.js";
+import { TPost } from "../types/model-types.js";
 
 // Options parameter is an object having searchOptions, filteringOptions, and etc.
 export const buildPaginationPipeline = <T>({
@@ -41,9 +45,9 @@ export const buildPaginationPipeline = <T>({
 };
 
 export const buildPostPaginationPipeline = ({
-	author,
+	authorName,
 	...rest
-}: TExtendedPageOptions<TPost & { author?: string }>) => {
+}: IPostPageOptions) => {
 	const paginationPipeline = buildPaginationPipeline<TPost>(rest);
 	paginationPipeline.splice(1, 0, {
 		$lookup: {
@@ -57,6 +61,7 @@ export const buildPostPaginationPipeline = ({
 		},
 	});
 	// TODO: Insert the additional match into the match in the query.
+	// TODO: Figure out way to do the hot, controversial, popular thing here.
 	return paginationPipeline;
 };
 

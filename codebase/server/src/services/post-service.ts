@@ -1,17 +1,18 @@
-import { Post } from "../models/post-model";
+import { Post } from "../models/post-model.js";
 import { ReasonPhrases } from "http-status-codes";
 import {
 	buildPage,
 	buildPaginationPipeline,
 	buildPostPaginationPipeline,
-} from "../utils/mongoose-utils";
+} from "../utils/mongoose-utils.js";
 import {
 	IAuthorizedUser,
 	IPaginationResult,
+	IPostPageOptions,
 	TExtendedPageOptions,
-} from "../types/misc-types";
-import { TPost } from "../types/model-types";
-import { Role } from "../constants/constants";
+} from "../types/misc-types.js";
+import { TPost } from "../types/model-types.js";
+import { Role } from "../constants/constants.js";
 
 const getPost = async (id: string) => {
 	const post = await Post.findById(id).exec();
@@ -19,9 +20,7 @@ const getPost = async (id: string) => {
 	return post.toObject();
 };
 
-const searchPosts = async (
-	postSearchOptions: Partial<TExtendedPageOptions<TPost>>
-) => {
+const searchPosts = async (postSearchOptions: IPostPageOptions) => {
 	const paginationResult = (await Post.aggregate(
 		buildPostPaginationPipeline(postSearchOptions as any)
 	).exec()) as any as IPaginationResult<TPost>;

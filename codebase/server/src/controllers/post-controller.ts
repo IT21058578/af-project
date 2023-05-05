@@ -1,13 +1,13 @@
-import { PostService } from "../services/post-service";
-import initializeLogger from "../utils/logger";
+import { PostService } from "../services/post-service.js";
+import initializeLogger from "../utils/logger.js";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { buildErrorMessage } from "../utils/misc-utils";
+import { buildErrorMessage } from "../utils/misc-utils.js";
 import { NextFunction, Request, Response } from "express";
-import { TRoleValue } from "../types/constant-types";
-import { TExtendedPageOptions } from "../types/misc-types";
-import { TPost } from "../types/model-types";
+import { TRoleValue } from "../types/constant-types.js";
+import { TExtendedPageOptions } from "../types/misc-types.js";
+import { TPost } from "../types/model-types.js";
 
-const log = initializeLogger(__filename.split("\\").pop() || "");
+const log = initializeLogger(import.meta.url.split("/").pop() || "");
 
 const getPost = async (req: Request, res: Response, next: NextFunction) => {
 	try {
@@ -35,7 +35,7 @@ const searchPosts = async (req: Request, res: Response, next: NextFunction) => {
 		const postSearchOptions = req.params as Partial<
 			TExtendedPageOptions<TPost>
 		>;
-		const postPage = await PostService.searchPosts(postSearchOptions);
+		const postPage = await PostService.searchPosts(postSearchOptions as any);
 		log.info("Successfully processed searchPosts request");
 		return res.send(StatusCodes.OK).json(postPage);
 	} catch (error) {

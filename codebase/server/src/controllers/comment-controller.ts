@@ -1,11 +1,11 @@
-import { CommentService } from "../services/comment-service";
-import initializeLogger from "../utils/logger";
+import { CommentService } from "../services/comment-service.js";
+import initializeLogger from "../utils/logger.js";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { buildErrorMessage } from "../utils/misc-utils";
+import { buildErrorMessage } from "../utils/misc-utils.js";
 import { Response, Request, NextFunction } from "express";
-import { TRoleValue } from "../types/constant-types";
+import { TRoleValue } from "../types/constant-types.js";
 
-const log = initializeLogger(__filename.split("\\").pop() || "");
+const log = initializeLogger(import.meta.url.split("/").pop() || "");
 
 const getComment = async (req: Request, res: Response, next: NextFunction) => {
 	try {

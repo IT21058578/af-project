@@ -1,13 +1,13 @@
 import express from "express";
-import { CommentController } from "../controllers/comment-controller";
-import validateSchema from "../middleware/validate-schema";
+import { CommentController } from "../controllers/comment-controller.js";
+import validateSchema from "../middleware/validate-schema.js";
 import {
 	checkCommentId,
 	checkReactionType,
 	checkUserDetails,
-} from "../utils/schema-validation-utils";
-import authorizeRequest from "../middleware/authorize-request";
-import { Role } from "../constants/constants";
+} from "../utils/schema-validation-utils.js";
+import authorizeRequest from "../middleware/authorize-request.js";
+import { Role } from "../constants/constants.js";
 
 const router = express.Router();
 

@@ -1,8 +1,11 @@
-import { DB_NAME, MONGODB_URI, TEST_DB_NAME } from "../constants/constants";
+import { DB_NAME, MONGODB_URI, TEST_DB_NAME } from "../constants/constants.js";
 import { MongoMemoryServer } from "mongodb-memory-server";
-import { IServerError } from "../types/misc-types";
-import { NextFunction } from "express";
+import { IServerError } from "../types/misc-types.js";
+import { NextFunction, Request, Response } from "express";
 import { ReasonPhrases } from "http-status-codes";
+import initializeLogger from "./logger.js";
+
+const log = initializeLogger(import.meta.url.split("/").pop() || "");
 
 export const buildErrorMessage = (
 	type: string,
