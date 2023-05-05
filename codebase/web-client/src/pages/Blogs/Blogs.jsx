@@ -54,7 +54,7 @@ const mainFeaturedPost = {
 const featuredPosts = [
   {
     title: 'Featured post',
-    date: 'Nov 12',
+    date: 'Nov 12, 2022',
     description:
       'This is a wider card with supporting text below as a natural lead-in to additional content.',
     image: 'https://www.traveldailymedia.com/assets/2022/10/shutterstock_1046627314.jpg',
@@ -62,7 +62,7 @@ const featuredPosts = [
   },
   {
     title: 'Post title',
-    date: 'Nov 11',
+    date: 'Nov 11, 2022',
     description:
       'This is a wider card with supporting text below as a natural lead-in to additional content.',
     image: 'https://www.backpackerbanter.com/blog/wp-content/uploads/2018/11/best-places-to-visit-in-sri-lanka-backpacker-travel-sigiriya-kandy-dambulla-elephants-1920x1014.jpg',
@@ -70,7 +70,7 @@ const featuredPosts = [
   },
   {
     title: 'Post title2',
-    date: 'Nov 11',
+    date: 'Nov 11, 2022',
     description:
       'This is a wider card with supporting text below as a natural lead-in to additional content.',
     image: 'https://www.journeyera.com/wp-content/uploads/2018/01/sri-lanka-photos-8716.jpg',
@@ -78,7 +78,7 @@ const featuredPosts = [
   },
   {
     title: 'Post title3',
-    date: 'Nov 11',
+    date: 'Nov 11, 2022',
     description:
       'This is a wider card with supporting text below as a natural lead-in to additional content.',
     image: 'https://www.experiencetravelgroup.com/blog/wp-content/uploads/2013/03/Sri-Lanka-3.jpg',
@@ -86,7 +86,7 @@ const featuredPosts = [
   },
   {
     title: 'Post title4',
-    date: 'Nov 11',
+    date: 'Nov 11, 2022',
     description:
       'This is a wider card with supporting text below as a natural lead-in to additional content.',
     image: 'https://static.saltinourhair.com/wp-content/uploads/2018/06/23120224/best-sri-lanka-route-guide.jpg',
@@ -94,7 +94,7 @@ const featuredPosts = [
   },
   {
     title: 'Post title5',
-    date: 'Nov 11',
+    date: 'Nov 11, 2022',
     description:
       'This is a wider card with supporting text below as a natural lead-in to additional content.',
     image: 'https://worldtravelfamily.com/wp-content/uploads/2013/12/Sri-Lanka-Travel-Blog.jpg',
@@ -132,15 +132,17 @@ export default function Blog() {
       </Link>
 
       <CssBaseline />
-      <NavBar />
+      <div>
+      <NavBar style={{ position: 'absolute', zIndex: 1 }} />
       <CardMedia
         component="video"
         autoPlay
         loop
         muted
         src={video}
-        style={{ height: '60%' }}
+        style={{ height: '60%', marginTop: '-360px' }}
       />
+      </div>
       <br></br>
       <Container maxWidth="xl">
         <main>
@@ -154,7 +156,6 @@ export default function Blog() {
             {/* <Main title="From the firehose" posts={posts} /> */}
           </Grid>
           <Pagination />
-          {/* <Carousel /> */}
         </main>
       </Container>
       <CardMedia
