@@ -1,0 +1,72 @@
+.appBar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  background: antiquewhite;
+}
+
+@media (max-width: 600px) {
+  .appBar {
+    flex-direction: column;
+  }
+}
+
+.heading {
+ 
+  text-decoration: none;
+  font-size: 2em;
+  font-weight: 300;
+}
+
+.image {
+  margin-left: 10px;
+  margin-top: 5px;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: center;
+  margin-left: 60%;
+}
+
+@media (max-width: 600px) {
+  .toolbar {
+    width: auto;
+  }
+}
+
+.profile {
+  display: flex;
+  justify-content: space-between;
+  width: 400px;
+  align-items: center;
+}
+
+@media (max-width: 600px) {
+  .profile {
+    width: auto;
+    justify-content: center;
+  }
+}
+
+.logout {
+  margin-left: 20px;
+  align-items: right;
+}
+
+.userName {
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
+.brandContainer {
+  display: flex;
+  margin-top: 1%;
+}
+
+.purple {
+  color: darkblue;
+  background-color: purple;
+}
