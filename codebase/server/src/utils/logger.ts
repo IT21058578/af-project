@@ -2,8 +2,10 @@ import { createLogger, format, transports } from "winston";
 
 const customFormat = format.printf(
 	({ level, message, label, timestamp, moduleName }) =>
-		`${timestamp} ${level.toUpperCase()} - [${label}] \{${moduleName}\} : ${message}`
+		`${timestamp} ${level} - [${label}] \{${moduleName}\} : ${message}`
 );
+
+// TODO: Colorize Output
 
 const logger = createLogger({
 	level: "info",
@@ -15,12 +17,13 @@ const logger = createLogger({
 		format.errors({ stack: true }),
 		format.splat(),
 		format.json(),
+		format.colorize({ level: true }),
 		customFormat
 	),
 	transports: [new transports.Console()],
 });
 
-const initializeLogger = (moduleName) =>
+const initializeLogger = (moduleName: string) =>
 	logger.child({ moduleName: moduleName });
 
 export default initializeLogger;
