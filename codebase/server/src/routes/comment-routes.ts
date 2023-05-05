@@ -11,6 +11,8 @@ import { Role } from "../constants/constants.js";
 
 const router = express.Router();
 
+// TODO: Move these routes so they arent nested
+
 // Post Comments Routes
 router.post(
 	"/",
@@ -33,6 +35,8 @@ router.post(
 	}),
 	CommentController.createComment
 );
+
+// TODO: Search comments
 
 router
 	.route("/:commentId")
@@ -63,29 +67,25 @@ router
 
 // Post Comments Like-Dislike Routes
 // Here reactionType can be: like, dislike
-router.post(
-	"/:commentId/:reactionType/",
-	authorizeRequest([Role.USER]),
-	...validateSchema({
-		...checkCommentId,
-		...checkReactionType,
-		...checkUserDetails,
-	}),
-	CommentController.createlikeDislikeComment
-);
-router.route("/:commentId/:reactionType/:userId").delete(
-	authorizeRequest([Role.USER]),
-	...validateSchema({
-		...checkCommentId,
-		...checkReactionType,
-		...checkUserDetails,
-		userId: {
-			isMongoId: true,
-			errorMessage: "userId must be an ObjectId",
-			in: ["params"],
-		},
-	}),
-	CommentController.deleteLikeDislikeComment
-);
+router
+	.route("/:commentId/:reactionType")
+	.delete(
+		authorizeRequest([Role.USER]),
+		...validateSchema({
+			...checkCommentId,
+			...checkReactionType,
+			...checkUserDetails,
+		}),
+		CommentController.deleteLikeDislikeComment
+	)
+	.post(
+		authorizeRequest([Role.USER]),
+		...validateSchema({
+			...checkCommentId,
+			...checkReactionType,
+			...checkUserDetails,
+		}),
+		CommentController.createlikeDislikeComment
+	);
 
 export default router;

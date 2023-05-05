@@ -13,7 +13,7 @@ router.get("/search", PostController.searchPosts);
 router
 	.route("/:postId")
 	.get(PostController.getPost)
-	.post(authorizeRequest([Role.ADMIN]), PostController.editPost)
+	.put(authorizeRequest([Role.ADMIN]), PostController.editPost)
 	.delete(authorizeRequest([Role.ADMIN]), PostController.deletePost);
 
 // Post Like-Dislike routes
@@ -29,6 +29,6 @@ router
 	.delete(authorizeRequest([Role.USER]), PostController.deleteLikeDislikePost);
 
 // Post-Comment routes
-router.use(commentRoutes);
+router.use("/comments", commentRoutes);
 
 export default router;

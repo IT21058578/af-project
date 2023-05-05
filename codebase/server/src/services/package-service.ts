@@ -37,7 +37,7 @@ const editTripPackage = async (
 		(existingTripPackage as any)[key] =
 			value ?? (existingTripPackage as any)[key];
 	});
-	existingTripPackage.lastUpdatedBy = authorizedUserId;
+	existingTripPackage.lastUpdatedById = authorizedUserId;
 	return (await existingTripPackage.save()).toObject;
 };
 
@@ -52,7 +52,7 @@ const createTripPackage = async (
 	newTripPackage: Partial<TTripPackage>,
 	authorizedUserId: string
 ) => {
-	newTripPackage.createdBy = authorizedUserId;
+	newTripPackage.createdById = authorizedUserId;
 	return (await TripPackage.create(newTripPackage)).toObject;
 };
 

@@ -35,7 +35,7 @@ const editLocation = async (
 	Object.entries(editedLocation).forEach(([key, value]) => {
 		(existingLocation as any)[key] = value ?? (existingLocation as any)[key];
 	});
-	existingLocation.lastUpdatedBy = authorizedUserId;
+	existingLocation.lastUpdatedById = authorizedUserId;
 
 	return (await existingLocation.save()).toObject;
 };
@@ -50,7 +50,7 @@ const createLocation = async (
 	newLocation: Partial<TLocation>,
 	authorizedUserId: string
 ) => {
-	newLocation.createdBy = authorizedUserId;
+	newLocation.createdById = authorizedUserId;
 	return (await Location.create(newLocation)).toObject;
 };
 

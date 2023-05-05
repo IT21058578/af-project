@@ -2,20 +2,32 @@ import { Schema, model } from "mongoose";
 
 export const tripPackageSchema = new Schema(
 	{
-		createdBy: String,
-		lastUpdatedBy: String,
 		name: String,
-		price: Number,
+		createdById: String,
+		lastUpdatedById: String,
+		totalDistance: Number,
+		price: {
+			perPerson: Number,
+			transport: {
+				group: Number,
+				van: Number,
+				car: Number,
+			},
+			lodging: {
+				threeStar: Number,
+				fourStar: Number,
+				fiveStar: Number,
+			},
+			perPersonFood: Number,
+		},
 		discount: {
 			type: { type: String, enum: ["FLAT", "PERCENT"] },
 			value: Number,
 		},
 		plan: [
 			{
-				location: String,
-				stayTime: String,
-				nextRoute: String,
-				travelTime: String,
+				locationId: String,
+				activities: [String],				
 			},
 		],
 		limitedDateRange: {

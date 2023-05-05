@@ -54,18 +54,6 @@ export const checkLocationFields = (optional?: true): Schema => {
 			optional,
 			in: ["body"],
 		},
-		"price.base": {
-			isNumeric: true,
-			errorMessage: "base must be a numeric value",
-			optional,
-			in: ["body"],
-		},
-		"price.personDay": {
-			isNumeric: true,
-			errorMessage: "personDay must be a numeric value",
-			optional,
-			in: ["body"],
-		},
 		"address.addressLine1": {
 			isString: true,
 			errorMessage: "addressLine1 must be a String",
@@ -96,9 +84,99 @@ export const checkLocationFields = (optional?: true): Schema => {
 export const checkTripPackageFields = (optional?: true): Schema => {
 	return {
 		name: {
+			optional,
 			isString: true,
 			errorMessage: "name must be a String",
+			in: ["body"],
+		},
+		totalDistance: {
 			optional,
+			isNumeric: true,
+			errorMessage: "totalDistance must be a Number",
+			in: ["body"],
+		},
+		"price.perPerson": {
+			optional,
+			isNumeric: true,
+			errorMessage: "perPerson must be a Number",
+			in: ["body"],
+		},
+		"price.perPersonFood": {
+			optional,
+			isNumeric: true,
+			errorMessage: "perPersonFood must be a Number",
+			in: ["body"],
+		},
+		"price.transport.group": {
+			optional,
+			isNumeric: true,
+			errorMessage: "group must be a Number",
+			in: ["body"],
+		},
+		"price.transport.van": {
+			optional,
+			isNumeric: true,
+			errorMessage: "van must be a Number",
+			in: ["body"],
+		},
+		"price.transport.car": {
+			optional,
+			isNumeric: true,
+			errorMessage: "car must be a Number",
+			in: ["body"],
+		},
+		"price.lodging.threeStar": {
+			optional,
+			isNumeric: true,
+			errorMessage: "threeStar must be a Number",
+			in: ["body"],
+		},
+		"price.lodging.fourStar": {
+			optional,
+			isNumeric: true,
+			errorMessage: "fourStar must be a Number",
+			in: ["body"],
+		},
+		"price.lodging.fiveStar": {
+			optional,
+			isNumeric: true,
+			errorMessage: "fiveStar must be a Number",
+			in: ["body"],
+		},
+		"discount.value": {
+			optional,
+			isNumeric: true,
+			errorMessage: "value must be a Number",
+			in: ["body"],
+		},
+		"discount.type": {
+			optional,
+			isIn: { options: ["FLAT", "PERCENT"] },
+			errorMessage: "type must be either be 'FLAT' or 'PERCENT'",
+			in: ["body"],
+		},
+		"price.*.locationId": {
+			optional,
+			isMongoId: true,
+			errorMessage: "locationId must be an ObjectId",
+			in: ["body"],
+		},
+		"price.*.activities.*": {
+			optional,
+			isString: true,
+			errorMessage: "Each value in activites must be a String",
+			in: ["body"],
+		},
+		"limitedDateRange.startDate": {
+			optional: true,
+			isDate: true,
+			errorMessage: "startDate must be a Date",
+			in: ["body"],
+		},
+		"limitedDateRange.endDate": {
+			optional: true,
+			isDate: true,
+			errorMessage: "endDate must be a Date",
 			in: ["body"],
 		},
 	};

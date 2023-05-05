@@ -2,14 +2,10 @@ import { Schema, model } from "mongoose";
 
 export const locationSchema = new Schema(
 	{
-		createdBy: String,
-		lastUpdatedBy: String,
+		createdById: String,
+		lastUpdatedById: String,
 		name: String,
 		imageUrl: String,
-		price: {
-			base: Number,
-			personDay: Number,
-		},
 		address: {
 			addressLine1: String,
 			addressLine2: String,
