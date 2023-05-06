@@ -9,7 +9,7 @@ import TourHome from './pages/Tours/tourHome';
 import TourDetails from './pages/Tours/tourDetail';
 import DetailView from './components/Tour/packageDetails';
 import AdminHome from './pages/Admin/AdminHome';
-
+import Author from './pages/Author';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
@@ -35,6 +35,7 @@ function App() {
           <Route exact path="/tour/details/:title" element={<DetailView />} />
           <Route exact path="/admin" element={<AdminHome />} />
           <Route exact path="/blogdetail" element={<BlogDetails />} />
+          <Route exact path="/author" element={<Author />} />
         </Routes>
       </div>
       {/* <Footer /> */}
