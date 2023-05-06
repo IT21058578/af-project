@@ -29,7 +29,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  background: #ffffff;
+  background: antiquewhite;
 	background-size: 40px 40px;
 	background-position: -19px -19px;
 }
@@ -61,12 +61,21 @@ button:focus-visible {
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
-    background-color: #ffffff;
+    background-color: antiquewhite;
   }
   a:hover {
     color: #704241;
   }
   button {
     background-color: #f9f9f9;
+  }
+}
+
+a.MuiLink-root {
+  color: antiquewhite;
+  transition: color 0.2s ease-in-out;
+
+  &:hover {
+    color: white;
   }
 }

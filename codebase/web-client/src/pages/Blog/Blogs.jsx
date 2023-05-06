@@ -8,7 +8,7 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 // import Header from './Header';
 import MainFeaturedPost from './MainFeaturedPost';
-import FeaturedPost from './Blog/Blog';
+import FeaturedPost from './Blog';
 import Pagination from '../../components/Pagination';
 // import Carousel from '../../components/Carousel';
 // import Main from './Main';
@@ -43,7 +43,7 @@ const sections = [
 ];
 
 const mainFeaturedPost = {
-  title: 'Title of a longer featured blog post',
+  title: 'When can we travel to Sri Lanka in 2022?',
   description:
     "Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.",
   image: 'https://d3k9ljo62xl25w.cloudfront.net/media/images/WhenCanWeTravelTo_SriLanka_22.original.jpg',
@@ -53,15 +53,15 @@ const mainFeaturedPost = {
 
 const featuredPosts = [
   {
-    title: 'Featured post',
-    date: 'Nov 12, 2022',
+    title: '10 Best Places to Visit in Sri Lanka',
+    date: 'Jan 12, 2023',
     description:
       'This is a wider card with supporting text below as a natural lead-in to additional content.',
     image: 'https://www.traveldailymedia.com/assets/2022/10/shutterstock_1046627314.jpg',
     imageLabel: 'Image Text',
   },
   {
-    title: 'Post title',
+    title: '7 Great things to do in Jaffna',
     date: 'Nov 11, 2022',
     description:
       'This is a wider card with supporting text below as a natural lead-in to additional content.',
@@ -69,7 +69,7 @@ const featuredPosts = [
     imageLabel: 'Image Text',
   },
   {
-    title: 'Post title2',
+    title: 'Safari in Yala',
     date: 'Nov 11, 2022',
     description:
       'This is a wider card with supporting text below as a natural lead-in to additional content.',
@@ -77,7 +77,7 @@ const featuredPosts = [
     imageLabel: 'Image Text',
   },
   {
-    title: 'Post title3',
+    title: 'Sigiriya Lion Rock',
     date: 'Nov 11, 2022',
     description:
       'This is a wider card with supporting text below as a natural lead-in to additional content.',
@@ -85,15 +85,15 @@ const featuredPosts = [
     imageLabel: 'Image Text',
   },
   {
-    title: 'Post title4',
+    title: '9 Unmissable Things To Do in Unawatuna, Sri Lanka',
     date: 'Nov 11, 2022',
     description:
-      'This is a wider card with supporting text below as a natural lead-in to additional content.',
+      'This is a wider card with supporting text',
     image: 'https://static.saltinourhair.com/wp-content/uploads/2018/06/23120224/best-sri-lanka-route-guide.jpg',
     imageLabel: 'Image Text',
   },
   {
-    title: 'Post title5',
+    title: '9 Great things to do in Kandy',
     date: 'Nov 11, 2022',
     description:
       'This is a wider card with supporting text below as a natural lead-in to additional content.',
@@ -126,7 +126,7 @@ export default function Blog() {
   return (
     <ThemeProvider theme={theme}>
       <Link to="/new">
-        <Fab color="inherit" aria-label="edit" variant="extended" sx={{ position: 'fixed', marginLeft: '80%', marginTop: '550px' }}>
+        <Fab aria-label="edit" variant="extended" sx={{ position: 'fixed', marginLeft: '80%', marginTop: '550px' }}>
           <EditIcon sx={{ mr: 1 }} /> Write a blog
         </Fab>
       </Link>
