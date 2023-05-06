@@ -3,6 +3,9 @@ import styled from "styled-components";
 import Destination1 from "../../assets/Destination1.png";
 import Destination2 from "../../assets/Destination2.png";
 import Destination3 from "../../assets/Destination3.png";
+import Destination4 from "../../assets/Destination4.png";
+import Destination5 from "../../assets/Destination5.png";
+import Destination6 from "../../assets/Destination6.png";
 import info1 from "../../assets/info1.png";
 import info2 from "../../assets/info2.png";
 import info3 from "../../assets/info3.png";
@@ -31,6 +34,27 @@ export default function Package() {
       cost: "45,500",
       duration: "Approx 2 night trip",
     },
+    {
+      image: Destination4,
+      title: "New Zealand",
+      subTitle: "New Zealand is an island country in the",
+      cost: "24,100",
+      duration: "Approx 1 night trip",
+    },
+    {
+      image: Destination5,
+      title: "Bora Bora",
+      subTitle: "Bora Bora is a small South Pacific island northwest of",
+      cost: "95,400",
+      duration: "Approx 2 night 2 day trip",
+    },
+    {
+      image: Destination6,
+      title: "London",
+      subTitle: "London, the capital of England and the United",
+      cost: "38,800",
+      duration: "Approx 3 night 2 day trip",
+    },
   ];
 
   const packages = [
@@ -49,6 +73,16 @@ export default function Package() {
       </div>
       <div className="packages">
         <ul>
+          {packages.map((pkg, index) => {
+            return (
+              <li
+                className={active === index + 1 ? "active" : ""}
+                onClick={() => setActive(index + 1)}
+              >
+                {pkg}
+              </li>
+            );
+          })}
         </ul>
       </div>
       <div className="destinations">

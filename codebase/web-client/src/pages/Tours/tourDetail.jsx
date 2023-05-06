@@ -3,9 +3,11 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
-import DetailImageList from '../../components/Tour/tourImageList';
 import Navbar from '../../components/NavBar/NavBar';
 import DetailCard from '../../components/Tour/packageDetailCards';
+import Recomended from '../../components/Tour/RecomendedPackages';
+import Hotel from '../../components/Tour/tourImageList';
+import Total from '../../components/Tour/bookingTotal';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -22,19 +24,16 @@ export default function TourDetails() {
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={1}>
         <Grid item xs={6} md={12}>
-          <Item sx={{color:'Black',boxShadow:'none', marginLeft:'60px' , marginRight:"60px" , marginTop:'60px'}}><h1>Package Details</h1></Item>
+          <Hotel/>
         </Grid>
-        <Grid item xs={6} md={5}>
-          <DetailImageList/>
-        </Grid>
-        <Grid item xs={6} md={6.5}>
+        <Grid item xs={6} md={6}>
           <DetailCard/>
         </Grid>
-        <Grid item xs={6} md={4}>
-          <Item></Item>
+        <Grid item xs={6} md={6}>
+          <Total/>
         </Grid>
-        <Grid item xs={6} md={8}>
-          <Item></Item>
+        <Grid item xs={6} md={12}>
+          <Recomended/>
         </Grid>
       </Grid>
     </Box>

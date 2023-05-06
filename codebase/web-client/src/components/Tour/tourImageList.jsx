@@ -1,71 +1,102 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
-import ImageListItemBar from '@mui/material/ImageListItemBar';
+import "./details.css";
+import CancelIcon from '@mui/icons-material/Cancel';
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { useState } from "react";
 
-export default function DetailImageList() {
+const Hotel = () => {
+  const [slideNumber, setSlideNumber] = useState(0);
+  const [open, setOpen] = useState(false);
+
+  const photos = [
+    {
+      src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707778.jpg?k=56ba0babbcbbfeb3d3e911728831dcbc390ed2cb16c51d88159f82bf751d04c6&o=&hp=1",
+    },
+    {
+      src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707367.jpg?k=cbacfdeb8404af56a1a94812575d96f6b80f6740fd491d02c6fc3912a16d8757&o=&hp=1",
+    },
+    {
+      src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261708745.jpg?k=1aae4678d645c63e0d90cdae8127b15f1e3232d4739bdf387a6578dc3b14bdfd&o=&hp=1",
+    },
+    {
+      src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707776.jpg?k=054bb3e27c9e58d3bb1110349eb5e6e24dacd53fbb0316b9e2519b2bf3c520ae&o=&hp=1",
+    },
+    {
+      src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261708693.jpg?k=ea210b4fa329fe302eab55dd9818c0571afba2abd2225ca3a36457f9afa74e94&o=&hp=1",
+    },
+    {
+      src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707389.jpg?k=52156673f9eb6d5d99d3eed9386491a0465ce6f3b995f005ac71abc192dd5827&o=&hp=1",
+    },
+  ];
+
+  const handleOpen = (i) => {
+    setSlideNumber(i);
+    setOpen(true);
+  };
+
+  const handleMove = (direction) => {
+    let newSlideNumber;
+
+    if (direction === "l") {
+      newSlideNumber = slideNumber === 0 ? 5 : slideNumber - 1;
+    } else {
+      newSlideNumber = slideNumber === 5 ? 0 : slideNumber + 1;
+    }
+
+    setSlideNumber(newSlideNumber)
+  };
+
   return (
     <div>
-    <Box sx={{ width: 500, height: 500, overflowY: 'scroll' ,margin:'20px' , marginLeft:'40px'}}>
-      <ImageList variant="masonry" cols={3} gap={8}>
-        {itemData.map((item) => (
-          <ImageListItem key={item.img} sx={{color:'black'}}>
-            <img
-              src={`${item.img}?w=248&fit=crop&auto=format`}
-              srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-              alt={item.title}
-              loading="lazy"
+      <div className="hotelContainer">
+        {open && (
+          <div className="slider">
+            <CancelIcon
+              className="close"
+              onClick={() => setOpen(false)}
             />
-            <ImageListItemBar position="below" title={item.author} />
-          </ImageListItem>
-        ))}
-      </ImageList>
-    </Box>
+            <ArrowCircleLeftIcon
+              className="arrow"
+              onClick={() => handleMove("l")}
+            />
+            <div className="sliderWrapper">
+              <img src={photos[slideNumber].src} alt="" className="sliderImg" />
+            </div>
+            <ArrowCircleRightIcon
+              className="arrow"
+              onClick={() => handleMove("r")}
+            />
+          </div>
+        )}
+        <div className="hotelWrapper">
+          <h1 className="hotelTitle">Tower Street Apartments</h1>
+          <div className="hotelAddress">
+            <LocationOnIcon/>
+            <span>Elton St 125 New york</span>
+          </div>
+          <span className="hotelDistance">
+            Excellent location – 500m from center
+          </span>
+          <span className="hotelPriceHighlight">
+            Book a stay over $114 at this property and get a free airport taxi
+          </span>
+          <div className="hotelImages">
+            {photos.map((photo, i) => (
+              <div className="hotelImgWrapper" key={i}>
+                <img
+                  onClick={() => handleOpen(i)}
+                  src={photo.src}
+                  alt=""
+                  className="hotelImg"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
-}
+};
 
-const itemData = [
-  {
-    img: 'https://images.unsplash.com/photo-1549388604-817d15aa0110',
-    title: 'Bed',
-    author: 'swabdesign',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1525097487452-6278ff080c31',
-    title: 'Books',
-    author: 'Pavel Nekoranec',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1523413651479-597eb2da0ad6',
-    title: 'Sink',
-    author: 'Charles Deluvio',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1563298723-dcfebaa392e3',
-    title: 'Kitchen',
-    author: 'Christian Mackie',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1588436706487-9d55d73a39e3',
-    title: 'Blinds',
-    author: 'Darren Richardson',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1574180045827-681f8a1a9622',
-    title: 'Chairs',
-    author: 'Taylor Simpson',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1530731141654-5993c3016c77',
-    title: 'Laptop',
-    author: 'Ben Kolde',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1481277542470-605612bd2d61',
-    title: 'Doors',
-    author: 'Philipp Berndt',
-  },
-  
-];
+export default Hotel;
