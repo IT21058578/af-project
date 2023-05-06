@@ -11,33 +11,7 @@ import { Role } from "../constants/constants.js";
 
 const router = express.Router();
 
-// TODO: Move these routes so they arent nested
-
-// Post Comments Routes
-router.post(
-	"/",
-	authorizeRequest([Role.USER]),
-	...validateSchema({
-		postId: {
-			isMongoId: true,
-			errorMessage: "postId must be an ObjectId",
-			in: ["params"],
-		},
-		parentId: {
-			isMongoId: true,
-			optional: true,
-			errorMessage: "parentId must be an ObjectId",
-		},
-		text: {
-			isString: true,
-			errorMessage: "Text must be a string and not empty",
-		},
-	}),
-	CommentController.createComment
-);
-
 // TODO: Search comments
-
 router
 	.route("/:commentId")
 	.get(

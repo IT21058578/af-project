@@ -2,14 +2,15 @@ import { Schema, Types, model } from "mongoose";
 
 export const postSchema = new Schema(
 	{
-		userId: String,
+		createdById: String,
+		lastUpdatedById: String,
 		title: String,
 		text: String,
-		image: String,
+		imageData: String,
 		tags: [String],
 		likes: [String],
 		dislikes: [String],
-		views: {type: Number, default: 0}
+		views: { type: Number, default: 0 },
 	},
 	{ timestamps: true }
 );

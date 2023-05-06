@@ -5,7 +5,7 @@ export const locationSchema = new Schema(
 		createdById: String,
 		lastUpdatedById: String,
 		name: String,
-		imageUrl: String,
+		imageData: String,
 		address: {
 			addressLine1: String,
 			addressLine2: String,

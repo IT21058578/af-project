@@ -1,9 +1,11 @@
 import express from "express";
 import { PostController } from "../controllers/post-controller.js";
-import commentRoutes from "./comment-routes.js";
 import authorizeRequest from "../middleware/authorize-request.js";
 import { Role } from "../constants/constants.js";
-import supertest from "supertest";
+import validateSchema from "../middleware/validate-schema.js";
+import { checkPostId } from "../utils/schema-validation-utils.js";
+import { CommentController } from "../controllers/comment-controller.js";
+
 const router = express.Router();
 // Post routes
 router.post("/", PostController.createPost);
@@ -28,7 +30,22 @@ router
 	.route("/:postId/:reactionType/:userId")
 	.delete(authorizeRequest([Role.USER]), PostController.deleteLikeDislikePost);
 
-// Post-Comment routes
-router.use("/comments", commentRoutes);
+router.post(
+	"/:postId/comments",
+	authorizeRequest([Role.USER]),
+	...validateSchema({
+		...checkPostId,
+		parentId: {
+			isMongoId: true,
+			optional: true,
+			errorMessage: "parentId must be an ObjectId",
+		},
+		text: {
+			isString: true,
+			errorMessage: "Text must be a string and not empty",
+		},
+	}),
+	CommentController.createComment
+);
 
 export default router;

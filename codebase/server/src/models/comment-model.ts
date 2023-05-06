@@ -3,8 +3,9 @@ import { Schema, Types, model } from "mongoose";
 export const commentSchema = new Schema(
 	{
 		postId: String,
-		userId: String,
-		parentId: String,
+		createdById: String,
+		lastUpdatedById: String,
+		parentCommentId: String,
 		text: String,
 		likes: [String],
 		dislikes: [String],

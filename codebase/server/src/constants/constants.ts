@@ -26,3 +26,8 @@ export const ETripPackageError = {
 	TRIP_PKG_NOT_FOUND: "Trip Package not found",
 	TRIP_PKG_ALREADY_EXISTS: "Trip Package already exists",
 } as const;
+
+export const EPaymentErrors = {
+	SESSION_URL_UNAVAILABLE: "Session URL unavailable",
+	UNAUTHORIZED_WEBHOOK: "Unauthorized Webhook endpoints access",
+};

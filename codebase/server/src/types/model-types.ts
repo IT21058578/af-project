@@ -12,3 +12,27 @@ export type TTokenFamily = InferSchemaType<typeof tokenFamilySchema>;
 export type TUser = InferSchemaType<typeof userSchema>;
 export type TTripPackage = InferSchemaType<typeof tripPackageSchema>;
 export type TLocation = InferSchemaType<typeof locationSchema>;
+
+export type TPostVO = Omit<TPost, "createdById" | "lastUpdatedById"> & {
+	createdBy: TUser;
+	lastUpdatedBy: TUser;
+};
+
+export type TCommentVO = Omit<TComment, "createdById" | "lastUpdatedById"> & {
+	createdBy: TUser;
+	lastUpdatedBy: TUser;
+};
+
+export type TTripPackageVO = Omit<
+	TTripPackage,
+	"createdById" | "lastUpdatedById" | "plan"
+> & {
+	createdBy: TUser;
+	lastUpdatedBy: TUser;
+	plan: (TLocation & { activities: string[] })[];
+};
+
+export type TLocationVO = Omit<TLocation, "createdById" | "lastUpdatedById"> & {
+	createdBy: TUser;
+	lastUpdatedBy: TUser;
+};

@@ -10,12 +10,14 @@ import postRoutes from "./routes/post-routes.js";
 import userRoutes from "./routes/user-routes.js";
 import packageRoutes from "./routes/package-routes.js";
 import locationRoutes from "./routes/location-routes.js";
+import commentRoutes from "./routes/comment-routes.js";
 
 import decodeToken from "./middleware/decode-token.js";
 import { PORT } from "./constants/constants.js";
 import requestLogger from "./middleware/request-logger.js";
 import errorHandler from "./middleware/error-handler.js";
 import { getDbName, getDbUri } from "./utils/misc-utils.js";
+import Stripe from "stripe";
 dotenv.config();
 
 const log = initializeLogger(import.meta.url.split("/").pop() || "");
@@ -41,6 +43,8 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/posts", postRoutes);
 app.use("/api/v1/locations", locationRoutes);
 app.use("/api/v1/packages", packageRoutes);
+app.use("/api/v1/comments", commentRoutes);
+
 
 app.use(errorHandler());
 
@@ -54,5 +58,10 @@ log.info("Connecting to MongoDB...");
 		});
 	});
 })();
+
+export const stripe = new Stripe("secret_key", {
+	apiVersion: "2022-11-15",
+	typescript: true,
+});
 
 export const server = app;

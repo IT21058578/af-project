@@ -34,6 +34,7 @@
 		"mongoose": "^7.0.2",
 		"nodemailer": "^6.9.1",
 		"openai": "^3.2.1",
+		"stripe": "^12.4.0",
 		"uuid": "^9.0.0",
 		"winston": "^3.8.2"
 	},
@@ -49,6 +50,7 @@
 		"@types/jest": "^29.5.1",
 		"@types/mongoose": "^5.11.97",
 		"@types/nodemailer": "^6.4.7",
+		"@types/stripe": "^8.0.417",
 		"@types/supertest": "^2.0.12",
 		"@types/uuid": "^9.0.1",
 		"@types/winston": "^2.4.4",
