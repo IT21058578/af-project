@@ -14,9 +14,9 @@ import {
   Tooltip,
 } from '@mui/material';
 import { Delete, Edit } from '@mui/icons-material';
-import { data, states } from './userData';
+import { data, states } from './employeeData';
 
-const UserManagment = () => {
+const EmployeeManagment = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [tableData, setTableData] = useState(() => data);
   const [validationErrors, setValidationErrors] = useState({});
@@ -181,7 +181,7 @@ const UserManagment = () => {
             onClick={() => setCreateModalOpen(true)}
             variant="contained"
           >
-            Create New User Account
+            Create New Employee Account
           </Button>
         )}
       />
@@ -212,7 +212,7 @@ export const CreateNewAccountModal = ({ open, columns, onClose, onSubmit }) => {
 
   return (
     <Dialog open={open}>
-      <DialogTitle textAlign="center">Create New User Account</DialogTitle>
+      <DialogTitle textAlign="center">Create New Employee Account</DialogTitle>
       <DialogContent>
         <form onSubmit={(e) => e.preventDefault()}>
           <Stack
@@ -238,7 +238,7 @@ export const CreateNewAccountModal = ({ open, columns, onClose, onSubmit }) => {
       <DialogActions sx={{ p: '1.25rem' }}>
         <Button onClick={onClose}>Cancel</Button>
         <Button color="secondary" onClick={handleSubmit} variant="contained">
-          Create New User Account
+          Create New Employee Account
         </Button>
       </DialogActions>
     </Dialog>
@@ -255,4 +255,4 @@ const validateEmail = (email) =>
     );
 const validateAge = (age) => age >= 18 && age <= 50;
 
-export default UserManagment;
+export default EmployeeManagment;

@@ -14,7 +14,7 @@ import {
   Tooltip,
 } from '@mui/material';
 import { Delete, Edit } from '@mui/icons-material';
-import { data, states } from './makeData';
+import { data, locations } from './packageData';
 
 const PackageManagment = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -111,16 +111,16 @@ const PackageManagment = () => {
         }),
       },
       {
-        accessorKey: 'locations',
-        header: 'Locations',
+        accessorKey: 'catogery',
+        header: 'Catogery',
+        size: 140,
         muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
           ...getCommonEditTextFieldProps(cell),
-          type: 'email',
         }),
       },
       {
-        accessorKey: 'catogery',
-        header: 'Catogery',
+        accessorKey: 'price',
+        header: 'Price',
         size: 80,
         muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
           ...getCommonEditTextFieldProps(cell),
@@ -128,11 +128,11 @@ const PackageManagment = () => {
         }),
       },
       {
-        accessorKey: 'state',
-        header: 'State',
+        accessorKey: 'locations',
+        header: 'Locations',
         muiTableBodyCellEditTextFieldProps: {
           select: true, //change to select for a dropdown
-          children: states.map((state) => (
+          children: locations.map((state) => (
             <MenuItem key={state} value={state}>
               {state}
             </MenuItem>

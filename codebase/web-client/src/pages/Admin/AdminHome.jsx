@@ -8,6 +8,8 @@ import Dashboard from './AdminDash';
 import PackageManagment from '../../components/Admin/packageManagment';
 import Navbar from '../../components/NavBar/NavBar';
 import Footer from '../../components/Footer';
+import UserManagment from '../../components/Admin/userManagment';
+import EmployeeManagment from '../../components/Admin/employeeManagment';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -65,10 +67,10 @@ export default function AdminHome() {
         <Dashboard/>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <PackageManagment/>
+        <UserManagment/>
       </TabPanel>
       <TabPanel value={value} index={2}>
-       <PackageManagment/>
+       <EmployeeManagment/>
       </TabPanel>
       <TabPanel value={value} index={3}>
        <PackageManagment/>
