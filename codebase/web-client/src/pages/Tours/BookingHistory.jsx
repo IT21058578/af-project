@@ -23,7 +23,7 @@ export default function UserOrder() {
     <Navbar/>
     <h3>Bookig history</h3>
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table sx={{ minWidth: 450 }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>Booked Package</TableCell>
