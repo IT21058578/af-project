@@ -1,35 +1,50 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import NavBar from './components/NavBar/NavBar';
+import Footer from './components/Footer';
+import Auth from './pages/Auth/auth';
+import Blogs from './pages/Blog/Blogs';
+import BlogDetails from './pages/Blog/BlogDetails';
+import NewBlog from './pages/NewBlog';
+import TourHome from './pages/Tours/tourHome';
+import TourDetails from './pages/Tours/tourDetail';
+import AdminHome from './pages/Admin/AdminHome';
+import Author from './pages/Author';
+import UserOrder from './pages/Tours/BookingHistory';
+
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
-  const [count, setCount] = useState(0)
 
+  
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <BrowserRouter>
+      {/* <NavBar /> */}
+      <div className="App">
+        <Routes>
+          {/* 
+          <Route path="/posts" exact component={Home} />
+          <Route path="/posts/search" exact component={Home} />
+          <Route path="/posts/:id" exact component={PostDetails} />
+          <Route path={['/creators/:name', '/tags/:name']} component={CreatorOrTag} /> */}
+          {/* <Route path="/auth" exact component={() => (!user ? <Auth /> : <Redirect to="/blogs" />)} /> */}
+          <Route path="/" exact component={() => <Redirect to="/blog" />} />
+          <Route exact path="/auth" element={<Auth />} />
+          <Route exact path="/blog" element={<Blogs />} />
+          <Route exact path="/new" element={<NewBlog />} />
+          <Route exact path="/tour" element={<TourHome />} />
+          <Route exact path="/details" element={<TourDetails />} />
+          <Route exact path="/tour/details/:title" element={<TourDetails />} />
+          <Route exact path="/admin" element={<AdminHome />} />
+          <Route exact path="/blogdetail" element={<BlogDetails />} />
+          <Route exact path="/author" element={<Author />} />                    
+          <Route exact path="/userbooking" element={<UserOrder />} />
+
+
+        </Routes>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
+      {/* <Footer /> */}
+    </BrowserRouter>
   )
 }
 
-export default App
+export default App;

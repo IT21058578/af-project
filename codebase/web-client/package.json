@@ -11,12 +11,23 @@
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "@heroicons/react": "^2.0.17",
     "@mui/icons-material": "^5.11.11",
     "@mui/material": "^5.11.13",
     "@reduxjs/toolkit": "^1.9.3",
+    "export-to-csv": "^0.2.1",
+    "jwt-decode": "^3.1.2",
+    "material-react-table": "^1.11.2",
+    "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-file-base64": "^1.0.3",
+    "react-final-form": "^6.5.9",
     "react-hook-form": "^7.43.7",
+    "react-redux": "^8.0.5",
+    "react-router-dom": "^6.10.0",
+    "redux": "^4.2.1",
+    "styled-components": "^5.3.10",
     "yup": "^1.0.2"
   },
   "devDependencies": {
