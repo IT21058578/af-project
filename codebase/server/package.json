@@ -1,24 +1,62 @@
 {
-  "type": "module",
-  "scripts": {
-    "test": "jest",
-    "dev": "nodemon src/index.js",
-    "start": "node src/index.js"
-  },
-  "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "cors": "^2.8.5",
-    "dotenv": "^16.0.3",
-    "express": "^4.18.2",
-    "express-validator": "^6.15.0",
-    "helmet": "^6.0.1",
-    "jose": "^4.13.1",
-    "jsonwebtoken": "^9.0.0",
-    "mongoose": "^7.0.2",
-    "winston": "^3.8.2"
-  },
-  "devDependencies": {
-    "jest": "^29.5.0",
-    "nodemon": "^2.0.21"
-  }
+	"type": "module",
+	"scripts": {
+		"test": "jest --forceExit",
+		"build": "tsc",
+		"gen-data": "ts-node-esm src/utils/setup-test-data.ts",
+		"dev": "nodemon src/index.ts",
+		"dev-start": "ts-node-esm src/index.ts",
+		"start": "node src/index.js"
+	},
+	"nodemonConfig": {
+		"execMap": {
+			"ts": "ts-node-esm"
+		}
+	},
+	"jest": {
+		"verbose": true,
+		"globalSetup": "./src/utils/test-utils/global-before-all.ts",
+		"globalTeardown": "./src/utils/test-utils/global-after-all.ts",
+		"preset": "ts-jest"
+	},
+	"dependencies": {
+		"axios": "^1.4.0",
+		"bcrypt": "^5.1.0",
+		"bcryptjs": "^2.4.3",
+		"cors": "^2.8.5",
+		"dotenv": "^16.0.3",
+		"express": "^4.18.2",
+		"express-validator": "^6.15.0",
+		"helmet": "^6.0.1",
+		"http-status-codes": "^2.2.0",
+		"jose": "^4.13.1",
+		"jsonwebtoken": "^9.0.0",
+		"mongoose": "^7.0.2",
+		"nodemailer": "^6.9.1",
+		"openai": "^3.2.1",
+		"uuid": "^9.0.0",
+		"winston": "^3.8.2"
+	},
+	"devDependencies": {
+		"@faker-js/faker": "^7.6.0",
+		"@types/axios": "^0.14.0",
+		"@types/bcrypt": "^5.0.0",
+		"@types/cors": "^2.8.13",
+		"@types/dotenv": "^8.2.0",
+		"@types/express": "^4.17.17",
+		"@types/express-validator": "^3.0.0",
+		"@types/http-status-codes": "^1.2.0",
+		"@types/jest": "^29.5.1",
+		"@types/mongoose": "^5.11.97",
+		"@types/nodemailer": "^6.4.7",
+		"@types/supertest": "^2.0.12",
+		"@types/uuid": "^9.0.1",
+		"@types/winston": "^2.4.4",
+		"jest": "^29.5.0",
+		"mongodb-memory-server": "^8.12.2",
+		"nodemon": "^2.0.21",
+		"supertest": "^6.3.3",
+		"ts-jest": "^29.1.0",
+		"typescript": "^5.0.4"
+	}
 }

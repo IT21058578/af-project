@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 // import { useDispatch } from 'react-redux';
 import decode from 'jwt-decode';
-
-// import feastlyText from '../../images/feastlyText.png';
 import logoCH from '../../assets/logoCH.png';
 // import * as actionType from '../../constants/actionTypes';
 
@@ -24,7 +22,7 @@ import { Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-import Image from '../../assets/back_nav.png';
+import Image from '../../assets/navBg.png';
 
 
 const Navbar = () => {
@@ -91,7 +89,7 @@ const Navbar = () => {
     setAnchorElUser(null);
   };
   return (
-    <AppBar position="static" sx={{backgroundImage:`url(${Image})`,backgroundSize:'contain',backgroundRepeat:'no-repeat', opacity:"1.0", color:'black' , padding:'30px', minHeight:'370px' , boxShadow:'none'}}>
+    <AppBar position="static" sx={{ backgroundColor: 'transparent !important', backgroundImage:`url(${Image})`, backgroundSize:'cover',backgroundRepeat:'no-repeat', opacity:"1.0", color:'black' , padding:'30px', minHeight:'480px' , boxShadow:'none'}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters >
         <Link to="/Blogs" className="brandContainer">

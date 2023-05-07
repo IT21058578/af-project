@@ -3,7 +3,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import Link from '@mui/material/Link';
+import { Link } from 'react-router-dom';
 
 import logoCH from '../assets/logoCH.png';
 import TwitterIcon from '@mui/icons-material/Twitter';
@@ -56,7 +56,7 @@ export default function StickyFooter() {
             <Link color="inherit" href="https://mui.com/">
                 Tour Guide
             </Link>&nbsp;&nbsp;
-            <Link color="inherit" href="https://mui.com/">
+            <Link color="inherit" to="/blogs">
                 Blog
             </Link>&nbsp;&nbsp;
             <Link color="inherit" href="https://mui.com/">

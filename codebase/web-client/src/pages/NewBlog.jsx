@@ -15,6 +15,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Footer from '../components/Footer';
 import NavBar from '../components/NavBar/NavBar';
 import FileBase from 'react-file-base64';
+import TextareaAutosize from '@mui/base/TextareaAutosize';
 
 
 const theme = createTheme();
@@ -44,7 +45,7 @@ export default function NewBlog() {
                 />
                 </Grid>
                 <Grid item xs={12}>
-                <TextField
+                <TextareaAutosize 
                     required
                     id="content"
                     name="content"
