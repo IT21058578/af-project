@@ -8,6 +8,7 @@ import DetailCard from '../../components/Tour/packageDetailCards';
 import Recomended from '../../components/Tour/RecomendedPackages';
 import Hotel from '../../components/Tour/tourImageList';
 import Total from '../../components/Tour/bookingTotal';
+import TourGuid from '../../components/Tour/tourGuidMassage';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -31,6 +32,9 @@ export default function TourDetails() {
         </Grid>
         <Grid item xs={6} md={6}>
           <Total/>
+        </Grid>
+        <Grid item xs={6} md={12}>
+          <TourGuid/>
         </Grid>
         <Grid item xs={6} md={12}>
           <Recomended/>

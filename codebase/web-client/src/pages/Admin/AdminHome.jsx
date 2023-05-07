@@ -7,7 +7,6 @@ import Box from '@mui/material/Box';
 import Dashboard from './AdminDash';
 import PackageManagment from '../../components/Admin/packageManagment';
 import Navbar from '../../components/NavBar/NavBar';
-
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 

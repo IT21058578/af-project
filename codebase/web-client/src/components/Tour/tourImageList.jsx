@@ -11,22 +11,22 @@ const Hotel = () => {
 
   const photos = [
     {
-      src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707778.jpg?k=56ba0babbcbbfeb3d3e911728831dcbc390ed2cb16c51d88159f82bf751d04c6&o=&hp=1",
+      src: "https://media.tacdn.com/media/attractions-splice-spp-674x446/06/6a/e4/df.jpg",
     },
     {
-      src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707367.jpg?k=cbacfdeb8404af56a1a94812575d96f6b80f6740fd491d02c6fc3912a16d8757&o=&hp=1",
+      src: "https://www.trawell.in/admin/images/upload/1894272Yala_Jeep_Safari.jpg",
     },
     {
-      src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261708745.jpg?k=1aae4678d645c63e0d90cdae8127b15f1e3232d4739bdf387a6578dc3b14bdfd&o=&hp=1",
+      src: "https://travellersisle.com/wp-content/uploads/2021/06/Yala-national-park-closure.jpg",
     },
     {
-      src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707776.jpg?k=054bb3e27c9e58d3bb1110349eb5e6e24dacd53fbb0316b9e2519b2bf3c520ae&o=&hp=1",
+      src: "https://img.traveltriangle.com/blog/wp-content/uploads/2017/10/Traveler-Reviews-for-Yala-National-Park.jpg",
     },
     {
-      src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261708693.jpg?k=ea210b4fa329fe302eab55dd9818c0571afba2abd2225ca3a36457f9afa74e94&o=&hp=1",
+      src: "https://www.astraltravelsrilanka.com/wp-content/uploads/2021/12/yala-safari-arugam-bay.jpg",
     },
     {
-      src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707389.jpg?k=52156673f9eb6d5d99d3eed9386491a0465ce6f3b995f005ac71abc192dd5827&o=&hp=1",
+      src: "https://flashpackingfamily.com/wp-content/uploads/2019/12/Yala-National-park-leopard-sighting.jpg",
     },
   ];
 
@@ -70,16 +70,16 @@ const Hotel = () => {
           </div>
         )}
         <div className="hotelWrapper">
-          <h1 className="hotelTitle">Tower Street Apartments</h1>
+          <h1 className="hotelTitle">Yala national park</h1>
           <div className="hotelAddress">
             <LocationOnIcon/>
-            <span>Elton St 125 New york</span>
+            <span>Sri Lanka</span>
           </div>
           <span className="hotelDistance">
-            Excellent location – 500m from center
+            Excellent location to visit
           </span>
           <span className="hotelPriceHighlight">
-            Book a stay over $114 at this property and get a free airport taxi
+            Famous For: Wildlife, Flora & Fauna
           </span>
           <div className="hotelImages">
             {photos.map((photo, i) => (

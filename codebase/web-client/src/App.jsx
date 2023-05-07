@@ -6,7 +6,6 @@ import Blogs from './pages/Blogs/Blogs';
 import NewBlog from './pages/NewBlog';
 import TourHome from './pages/Tours/tourHome';
 import TourDetails from './pages/Tours/tourDetail';
-import DetailView from './components/Tour/packageDetails';
 import AdminHome from './pages/Admin/AdminHome';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -30,7 +29,6 @@ function App() {
           <Route exact path="/new" element={<NewBlog />} />
           <Route exact path="/tour" element={<TourHome />} />
           <Route exact path="/deatails" element={<TourDetails />} />
-          <Route exact path="/tour/details/:title" element={<DetailView />} />
           <Route exact path="/admin" element={<AdminHome />} />
 
         </Routes>

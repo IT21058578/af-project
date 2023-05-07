@@ -1,11 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Destination1 from "../../assets/Destination1.png";
-import Destination2 from "../../assets/Destination2.png";
-import Destination3 from "../../assets/Destination3.png";
-import Destination4 from "../../assets/Destination4.png";
-import Destination5 from "../../assets/Destination5.png";
-import Destination6 from "../../assets/Destination6.png";
 import info1 from "../../assets/info1.png";
 import info2 from "../../assets/info2.png";
 import info3 from "../../assets/info3.png";
@@ -14,53 +8,53 @@ import { Link } from "react-router-dom";
 export default function Package() {
   const data = [
     {
-      image: Destination1,
-      title: "Singapore",
-      subTitle: "Singapore, officialy thr Republic of Singapore, is a",
-      cost: "38,800",
+      image: "https://assets.traveltriangle.com/blog/wp-content/uploads/2014/11/Yala-National-Park-in-Sri-Lanka_23rd-oct.jpg",
+      title: "Yala",
+      subTitle: "Home To A Host Of Wildlife And Birds",
+      cost: "1,000",
       duration: "Approx 2 night trip",
     },
     {
-      image: Destination2,
-      title: "Thailand",
-      subTitle: "Thailand is a Southeast Asia country. It's known for",
-      cost: "54,200",
+      image: "https://res.cloudinary.com/thrillophilia/image/upload/c_fill,f_auto,fl_progressive.strip_profile,g_auto,h_600,q_auto,w_auto/v1/filestore/9kabqd8s5e0rjw51vpwfbjku9wxd_couple%20at%20bentota.jpg",
+      title: "Benthota",
+      subTitle: "Weekend Island Break with Colombo and Bentota",
+      cost: "1,200",
       duration: "Approx 2 night trip",
     },
     {
-      image: Destination3,
-      title: "Paris",
-      subTitle: "Paris, France's capital, is a major European city and a",
-      cost: "45,500",
+      image: "https://res.cloudinary.com/thrillophilia/image/upload/c_fill,f_auto,fl_progressive.strip_profile,g_auto,h_600,q_auto,w_auto/v1/filestore/twgr8e61ekm83i2swa2f93fpozrx_Nuwara%20Eliya%2010.jpg",
+      title: "Kandy",
+      subTitle: "Sweet Escapade to Sri Lanka with Kandy",
+      cost: "2,500",
       duration: "Approx 2 night trip",
     },
     {
-      image: Destination4,
-      title: "New Zealand",
-      subTitle: "New Zealand is an island country in the",
-      cost: "24,100",
+      image: "https://res.cloudinary.com/thrillophilia/image/upload/c_fill,f_auto,fl_progressive.strip_profile,g_auto,h_600,q_auto,w_auto/v1/filestore/7xvzjq6q8ch5a5ueq3rw9ng77k08_%5BDownloader.la%5D-619ca07794280.jpg",
+      title: "Mirissa",
+      subTitle: "1 Day Splendors of Sri Lanka with Mirissa",
+      cost: "1,100",
       duration: "Approx 1 night trip",
     },
     {
-      image: Destination5,
-      title: "Bora Bora",
-      subTitle: "Bora Bora is a small South Pacific island northwest of",
-      cost: "95,400",
+      image: "https://assets.traveltriangle.com/blog/wp-content/uploads/2015/02/Sea-Surfing-at-Arugam-Bay.jpg",
+      title: "Arugam Bay",
+      subTitle: "Turquoise Heaven For Adrenaline-Junkies",
+      cost: "1,400",
       duration: "Approx 2 night 2 day trip",
     },
     {
-      image: Destination6,
-      title: "London",
-      subTitle: "London, the capital of England and the United",
-      cost: "38,800",
+      image: "https://assets.traveltriangle.com/blog/wp-content/uploads/2015/02/Sigiriya-rock-fortress-in-Sri-Lanka.jpg",
+      title: "Sigiriya and Polonnaruwa",
+      subTitle: "Ruggedness Amidst The Greenery",
+      cost: "2,800",
       duration: "Approx 3 night 2 day trip",
     },
   ];
 
   const packages = [
-    "The Weekend Break",
-    "The Package Holiday",
-    "The Group Tour",
+    "New Packages",
+    "Most Popular Packages",
+    "Short Term Travel",
     "Long Term Slow Travel",
   ];
 
@@ -69,7 +63,7 @@ export default function Package() {
   return (
     <Section id="recommend">
       <div className="title">
-        <h2>Recommended Destinations</h2>
+        <h2>Explore Destinations</h2>
       </div>
       <div className="packages">
         <ul>
