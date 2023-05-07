@@ -28,7 +28,7 @@ function App() {
           <Route exact path="/blogs" element={<Blogs />} />
           <Route exact path="/new" element={<NewBlog />} />
           <Route exact path="/tour" element={<TourHome />} />
-          <Route exact path="/deatails" element={<TourDetails />} />
+          <Route exact path="/tour/details/:title" element={<TourDetails />} />
           <Route exact path="/admin" element={<AdminHome />} />
 
         </Routes>

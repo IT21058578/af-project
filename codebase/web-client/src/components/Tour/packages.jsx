@@ -83,7 +83,7 @@ export default function Package() {
         {tour.map((destination) => {
           return (
             <div className="destination" key={destination.title}>
-              <Link to={`/deatails`}>View details</Link>
+              <Link to={`/tour/details/${destination.title}`}>View details</Link>
               <img src={destination.image} alt="" />
               <h3>{destination.title}</h3>
               <p>{destination.subTitle}</p>
