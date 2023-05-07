@@ -30,7 +30,7 @@ export default function NewBlog() {
       <Container component="main" maxWidth="lg" sx={{ mb: 4 }}>
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 }, backgroundColor: 'antiquewhite', borderRadius:'20px',  }}>
           <Typography component="h1" variant="h4" align="center">
-            Add New Blog
+            Write a Blog
           </Typography><br></br>
             <Grid container spacing={3}>
                

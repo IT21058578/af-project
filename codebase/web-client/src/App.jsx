@@ -31,7 +31,7 @@ function App() {
           <Route exact path="/blog" element={<Blogs />} />
           <Route exact path="/new" element={<NewBlog />} />
           <Route exact path="/tour" element={<TourHome />} />
-          <Route exact path="/deatails" element={<TourDetails />} />
+          <Route exact path="/details" element={<TourDetails />} />
           <Route exact path="/tour/details/:title" element={<DetailView />} />
           <Route exact path="/admin" element={<AdminHome />} />
           <Route exact path="/blogdetail" element={<BlogDetails />} />
