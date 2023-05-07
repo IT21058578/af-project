@@ -2,6 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Navbar from '../../components/NavBar/NavBar';
+import Footer from '../../components/Footer';
 import DetailCard from '../../components/Tour/packageDetailCards';
 import Recomended from '../../components/Tour/RecomendedPackages';
 import Hotel from '../../components/Tour/tourImageList';
@@ -31,6 +32,7 @@ export default function TourDetails() {
         </Grid>
       </Grid>
     </Box>
+    <Footer />
     </div>
   );
 }

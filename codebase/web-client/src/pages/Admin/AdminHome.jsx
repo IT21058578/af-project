@@ -57,9 +57,9 @@ export default function AdminHome() {
     <Box sx={{ width: '100%', marginTop:'30px'}}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="Dash Board" {...a11yProps(0)} />
+          <Tab label="DashBoard" {...a11yProps(0)} />
           <Tab label="User Managment" {...a11yProps(1)} />
-          <Tab label="Employee Managment" {...a11yProps(2)} />
+          <Tab label="Authors Managment" {...a11yProps(2)} />
           <Tab label="Tour Managment" {...a11yProps(3)} />
         </Tabs>
       </Box>

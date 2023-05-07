@@ -7,30 +7,33 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Navbar from '../../components/NavBar/NavBar';
+import Footer from '../../components/Footer';
 
 function createData(packageName, date, persons, vehicle, price) {
   return { packageName, date, persons, vehicle, price };
 }
 
 const rows = [
-  createData('Yala', '2023.05.04', '6', 'Van', '2100'),
-  createData('Mirissa', '2023.05.07', '6', 'Van', '1900'),
+  createData('Yala', '2023.05.04', '6', 'Van', '21000'),
+  createData('Mirissa', '2023.05.07', '6', 'Van', '19000'),
+  createData('Kandy', '2022.05.07', '6', 'Van', '29000'),
+
 ];
 
 export default function UserOrder() {
   return (
     <div>
     <Navbar/>
-    <h3>Bookig history</h3>
-    <TableContainer component={Paper}>
+    <h3 style={{marginLeft:'10%'}}>Bookig history</h3>
+    <TableContainer component={Paper} sx={{width:'80%', marginLeft:'10%', marginBottom:'50px', backgroundColor:'antiquewhite'}}>
       <Table sx={{ minWidth: 450 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Booked Package</TableCell>
-            <TableCell align="right">Date</TableCell>
-            <TableCell align="right">Persons</TableCell>
-            <TableCell align="right">Vehicle</TableCell>
-            <TableCell align="right">Price</TableCell>
+            <TableCell sx={{fontWeight: 'bold'}}>Booked Package</TableCell>
+            <TableCell sx={{fontWeight: 'bold'}} align="right">Date</TableCell>
+            <TableCell sx={{fontWeight: 'bold'}} align="right">Persons</TableCell>
+            <TableCell sx={{fontWeight: 'bold'}} align="right">Vehicle</TableCell>
+            <TableCell sx={{fontWeight: 'bold'}} align="right">Price (LKR)</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -51,6 +54,7 @@ export default function UserOrder() {
         </TableBody>
       </Table>
     </TableContainer>
+    <Footer />
     </div>
   );
 }

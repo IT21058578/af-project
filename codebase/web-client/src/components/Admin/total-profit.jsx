@@ -22,7 +22,7 @@ export const OverviewTotalProfit = (props) => {
               Total Profit
             </Typography>
             <Typography variant="h4">
-              {value}
+              {value}240,000 LKR
             </Typography>
           </Stack>
           <Avatar

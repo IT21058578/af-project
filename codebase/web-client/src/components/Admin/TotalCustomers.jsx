@@ -24,7 +24,7 @@ export const OverviewTotalCustomers = (props) => {
               Total Customers
             </Typography>
             <Typography variant="h4">
-              {value}
+              {value}44
             </Typography>
           </Stack>
           <Avatar

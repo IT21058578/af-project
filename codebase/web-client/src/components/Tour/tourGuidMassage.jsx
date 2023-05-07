@@ -6,7 +6,7 @@ export default function TourGuid() {
   return (
     <Section id="testimonials">
       <div className="title">
-        <h2>Your Guids</h2>
+        <h2>Your Guides</h2>
       </div>
       <div className="testimonials">
         <div className="testimonial">
@@ -18,7 +18,7 @@ export default function TourGuid() {
             <img src={avatarImage} alt="" />
             <div className="details">
               <h4>Dinuka Dissanayaka</h4>
-              <span>10 years expirienced guid</span>
+              <span>10 years expirienced guide</span>
             </div>
           </div>
         </div>
@@ -31,7 +31,7 @@ export default function TourGuid() {
             <img src={avatarImage} alt="" />
             <div className="details">
               <h4>Tharidu Sampath</h4>
-              <span>15 years expirienced guid</span>
+              <span>15 years expirienced guide</span>
             </div>
           </div>
         </div>
@@ -44,7 +44,7 @@ export default function TourGuid() {
             <img src={avatarImage} alt="" />
             <div className="details">
               <h4>Sansika Kodithuwakku</h4>
-              <span>15 years expirienced guid</span>
+              <span>15 years expirienced guide</span>
             </div>
           </div>
         </div>

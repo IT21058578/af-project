@@ -181,7 +181,7 @@ const EmployeeManagment = () => {
             onClick={() => setCreateModalOpen(true)}
             variant="contained"
           >
-            Create New Employee Account
+            Add New Author
           </Button>
         )}
       />
@@ -212,7 +212,7 @@ export const CreateNewAccountModal = ({ open, columns, onClose, onSubmit }) => {
 
   return (
     <Dialog open={open}>
-      <DialogTitle textAlign="center">Create New Employee Account</DialogTitle>
+      <DialogTitle textAlign="center">Add New Author</DialogTitle>
       <DialogContent>
         <form onSubmit={(e) => e.preventDefault()}>
           <Stack
@@ -238,7 +238,7 @@ export const CreateNewAccountModal = ({ open, columns, onClose, onSubmit }) => {
       <DialogActions sx={{ p: '1.25rem' }}>
         <Button onClick={onClose}>Cancel</Button>
         <Button color="secondary" onClick={handleSubmit} variant="contained">
-          Create New Employee Account
+          Add New Author
         </Button>
       </DialogActions>
     </Dialog>
