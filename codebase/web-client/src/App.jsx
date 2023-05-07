@@ -39,3 +39,6 @@ function App() {
 }
 
 export default App
+const App = () => {
+	return <div>Lets go!</div>;
+};
