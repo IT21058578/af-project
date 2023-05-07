@@ -3,7 +3,7 @@ import NavBar from './components/NavBar/NavBar';
 import Footer from './components/Footer';
 import Auth from './pages/Auth/auth';
 import Blogs from './pages/Blog/Blogs';
-import BlogDetails from './pages/Blog/BlogDetails';
+import BlogDetail from './pages/Blog/BlogDetails'; 
 import NewBlog from './pages/NewBlog';
 import TourHome from './pages/Tours/tourHome';
 import TourDetails from './pages/Tours/tourDetail';
@@ -35,7 +35,7 @@ function App() {
           <Route exact path="/details" element={<TourDetails />} />
           <Route exact path="/tour/details/:title" element={<TourDetails />} />
           <Route exact path="/admin" element={<AdminHome />} />
-          <Route exact path="/blogdetail" element={<BlogDetails />} />
+          <Route exact path="/blogdetail" element={<BlogDetail />} />
           <Route exact path="/author" element={<Author />} />                    
           <Route exact path="/userbooking" element={<UserOrder />} />
 
