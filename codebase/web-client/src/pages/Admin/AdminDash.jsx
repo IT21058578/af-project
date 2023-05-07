@@ -7,6 +7,7 @@ import { OverviewBudget } from '../../components/Admin/BuggetComponents';
 import { OverviewTasksProgress } from '../../components/Admin/tasks-progress';
 import { OverviewTotalProfit } from '../../components/Admin/total-profit';
 import { OverviewTotalCustomers } from '../../components/Admin/TotalCustomers';
+import AdminOrder from '../../components/Admin/orderTableAdmin';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -32,6 +33,12 @@ export default function Dashboard() {
         </Grid>
         <Grid item xs={3}>
          <OverviewTotalProfit/>
+        </Grid>
+        <Grid item xs={12}>
+         <h3 style={{alignItems:'center' , marginTop:'40px' , marginLeft:'30px' , color:'red'}}>Booking Details</h3>
+        </Grid>
+        <Grid item xs={12}>
+         <AdminOrder/>
         </Grid>
       </Grid>
     </Box>

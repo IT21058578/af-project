@@ -1,11 +1,12 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React from 'react';
 import MaterialReactTable from 'material-react-table';
-import { makeData } from './makeData1';
+import { Box, Button } from '@mui/material';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import { ExportToCsv } from 'export-to-csv'; //or use your library of choice here
+import { data } from './orderData';
 
-const AdminOrder = () => {
-  const columns = useMemo(
-    //column definitions...
-    () => [
+//defining columns outside of the component is fine, is stable
+const columns = [
       {
         accessorKey: 'customerName',
         header: 'Customer Name',
@@ -24,17 +25,17 @@ const AdminOrder = () => {
       {
         accessorKey: 'persons',
         header: 'Persons',
-        size: 300,
+        size: 150,
       },
       {
         accessorKey: 'tourType',
         header: 'Tour Type',
-        size: 250,
+        size: 150,
       },
       {
         accessorKey: 'vehicle',
         header: 'Vehicle',
-        size: 300,
+        size: 150,
       },
       {
         accessorKey: 'hotelType',
@@ -44,54 +45,82 @@ const AdminOrder = () => {
         accessorKey: 'totalPayment',
         header: 'Total Payment',
       },
-    ],
-    [],
-    //end
-  );
+];
 
-  //optionally access the underlying virtualizer instance
-  const rowVirtualizerInstanceRef = useRef(null);
+const csvOptions = {
+  fieldSeparator: ',',
+  quoteStrings: '"',
+  decimalSeparator: '.',
+  showLabels: true,
+  useBom: true,
+  useKeysAsHeaders: false,
+  headers: columns.map((c) => c.header),
+};
 
-  const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [sorting, setSorting] = useState([]);
+const csvExporter = new ExportToCsv(csvOptions);
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setData(makeData(10_000));
-      setIsLoading(false);
-    }
-  }, []);
+const AdminOrder = () => {
+  const handleExportRows = (rows) => {
+    csvExporter.generateCsv(rows.map((row) => row.original));
+  };
 
-  useEffect(() => {
-    //scroll to the top of the table when the sorting changes
-    try {
-      rowVirtualizerInstanceRef.current?.scrollToIndex?.(0);
-    } catch (error) {
-      console.error(error);
-    }
-  }, [sorting]);
+  const handleExportData = () => {
+    csvExporter.generateCsv(data);
+  };
 
   return (
     <MaterialReactTable
       columns={columns}
-      data={data} //10,000 rows
-      enableBottomToolbar={false}
-      enableColumnResizing
-      enableColumnVirtualization
-      enableGlobalFilterModes
-      enablePagination={false}
-      enablePinning
-      enableRowNumbers
-      enableRowVirtualization
-      muiTableContainerProps={{ sx: { maxHeight: '600px' } }}
-      onSortingChange={setSorting}
-      state={{ isLoading, sorting }}
-      rowVirtualizerInstanceRef={rowVirtualizerInstanceRef} //optional
-      rowVirtualizerProps={{ overscan: 5 }} //optionally customize the row virtualizer
-      columnVirtualizerProps={{ overscan: 2 }} //optionally customize the column virtualizer
+      data={data}
+      enableRowSelection
+      positionToolbarAlertBanner="bottom"
+      renderTopToolbarCustomActions={({ table }) => (
+        <Box
+          sx={{ display: 'flex', gap: '1rem', p: '0.5rem', flexWrap: 'wrap' }}
+        >
+          <Button
+            color="primary"
+            onClick={handleExportData}
+            startIcon={<FileDownloadIcon />}
+            variant="contained"
+          >
+            Export All Data
+          </Button>
+          <Button
+            disabled={table.getPrePaginationRowModel().rows.length === 0}
+            onClick={() =>
+              handleExportRows(table.getPrePaginationRowModel().rows)
+            }
+            startIcon={<FileDownloadIcon />}
+            variant="contained"
+          >
+            Export All Rows
+          </Button>
+          <Button
+            disabled={table.getRowModel().rows.length === 0}
+            onClick={() => handleExportRows(table.getRowModel().rows)}
+            startIcon={<FileDownloadIcon />}
+            variant="contained"
+          >
+            Export Page Rows
+          </Button>
+          <Button
+            disabled={
+              !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+            }
+            onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+            startIcon={<FileDownloadIcon />}
+            variant="contained"
+          >
+            Export Selected Rows
+          </Button>
+        </Box>
+      )}
     />
   );
 };
 
 export default AdminOrder;
+
+
+
