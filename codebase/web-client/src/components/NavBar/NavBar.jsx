@@ -21,7 +21,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = ['Dashboard', 'Logout'];
 import Image from '../../assets/navBg.png';
 
 
@@ -88,6 +88,7 @@ const Navbar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
   return (
     <AppBar position="static" sx={{ backgroundColor: 'transparent !important', backgroundImage:`url(${Image})`, backgroundSize:'cover',backgroundRepeat:'no-repeat', opacity:"1.0", color:'black' , padding:'30px', minHeight:'480px' , boxShadow:'none'}}>
       <Container maxWidth="xl">
@@ -149,10 +150,12 @@ const Navbar = () => {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+              <MenuItem key={setting}>
+                <Link to={setting === 'Dashboard' ? '/userbooking' : '/logout'} style={{ textDecoration: 'none' }}>
                   <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
+                </Link>
+              </MenuItem>
+            ))}
             </Menu>
           </Box>
         </Toolbar>

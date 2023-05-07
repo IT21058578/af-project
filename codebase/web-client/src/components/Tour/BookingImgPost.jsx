@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import homeImage from "../../assets/hero.png";
+// import homeImage from "../../assets/hero.jpeg";
+
+const homeImage = "https://oxfordbusinessgroup.com/wp-content/uploads/2022/10/Sri-Lanka-banner_2.png"
 export default function Hero() {
   return (
     <Section id="hero">
@@ -11,9 +13,8 @@ export default function Hero() {
         <div className="title">
           <h1>TRAVEL TO EXPLORE</h1>
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere
-            natus, enim ipsam magnam odit deserunt itaque? Minima earum velit
-            tenetur!
+          The real voyage of discovery consists not 
+          in seeking new landscapes but in having new eyes. – Marcel Proust
           </p>
         </div>
         <div className="search">
@@ -22,11 +23,11 @@ export default function Hero() {
             <input type="text" placeholder="Search Your location" />
           </div>
           <div className="container">
-            <label htmlFor="">Check-in</label>
+            <label htmlFor="">Tour-Start-Day</label>
             <input type="date" />
           </div>
           <div className="container">
-            <label htmlFor="">Check-out</label>
+            <label htmlFor="">Tour-End-Day</label>
             <input type="date" />
           </div>
           <button>Explore Now</button>

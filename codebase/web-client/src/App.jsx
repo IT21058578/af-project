@@ -7,9 +7,10 @@ import BlogDetails from './pages/Blog/BlogDetails';
 import NewBlog from './pages/NewBlog';
 import TourHome from './pages/Tours/tourHome';
 import TourDetails from './pages/Tours/tourDetail';
-import DetailView from './components/Tour/packageDetails';
 import AdminHome from './pages/Admin/AdminHome';
 import Author from './pages/Author';
+import UserOrder from './pages/Tours/BookingHistory';
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
@@ -33,9 +34,12 @@ function App() {
           <Route exact path="/tour" element={<TourHome />} />
           <Route exact path="/details" element={<TourDetails />} />
           <Route exact path="/tour/details/:title" element={<DetailView />} />
+          <Route exact path="/tour/details/:title" element={<TourDetails />} />
           <Route exact path="/admin" element={<AdminHome />} />
           <Route exact path="/blogdetail" element={<BlogDetails />} />
-          <Route exact path="/author" element={<Author />} />
+          <Route exact path="/author" element={<Author />} />          
+          <Route exact path="/userbooking" element={<UserOrder />} />
+
         </Routes>
       </div>
       {/* <Footer /> */}

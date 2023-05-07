@@ -3,7 +3,7 @@ import Hero from "../../components/Tour/BookingImgPost";
 import Navbar from "../../components/NavBar/NavBar";
 import Footer from "../../components/Footer";
 import Services from "../../components/Tour/Services";
-import Recommend from "../../components/Tour/RecomendedPackages";
+import Package from "../../components/Tour/packages";
 import { Box } from "@mui/material";
 
 
@@ -15,7 +15,7 @@ function TourHome(){
           <Box sx={{marginLeft:'30px', marginRight:'30px'}}>
             <Services/>
           </Box>
-          <Recommend/>
+          <Package/>
           <Footer />
         </div>
       );
