@@ -39,7 +39,7 @@ const editComment = async (
 	if (existingComment === null) throw Error(ReasonPhrases.NOT_FOUND);
 
 	if (
-		authorizedUser.id !== existingComment.userId &&
+		authorizedUser.id !== existingComment.createdById &&
 		!authorizedUser.roles.includes(Role.ADMIN)
 	) {
 		throw Error(ReasonPhrases.UNAUTHORIZED);
@@ -54,7 +54,7 @@ const deleteComment = async (id: string, authorizedUser: IAuthorizedUser) => {
 	if (existingComment === null) throw Error(ReasonPhrases.NOT_FOUND);
 
 	if (
-		authorizedUser.id !== existingComment.userId &&
+		authorizedUser.id !== existingComment.createdById &&
 		!authorizedUser.roles.includes("ADMIN")
 	) {
 		throw Error(ReasonPhrases.UNAUTHORIZED);

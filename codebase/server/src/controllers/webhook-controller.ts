@@ -7,36 +7,19 @@ import { EPaymentErrors } from "../constants/constants.js";
 
 const log = initializeLogger(import.meta.url.split("/").pop() || "");
 
-const createCheckoutSession = async (
+const handleStripeWebhookEvent = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
 ) => {
 	try {
-		log.info(`Request with url ${req.url} has reached controller function`);
-		const sessionUrl = await PaymentService.createCheckoutSession();
-		return res.redirect(sessionUrl);
-	} catch (error) {
-		log.error(
-			`Error occurred when processing ${req.url} request ERR: ${error}`
-		);
-		handleControllerError(next, error, []);
-	}
-};
-
-const handleWebhookEvent = async (
-	req: Request,
-	res: Response,
-	next: NextFunction
-) => {
-	try {
-		log.info(`Request with url ${req.url} has reached controller function`);
+		log.info(`Received stripe webhook event at ${req.url}`);
 		const payload = req.body;
 		const signature = req.headers["stripe-signature"] as string | undefined;
 		if (signature === undefined)
 			throw Error(EPaymentErrors.UNAUTHORIZED_WEBHOOK);
-		await PaymentService.handleWebhookEvent(payload, signature);
-		return res.status(StatusCodes.OK);
+		// await PaymentService.handleWebhookEvent(payload, signature);
+		return res.status(StatusCodes.OK).send();
 	} catch (error) {
 		log.error(
 			`Error occurred when processing ${req.url} request ERR: ${error}`
@@ -45,7 +28,6 @@ const handleWebhookEvent = async (
 	}
 };
 
-export const PaymentController = {
-	createCheckoutSession,
-	handleWebhookEvent,
+export const WebhookController = {
+	handleStripeWebhookEvent,
 };

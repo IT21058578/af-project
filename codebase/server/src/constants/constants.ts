@@ -17,6 +17,18 @@ export const Role = {
 	ADMIN: "ADMIN",
 } as const;
 
+export const ELodging = {
+	THREE_STAR: "THREE_STAR",
+	FOUR_STAR: "FOUR_STAR",
+	FIVE_STAR: "FIVE_STAR",
+} as const;
+
+export const ETransport = {
+	GROUP: "GROUP",
+	CAR: "CAR",
+	VAN: "VAN",
+} as const;
+
 export const ELocationError = {
 	LOCATION_NOT_FOUND: "Location not found",
 	LOCATION_ALREADY_EXISTS: "Location already exists",

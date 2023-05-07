@@ -41,7 +41,7 @@ const editPost = async (
 	if (existingPost === null) throw Error(ReasonPhrases.NOT_FOUND);
 
 	if (
-		authorizedUser.id !== existingPost.userId &&
+		authorizedUser.id !== existingPost.createdById &&
 		!authorizedUser.roles.includes(Role.ADMIN)
 	) {
 		throw Error(ReasonPhrases.UNAUTHORIZED);
@@ -57,7 +57,7 @@ const deletePost = async (id: string, authorizedUser: IAuthorizedUser) => {
 	if (existingPost === null) throw Error(ReasonPhrases.NOT_FOUND);
 
 	if (
-		authorizedUser.id !== existingPost.userId &&
+		authorizedUser.id !== existingPost.createdById &&
 		!authorizedUser.roles.includes(Role.ADMIN)
 	) {
 		throw Error(ReasonPhrases.UNAUTHORIZED);

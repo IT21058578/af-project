@@ -11,13 +11,15 @@ import userRoutes from "./routes/user-routes.js";
 import packageRoutes from "./routes/package-routes.js";
 import locationRoutes from "./routes/location-routes.js";
 import commentRoutes from "./routes/comment-routes.js";
+import webhookRoutes from "./routes/webhook-routes.js";
+import bookingRoutes from "./routes/booking-routes.js";
 
 import decodeToken from "./middleware/decode-token.js";
 import { PORT } from "./constants/constants.js";
 import requestLogger from "./middleware/request-logger.js";
 import errorHandler from "./middleware/error-handler.js";
 import { getDbName, getDbUri } from "./utils/misc-utils.js";
-import Stripe from "stripe";
+
 dotenv.config();
 
 const log = initializeLogger(import.meta.url.split("/").pop() || "");
@@ -27,25 +29,28 @@ log.info("Starting server...");
 const app = express();
 
 // Configuration
+log.info("Attaching raw routes...");
+app.use("/api/v1/webhooks", webhookRoutes);
+
 log.info("Configuring middleware...");
 app.use(helmet());
 app.use(cors());
-app.use(json());
 app.use(urlencoded());
 app.use(requestLogger());
 app.use(decodeToken());
+app.use(json());
 
 // Routes
-log.info("Configuring routes...");
-
+log.info("Attaching parsed routes...");
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/posts", postRoutes);
 app.use("/api/v1/locations", locationRoutes);
 app.use("/api/v1/packages", packageRoutes);
 app.use("/api/v1/comments", commentRoutes);
+app.use("/api/v1/bookings", bookingRoutes);
 
-
+log.info("Configuring error handler...");
 app.use(errorHandler());
 
 // Database Connection
@@ -58,10 +63,5 @@ log.info("Connecting to MongoDB...");
 		});
 	});
 })();
-
-export const stripe = new Stripe("secret_key", {
-	apiVersion: "2022-11-15",
-	typescript: true,
-});
 
 export const server = app;

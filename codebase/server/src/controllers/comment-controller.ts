@@ -39,8 +39,8 @@ const createComment = async (
 		const { parentId, text } = req.body;
 		const createdComment = await CommentService.createComment({
 			postId,
-			userId,
-			parentId,
+			createdById: userId,
+			parentCommentId: parentId,
 			text,
 		});
 		log.info("Successfully processed createComment request");
