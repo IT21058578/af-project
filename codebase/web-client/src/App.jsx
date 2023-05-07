@@ -36,8 +36,9 @@ function App() {
           <Route exact path="/tour/details/:title" element={<TourDetails />} />
           <Route exact path="/admin" element={<AdminHome />} />
           <Route exact path="/blogdetail" element={<BlogDetails />} />
-          <Route exact path="/author" element={<Author />} />          
+          <Route exact path="/author" element={<Author />} />                    
           <Route exact path="/userbooking" element={<UserOrder />} />
+
 
         </Routes>
       </div>
