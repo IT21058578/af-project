@@ -2,6 +2,14 @@ import Stripe from "stripe";
 import fs from "fs/promises";
 import initializeLogger from "../utils/logger.js";
 import { EmailService } from "./email-service.js";
+import { TripPackage } from "../models/package-model.js";
+import {
+	CHECKOUT_CANCEL_URL,
+	CHECKOUT_SUCCESS_URL,
+	ETripPackageError,
+} from "../constants/constants.js";
+import { TripPackageService } from "./package-service.js";
+import { TPricingOptions } from "../types/model-types.js";
 
 const log = initializeLogger(import.meta.url.split("/").pop() || "");
 
@@ -32,32 +40,45 @@ const loadKeys = async () => {
 
 loadKeys();
 
-const createCheckoutSession = async () => {
-	// TODO: We need to get and calculate the amounts server-side then verify
-	// the client-side received amount is the same. If it isn't make an error.
+const createCheckoutSession = async (
+	id: string,
+	pricingOptions: TPricingOptions,
+	userId: string
+) => {
+	const existingTripPackage = await TripPackage.findById(id).exec();
+	if (existingTripPackage === null)
+		throw Error(ETripPackageError.TRIP_PKG_NOT_FOUND);
+
+	const calculatedPrice = TripPackageService.calculatePrice(
+		existingTripPackage,
+		pricingOptions
+	);
+
 	const { url } = await stripe.checkout.sessions.create({
 		line_items: [
 			{
 				price_data: {
-					currency: "",
-					product: "product_id",
+					currency: "lkr",
+					product: existingTripPackage.id,
 					product_data: {
-						name: "product_name",
-						description: "product_description",
+						name: existingTripPackage.name ?? "",
+						description: existingTripPackage.description ?? "",
 						metadata: {
-							persons: 0,
-							transport: "",
-							lodging: "",
-							withFood: 0,
+							userId: userId,
+							persons: pricingOptions.persons,
+							logding: pricingOptions.lodging,
+							transport: pricingOptions.transport,
+							withFood: pricingOptions.withFood ? "true" : "false",
 						},
 					},
 				},
+				price: String(calculatedPrice),
+				quantity: 1,
 			},
 		],
-		// TODO: Put proper urls here
 		mode: "payment",
-		success_url: "success url here",
-		cancel_url: "cancel url here",
+		success_url: CHECKOUT_SUCCESS_URL,
+		cancel_url: CHECKOUT_CANCEL_URL,
 	});
 
 	if (url === null) throw Error("");
@@ -97,7 +118,6 @@ const createOrder = async (data: Stripe.Checkout.Session, userId: string) => {
 	const { line_items } = await stripe.checkout.sessions.retrieve(data.id, {
 		expand: ["line-items"],
 	});
-	// TODO: Store data in database
 };
 
 export const PaymentService = {

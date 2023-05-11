@@ -9,7 +9,6 @@ export const commentSchema = new Schema(
 		text: String,
 		likes: [String],
 		dislikes: [String],
-		isOriginalPoster: Boolean,
 	},
 	{ timestamps: true }
 );

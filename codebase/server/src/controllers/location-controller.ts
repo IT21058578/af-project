@@ -11,9 +11,10 @@ const log = initializeLogger(import.meta.url.split("/").pop() || "");
 
 const getLocation = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		log.info(`Request with url ${req.url} has reached controller function`);
+		log.info("Intercepted getLocation request");
 		const { locationId } = req.params;
 		const existingLocation = await LocationService.getLocation(locationId);
+		log.info("Successfully processed getLocation request");
 		return res.status(StatusCodes.OK).json(existingLocation);
 	} catch (error) {
 		handleControllerError(next, error, [
@@ -32,14 +33,14 @@ const searchLocations = async (
 	next: NextFunction
 ) => {
 	try {
-		log.info(`Request with url ${req.url} has reached controller function`);
-		const locationSearchOptions = req.params as Partial<
+		log.info("Intercepted searchLocations request");
+		const locationSearchOptions = req.query as Partial<
 			TExtendedPageOptions<TLocation>
 		>;
 		const locationPage = await LocationService.searchLocations(
 			locationSearchOptions as any
 		);
-		log.info("Successfully processed searchPosts request");
+		log.info("Successfully processed searchLocation request");
 		return res.send(StatusCodes.OK).json(locationPage);
 	} catch (error) {
 		handleControllerError(next, error, []);
@@ -52,7 +53,7 @@ const editLocation = async (
 	next: NextFunction
 ) => {
 	try {
-		log.info(`Request with url ${req.url} has reached controller function`);
+		log.info("Intercepted editLocation request");
 		const { locationId } = req.params;
 		const editedLocation = req.body;
 		const authorizedUserId = req.headers["user-id"] as string;
@@ -61,6 +62,7 @@ const editLocation = async (
 			editedLocation,
 			authorizedUserId
 		);
+		log.info("Successfully processed editLocation request");
 		return res.status(StatusCodes.OK).json(existingLocation);
 	} catch (error) {
 		handleControllerError(next, error, [
@@ -79,9 +81,10 @@ const deleteLocation = async (
 	next: NextFunction
 ) => {
 	try {
-		log.info(`Request with url ${req.url} has reached controller function`);
+		log.info("Intercepted deleteLocation request");
 		const { locationId } = req.params;
 		await LocationService.deleteLocation(locationId);
+		log.info("Successfully processed deleteLocation request");
 		return res.status(StatusCodes.NO_CONTENT);
 	} catch (error) {
 		handleControllerError(next, error, []);
@@ -94,13 +97,14 @@ const createLocation = async (
 	next: NextFunction
 ) => {
 	try {
-		log.info(`Request with url ${req.url} has reached controller function`);
+		log.info("Intercepted createLocation request");
 		const newLocation = req.body;
 		const authorizedUserId = req.headers["user-id"] as string;
 		const savedLocation = await LocationService.createLocation(
 			newLocation,
 			authorizedUserId
 		);
+		log.info("Successfully processed createLocation request");
 		return res.status(StatusCodes.OK).json(savedLocation);
 	} catch (error) {
 		handleControllerError(next, error, []);

@@ -21,7 +21,7 @@ const searchCommentsByPost = async (
 ) => {
 	const paginationResult = (await Comment.aggregate(
 		buildPaginationPipeline(commentSearchOptions)
-	).exec()) as any as IPaginationResult<TComment>;
+	).exec())[0] as any as IPaginationResult<TComment>;
 	return buildPage(paginationResult, commentSearchOptions);
 };
 

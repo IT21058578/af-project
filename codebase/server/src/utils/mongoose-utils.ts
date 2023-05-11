@@ -8,7 +8,7 @@ import { TPost } from "../types/model-types.js";
 
 // Options parameter is an object having searchOptions, filteringOptions, and etc.
 export const buildPaginationPipeline = <T>({
-	sortField = "",
+	sortField = "_id",
 	sortDir = "asc",
 	pageNum = 1,
 	pageSize = 10,
@@ -23,7 +23,13 @@ export const buildPaginationPipeline = <T>({
 		}
 	});
 	return [
-		{ $match: { $and: formattedSearchOptions } },
+		{
+			$match: {
+				...(formattedSearchOptions.length > 0
+					? { $and: formattedSearchOptions }
+					: {}),
+			},
+		},
 		{
 			$facet: {
 				metadata: [{ $count: "countInQuery" }],
@@ -90,7 +96,7 @@ export const buildPage = <T>(
 					},
 				}),
 			state: {
-				isEmpty: data.length == 0,
+				isEmpty: data?.length == 0,
 				isLast: countOfPages === pageNum,
 				isFirst: pageNum === 1,
 			},
@@ -101,6 +107,6 @@ export const buildPage = <T>(
 			},
 			searchOptions,
 		},
-		content: data,
+		content: data ?? [],
 	};
 };

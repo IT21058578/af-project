@@ -15,9 +15,8 @@ const router = express.Router();
 // TripPackage routes
 router.route("/search").get(
 	...validateSchema({
-		...checkUserDetails,
 		...checkPageOptions,
-		...checkTripPackageFields(true),
+		...checkTripPackageFields(true, "query"),
 	}),
 	TripPackageController.searchTripPackages
 );

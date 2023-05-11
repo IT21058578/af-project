@@ -2,6 +2,7 @@ import express from "express";
 import { CommentController } from "../controllers/comment-controller.js";
 import validateSchema from "../middleware/validate-schema.js";
 import {
+	checkCommentFields,
 	checkCommentId,
 	checkReactionType,
 	checkUserDetails,
@@ -23,17 +24,16 @@ router
 	.put(
 		authorizeRequest([Role.USER]),
 		...validateSchema({
+			...checkUserDetails,
 			...checkCommentId,
-			text: {
-				isString: true,
-				errorMessage: "Text must be a string and not empty",
-			},
+			...checkCommentFields(undefined, true),
 		}),
 		CommentController.editComment
 	)
 	.delete(
 		authorizeRequest([Role.USER]),
 		...validateSchema({
+			...checkUserDetails,
 			...checkCommentId,
 		}),
 		CommentController.deleteComment
@@ -46,6 +46,7 @@ router
 	.delete(
 		authorizeRequest([Role.USER]),
 		...validateSchema({
+			...checkUserDetails,
 			...checkCommentId,
 			...checkReactionType,
 			...checkUserDetails,
@@ -55,6 +56,7 @@ router
 	.post(
 		authorizeRequest([Role.USER]),
 		...validateSchema({
+			...checkUserDetails,
 			...checkCommentId,
 			...checkReactionType,
 			...checkUserDetails,

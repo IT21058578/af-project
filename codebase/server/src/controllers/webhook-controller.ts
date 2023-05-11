@@ -13,17 +13,14 @@ const handleStripeWebhookEvent = async (
 	next: NextFunction
 ) => {
 	try {
-		log.info(`Received stripe webhook event at ${req.url}`);
+		log.info(`Intercepted handleStripeWebhookEvent request`);
 		const payload = req.body;
 		const signature = req.headers["stripe-signature"] as string | undefined;
 		if (signature === undefined)
 			throw Error(EPaymentErrors.UNAUTHORIZED_WEBHOOK);
-		// await PaymentService.handleWebhookEvent(payload, signature);
+		await PaymentService.handleWebhookEvent(payload, signature);
 		return res.status(StatusCodes.OK).send();
 	} catch (error) {
-		log.error(
-			`Error occurred when processing ${req.url} request ERR: ${error}`
-		);
 		handleControllerError(next, error, []);
 	}
 };

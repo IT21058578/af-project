@@ -3,6 +3,7 @@ import { Schema, model } from "mongoose";
 export const tripPackageSchema = new Schema(
 	{
 		name: String,
+		description: String,
 		createdById: String,
 		lastUpdatedById: String,
 		totalDistance: Number,

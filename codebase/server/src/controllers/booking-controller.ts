@@ -4,6 +4,7 @@ import { handleControllerError } from "../utils/misc-utils.js";
 import { StatusCodes } from "http-status-codes";
 import { PaymentService } from "../services/payment-services.js";
 import { EPaymentErrors } from "../constants/constants.js";
+import { TPricingOptions } from "../types/model-types.js";
 
 const log = initializeLogger(import.meta.url.split("/").pop() || "");
 
@@ -13,13 +14,19 @@ const createCheckoutSession = async (
 	next: NextFunction
 ) => {
 	try {
-		log.info(`Request with url ${req.url} has reached controller function`);
-		const sessionUrl = await PaymentService.createCheckoutSession();
+		log.info(`Intercepted createCheckoutSession request`);
+		const {
+			tripPackageId,
+			pricingOptions,
+		}: { tripPackageId: string; pricingOptions: TPricingOptions } = req.body;
+		const userId = req.headers["user-id"] as string;
+		const sessionUrl = await PaymentService.createCheckoutSession(
+			tripPackageId,
+			pricingOptions,
+			userId
+		);
 		return res.redirect(sessionUrl);
 	} catch (error) {
-		log.error(
-			`Error occurred when processing ${req.url} request ERR: ${error}`
-		);
 		handleControllerError(next, error, []);
 	}
 };

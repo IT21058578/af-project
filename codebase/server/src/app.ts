@@ -2,7 +2,6 @@ import express, { json, urlencoded } from "express";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import cors from "cors";
-import mongoose from "mongoose";
 import initializeLogger from "./utils/logger.js";
 
 import authRoutes from "./routes/auth-routes.js";
@@ -15,16 +14,14 @@ import webhookRoutes from "./routes/webhook-routes.js";
 import bookingRoutes from "./routes/booking-routes.js";
 
 import decodeToken from "./middleware/decode-token.js";
-import { PORT } from "./constants/constants.js";
 import requestLogger from "./middleware/request-logger.js";
 import errorHandler from "./middleware/error-handler.js";
-import { getDbName, getDbUri } from "./utils/misc-utils.js";
 
 dotenv.config();
 
 const log = initializeLogger(import.meta.url.split("/").pop() || "");
 
-log.info("Starting server...");
+log.info("Building app...");
 
 const app = express();
 
@@ -53,15 +50,4 @@ app.use("/api/v1/bookings", bookingRoutes);
 log.info("Configuring error handler...");
 app.use(errorHandler());
 
-// Database Connection
-log.info("Connecting to MongoDB...");
-(async () => {
-	mongoose.connect(await getDbUri(), { dbName: getDbName() }).then(() => {
-		log.info("Established connection");
-		app.listen(PORT || 3000, () => {
-			log.info(`Started listening to port ${PORT}`);
-		});
-	});
-})();
-
-export const server = app;
+export default app;

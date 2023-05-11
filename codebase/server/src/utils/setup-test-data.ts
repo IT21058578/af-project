@@ -12,23 +12,19 @@ import { Booking } from "../models/booking-model.js";
 const log = initializeLogger(import.meta.url.split("/").pop() || "");
 
 const selectRandom = <T>(arr: T[], exclude?: T[]) => {
-	return arr.filter(
-		(val) => faker.datatype.boolean() && !exclude?.includes(val)
-	);
+	const res = faker.helpers.arrayElements(arr);
+	if (res.length === 0) throw Error();
+	return res;
 };
 
 const selectRandomOne = <T>(arr: T[]) => {
-	const max = arr.length;
-	return arr[faker.datatype.number({ min: 0, max })];
+	const result = faker.helpers.arrayElement(arr);
+	if (result === undefined) throw Error("Result was undefined");
+	return result;
 };
 
 mongoose.connect(MONGODB_URI || "", { dbName: "af-project" }).then(async () => {
 	log.info("Established connection");
-
-	log.info("Clearing old users");
-	await User.deleteMany();
-	await Post.deleteMany();
-	await Comment.deleteMany();
 
 	log.info("Saving new users");
 	const savedUserIds: string[] = [];
@@ -54,9 +50,10 @@ mongoose.connect(MONGODB_URI || "", { dbName: "af-project" }).then(async () => {
 	const savedPostIds: string[] = [];
 	for (const _i of Array(30)) {
 		const likes = selectRandom(savedUserIds);
+		const dislikes = selectRandom(savedUserIds);
 		const post = new Post({
-			likes: likes,
-			dislikes: selectRandom(savedUserIds, likes),
+			likes,
+			dislikes,
 			tags: faker.datatype.array(),
 			text: faker.lorem.paragraphs(),
 			image: faker.internet.url(),
@@ -71,13 +68,17 @@ mongoose.connect(MONGODB_URI || "", { dbName: "af-project" }).then(async () => {
 	const savedCommentIds: string[] = [];
 	for (const _i of Array(60)) {
 		const likes = selectRandom(savedUserIds);
+		const dislikes = selectRandom(savedUserIds);
+		const createdById = selectRandomOne(savedUserIds);
+		const postId = selectRandomOne(savedPostIds);
+		const parentCommentId = selectRandomOne(savedCommentIds);
 		const comment = new Comment({
-			likes: likes,
-			dislikes: selectRandom(savedUserIds, likes),
+			likes,
+			dislikes,
 			text: faker.lorem.paragraphs(),
-			createdById: selectRandomOne(savedUserIds),
-			postId: selectRandomOne(savedPostIds),
-			parentCommentId: selectRandomOne(savedCommentIds),
+			createdById,
+			postId,
+			parentCommentId,
 		});
 		const savedComment = await comment.save();
 		savedCommentIds.push(savedComment.id);
@@ -86,6 +87,8 @@ mongoose.connect(MONGODB_URI || "", { dbName: "af-project" }).then(async () => {
 	log.info("Saving new locations");
 	const savedLocationIds: string[] = [];
 	for (const _i of Array(20)) {
+		const createdById = selectRandomOne(savedUserIds);
+		const lastUpdatedById = selectRandomOne(savedUserIds);
 		const location = new Location({
 			address: {
 				addressLine1: `${faker.address.buildingNumber()}, ${faker.address.streetAddress()}`,
@@ -93,8 +96,8 @@ mongoose.connect(MONGODB_URI || "", { dbName: "af-project" }).then(async () => {
 				city: faker.address.cityName(),
 				province: faker.address.cardinalDirection(),
 			},
-			createdById: selectRandomOne(savedUserIds),
-			lastUpdatedById: selectRandomOne(savedUserIds),
+			createdById,
+			lastUpdatedById,
 			name: faker.lorem.words(),
 			imageData: faker.image.city(),
 		});
@@ -109,11 +112,12 @@ mongoose.connect(MONGODB_URI || "", { dbName: "af-project" }).then(async () => {
 			locationId: id,
 			activities: faker.datatype.array(),
 		}));
-
+		const createdById = selectRandomOne(savedUserIds);
+		const lastUpdatedById = selectRandomOne(savedUserIds);
 		const tripPackage = new TripPackage({
 			views: faker.datatype.number({ min: 0 }),
-			createdById: selectRandomOne(savedUserIds),
-			lastUpdatedById: selectRandomOne(savedUserIds),
+			createdById,
+			lastUpdatedById,
 			name: faker.lorem.words(),
 			price: {
 				perPerson: faker.datatype.number({ min: 0 }),
@@ -155,8 +159,9 @@ mongoose.connect(MONGODB_URI || "", { dbName: "af-project" }).then(async () => {
 	log.info("Saving new bookings");
 	const savedBookingIds: string[] = [];
 	for (const _i of Array(30)) {
+		const createdById = selectRandomOne(savedUserIds);
 		const booking = new Booking({
-			createdById: selectRandomOne(savedUserIds),
+			createdById,
 			paymentMadeAt: faker.date.recent(),
 			stripePaymentId: faker.datatype.uuid(),
 			stripeSessionId: faker.datatype.uuid(),

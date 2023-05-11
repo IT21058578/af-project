@@ -1,26 +1,38 @@
-import { ELocationError } from "../constants/constants.js";
+import { ELocationError, EUserError } from "../constants/constants.js";
 import { Location } from "../models/location-model.js";
+import { User } from "../models/user-model.js";
 import {
 	IAuthorizedUser,
 	IPaginationResult,
 	TExtendedPageOptions,
 } from "../types/misc-types.js";
 import { TLocation } from "../types/model-types.js";
+import { TLocationVO, TUserVO } from "../types/vo-types.js";
 import { buildPage, buildPaginationPipeline } from "../utils/mongoose-utils.js";
+import { UserService } from "./user-service.js";
+import initializeLogger from "../utils/logger.js";
+
+const log = initializeLogger(import.meta.url.split("/").pop() || "");
 
 const getLocation = async (locationId: string) => {
 	const existingLocation = await Location.findById(locationId).exec();
 	if (existingLocation == null) throw Error(ELocationError.LOCATION_NOT_FOUND);
-	return existingLocation.toObject();
+	const locationVO = await buildLocationVO(existingLocation.toObject());
+	return locationVO;
 };
 
 const searchLocations = async (
 	locationSearchOptions: TExtendedPageOptions<TLocation>
 ) => {
-	const paginationResult = (await Location.aggregate(
-		buildPaginationPipeline(locationSearchOptions)
-	)) as any as IPaginationResult<TLocation>;
-	return buildPage(paginationResult, locationSearchOptions);
+	const { data, ...rest } = (
+		await Location.aggregate(buildPaginationPipeline(locationSearchOptions))
+	)[0] as any as IPaginationResult<TLocation>;
+	const locationVOs = await Promise.all(
+		data.map(async (location) => {
+			return await buildLocationVO(location);
+		})
+	);
+	return buildPage({ ...rest, data: locationVOs }, locationSearchOptions);
 };
 
 const editLocation = async (
@@ -54,10 +66,45 @@ const createLocation = async (
 	return (await Location.create(newLocation)).toObject;
 };
 
+const buildLocationVO = async (location: TLocation): Promise<TLocationVO> => {
+	const [createdByUser, lastUpdatedByUser] = await Promise.all([
+		User.findById(location.createdById),
+		User.findById(location.lastUpdatedById),
+	]);
+
+	let createdBy: TUserVO;
+	if (createdByUser !== null) {
+		createdBy = UserService.buildUserVO(createdByUser);
+	} else {
+		log.error(location);
+		throw Error(EUserError.NOT_FOUND);
+	}
+
+	let lastUpdatedBy: TUserVO;
+	if (lastUpdatedByUser !== null) {
+		lastUpdatedBy = UserService.buildUserVO(lastUpdatedByUser);
+	} else {
+		log.error(location);
+		throw Error(EUserError.NOT_FOUND);
+	}
+
+	return {
+		id: location.id,
+		name: location.name,
+		createdAt: location.createdAt,
+		updatedAt: location.updatedAt,
+		address: location.address,
+		imageData: location.imageData,
+		createdBy,
+		lastUpdatedBy,
+	};
+};
+
 export const LocationService = {
 	getLocation,
 	editLocation,
 	createLocation,
 	deleteLocation,
 	searchLocations,
+	buildLocationVO,
 };
