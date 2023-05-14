@@ -27,6 +27,8 @@ const getTripPackage = async (tripPackageId: string) => {
 	const existingTripPackage = await TripPackage.findById(tripPackageId).exec();
 	if (existingTripPackage == null)
 		throw Error(ETripPackageError.TRIP_PKG_NOT_FOUND);
+	existingTripPackage.views += 1;
+	existingTripPackage.save();
 	const tripPackageVO = await buildTripPackageVO(
 		existingTripPackage.toObject()
 	);

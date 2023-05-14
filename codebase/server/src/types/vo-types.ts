@@ -21,7 +21,7 @@ export type TTripPackageVO = Omit<
 > & {
 	createdBy: TUserVO;
 	lastUpdatedBy: TUserVO;
-	plan: (TLocationVO & { activities: string[] })[];
+	plan: (TLocation & { activities: string[] })[];
 };
 
 export type TPostVO = Omit<

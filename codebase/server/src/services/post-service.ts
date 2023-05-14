@@ -18,6 +18,8 @@ import { UserService } from "./user-service.js";
 const getPost = async (id: string) => {
 	const post = await Post.findById(id).exec();
 	if (post === null) throw Error(ReasonPhrases.NOT_FOUND);
+	post.views += 1;
+	post.save();
 	const postVO = await buildPostVO(post.toObject());
 	return postVO;
 };
