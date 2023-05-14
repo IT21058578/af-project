@@ -19,23 +19,6 @@ export const buildErrorMessage = (
 	errors,
 });
 
-export const getDbName = () => {
-	if (process.env.NODE_ENV === "test") {
-		return TEST_DB_NAME;
-	} else {
-		return DB_NAME;
-	}
-};
-
-export const getDbUri = async () => {
-	if (process.env.NODE_ENV === "test") {
-		const mongod = await MongoMemoryServer.create();
-		return mongod.getUri();
-	} else {
-		return MONGODB_URI || "";
-	}
-};
-
 /**
  * This is a helper functioning to help handle errors that can occur in controllers and services.
  * Controller functions tend to get bloated for no reaon. This functio aims to reduce that bloat.
@@ -48,6 +31,9 @@ export const handleControllerError = (
 	error: any,
 	errorOptions: (IServerError & { reasons: string[] })[]
 ) => {
+	log.error(
+		`An error occurred when trying to process a request. ERR: ${error}`
+	);
 	let reasonPhrase: string = ReasonPhrases.INTERNAL_SERVER_ERROR;
 	let cause = "An unknown error occurred while trying to process your request";
 	if (error instanceof Error) {

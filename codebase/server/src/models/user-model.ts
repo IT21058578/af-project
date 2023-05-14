@@ -3,18 +3,18 @@ import { tokenFamilySchema } from "./token-family-model.js";
 
 export const userSchema = new Schema(
 	{
-		firstName: String,
-		lastName: String,
-		mobile: String,
-		email: String,
-		password: String,
-		dateOfBirth: Date,
-		isAuthorized: Boolean,
-		isSubscribed: Boolean,
+		firstName: { type: String, required: true },
+		lastName: { type: String, required: true },
+		mobile: { type: String, required: true },
+		email: { type: String, required: true },
+		password: { type: String, required: true },
+		dateOfBirth: { type: String, required: true },
+		isAuthorized: { type: Boolean, default: false },
+		isSubscribed: { type: Boolean, default: true },
 		resetToken: String,
 		authorizationToken: String,
 		lastLoggedAt: Date,
-		roles: [String],
+		roles: { type: [String], default: [] },
 		tokenFamily: tokenFamilySchema,
 	},
 	{ timestamps: true }

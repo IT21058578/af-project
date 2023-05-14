@@ -1,4 +1,4 @@
-import { Schema } from "express-validator";
+import { Location, Schema } from "express-validator";
 
 export const checkReactionType: Schema = {
 	reactionType: {
@@ -40,144 +40,232 @@ export const checkTripPackageId: Schema = {
 	},
 };
 
-export const checkLocationFields = (optional?: true): Schema => {
+export const checkUserId: Schema = {
+	userId: {
+		isMongoId: true,
+		errorMessage: "userId must be an ObjectId",
+		in: ["params"],
+	},
+};
+
+// TODO: Complete Schema
+export const checkUserFields = (
+	optional?: true,
+	location: Location = "body"
+): Schema => {
+	return {};
+};
+
+export const checkPostFields = (
+	optional?: true,
+	location: Location = "body"
+): Schema => {
+	return {
+		title: {
+			optional,
+			isString: true,
+			errorMessage: "title must be a String",
+			in: location,
+		},
+		text: {
+			optional,
+			isString: true,
+			errorMessage: "text must be a String",
+			in: location,
+		},
+		imageData: {
+			optional,
+			isString: true,
+			errorMessage: "imageData must be a String",
+			in: location,
+		},
+		tags: {
+			optional,
+			isArray: true,
+			errorMessage: "tags must be an Array",
+			in: location,
+		},
+		"tags.*": {
+			isString: true,
+			errorMessage: "tags can only contain strings",
+			in: location,
+		},
+	};
+};
+
+export const checkCommentFields = (
+	optional?: true,
+	onlyEditableFields?: boolean,
+	location: Location = "body"
+): Schema => {
+	return {
+		...(!onlyEditableFields && {
+			parentCommentId: {
+				optional: true,
+				isMongoId: true,
+				errorMessage: "parentCommentId must be a String",
+				in: location,
+			},
+			isOriginalPoster: {
+				isBoolean: true,
+				errorMessage: "isOriginalPoster must be a boolean",
+				optional,
+				in: location,
+			},
+		}),
+		text: {
+			isString: true,
+			errorMessage: "text must be a String",
+			optional,
+			in: location,
+		},
+	};
+};
+
+export const checkLocationFields = (
+	optional?: true,
+	location: Location = "body"
+): Schema => {
 	return {
 		name: {
 			isString: true,
 			errorMessage: "name must be a String",
 			optional,
-			in: ["body"],
+			in: location,
 		},
 		imageUrl: {
 			isURL: true,
 			errorMessage: "imageUrl must be a URL",
 			optional,
-			in: ["body"],
+			in: location,
 		},
 		"address.addressLine1": {
 			isString: true,
 			errorMessage: "addressLine1 must be a String",
 			optional,
-			in: ["body"],
+			in: location,
 		},
 		"address.addressLine2": {
 			isString: true,
 			errorMessage: "addressLine2 must be a String",
 			optional,
-			in: ["body"],
+			in: location,
 		},
 		city: {
 			isString: true,
 			errorMessage: "city must be a String",
 			optional,
-			in: ["body"],
+			in: location,
 		},
 		province: {
 			isString: true,
 			errorMessage: "province must be a String",
 			optional,
-			in: ["body"],
+			in: location,
 		},
 	};
 };
 
-export const checkTripPackageFields = (optional?: true): Schema => {
+export const checkTripPackageFields = (
+	optional?: true,
+	location: Location = "body"
+): Schema => {
 	return {
 		name: {
 			optional,
 			isString: true,
 			errorMessage: "name must be a String",
-			in: ["body"],
+			in: location,
 		},
 		totalDistance: {
 			optional,
 			isNumeric: true,
 			errorMessage: "totalDistance must be a Number",
-			in: ["body"],
+			in: location,
 		},
 		"price.perPerson": {
 			optional,
 			isNumeric: true,
 			errorMessage: "perPerson must be a Number",
-			in: ["body"],
+			in: location,
 		},
 		"price.perPersonFood": {
 			optional,
 			isNumeric: true,
 			errorMessage: "perPersonFood must be a Number",
-			in: ["body"],
+			in: location,
 		},
 		"price.transport.group": {
 			optional,
 			isNumeric: true,
 			errorMessage: "group must be a Number",
-			in: ["body"],
+			in: location,
 		},
 		"price.transport.van": {
 			optional,
 			isNumeric: true,
 			errorMessage: "van must be a Number",
-			in: ["body"],
+			in: location,
 		},
 		"price.transport.car": {
 			optional,
 			isNumeric: true,
 			errorMessage: "car must be a Number",
-			in: ["body"],
+			in: location,
 		},
 		"price.lodging.threeStar": {
 			optional,
 			isNumeric: true,
 			errorMessage: "threeStar must be a Number",
-			in: ["body"],
+			in: location,
 		},
 		"price.lodging.fourStar": {
 			optional,
 			isNumeric: true,
 			errorMessage: "fourStar must be a Number",
-			in: ["body"],
+			in: location,
 		},
 		"price.lodging.fiveStar": {
 			optional,
 			isNumeric: true,
 			errorMessage: "fiveStar must be a Number",
-			in: ["body"],
+			in: location,
 		},
 		"discount.value": {
 			optional,
 			isNumeric: true,
 			errorMessage: "value must be a Number",
-			in: ["body"],
+			in: location,
 		},
 		"discount.type": {
 			optional,
 			isIn: { options: ["FLAT", "PERCENT"] },
 			errorMessage: "type must be either be 'FLAT' or 'PERCENT'",
-			in: ["body"],
+			in: location,
 		},
 		"price.*.locationId": {
 			optional,
 			isMongoId: true,
 			errorMessage: "locationId must be an ObjectId",
-			in: ["body"],
+			in: location,
 		},
 		"price.*.activities.*": {
 			optional,
 			isString: true,
 			errorMessage: "Each value in activites must be a String",
-			in: ["body"],
+			in: location,
 		},
 		"limitedDateRange.startDate": {
 			optional: true,
 			isDate: true,
 			errorMessage: "startDate must be a Date",
-			in: ["body"],
+			in: location,
 		},
 		"limitedDateRange.endDate": {
 			optional: true,
 			isDate: true,
 			errorMessage: "endDate must be a Date",
-			in: ["body"],
+			in: location,
 		},
 	};
 };
@@ -187,19 +275,21 @@ export const checkPageOptions: Schema = {
 		isInt: true,
 		errorMessage: "pageNum must be an Integer",
 		optional: true,
-		in: ["body"],
+		toInt: true,
+		in: ["query"],
 	},
 	pageSize: {
 		isInt: true,
 		errorMessage: "pageSize must be an Integer",
 		optional: true,
-		in: ["body"],
+		toInt: true,
+		in: ["query"],
 	},
 	sortField: {
 		isString: true,
 		errorMessage: "sortField must be a String",
 		optional: true,
-		in: ["body"],
+		in: ["query"],
 	},
 	sortDir: {
 		isIn: {
@@ -207,7 +297,7 @@ export const checkPageOptions: Schema = {
 		},
 		errorMessage: "sortDir must be either 'asc' or 'desc'",
 		optional: true,
-		in: ["body"],
+		in: ["query"],
 	},
 };
 
