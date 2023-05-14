@@ -1,10 +1,12 @@
 import { Aggregate, FilterQuery, PipelineStage } from "mongoose";
 import {
+	ICommentPageOptions,
 	IPaginationResult,
 	IPostPageOptions,
 	TExtendedPageOptions,
 } from "../types/misc-types.js";
-import { TPost } from "../types/model-types.js";
+import { TComment, TContentItem, TPost } from "../types/model-types.js";
+import { COMMENT_WEIGHT, VIEW_WEIGHT } from "../constants/constants.js";
 
 // Options parameter is an object having searchOptions, filteringOptions, and etc.
 export const buildPaginationPipeline = <T>({
@@ -55,19 +57,23 @@ export const buildPostPaginationPipeline = ({
 	...rest
 }: IPostPageOptions) => {
 	const paginationPipeline = buildPaginationPipeline<TPost>(rest);
-	paginationPipeline.splice(1, 0, {
-		$lookup: {
-			from: "User",
-			let: { searchId: { $toObjectId: "userId" } },
-			pipeline: [
-				{ $match: { $expr: [{ _id: "$$searchId" }] } },
-				{ $project: { _id: 1, firstName: 1, lastName: 1 } },
-			],
-			as: "authorInfo",
-		},
-	});
-	// TODO: Insert the additional match into the match in the query.
-	// TODO: Figure out way to do the hot, controversial, popular thing here.
+	paginationPipeline.splice(
+		1,
+		0,
+		...[
+			{
+				$lookup: {
+					from: "User",
+					let: { searchId: { $toObjectId: "userId" } },
+					pipeline: [
+						{ $match: { $expr: [{ _id: "$$searchId" }] } },
+						{ $project: { _id: 1, firstName: 1, lastName: 1 } },
+					],
+					as: "authorInfo",
+				},
+			},
+		]
+	);
 	return paginationPipeline;
 };
 

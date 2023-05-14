@@ -1,5 +1,5 @@
 import { Comment } from "../models/comment-model.js";
-import { Post } from "../models/post-model.js";
+import { Post } from "../models/post/post-model.js";
 import { ReasonPhrases } from "http-status-codes";
 import { buildPage, buildPaginationPipeline } from "../utils/mongoose-utils.js";
 import { TComment } from "../types/model-types.js";
@@ -8,7 +8,9 @@ import {
 	IPaginationResult,
 	TExtendedPageOptions,
 } from "../types/misc-types.js";
-import { Role } from "../constants/constants.js";
+import { EUserError, Role } from "../constants/constants.js";
+import { TCommentVO, TUserVO } from "../types/vo-types.js";
+import { User } from "../models/user-model.js";
 
 const getComment = async (id: string) => {
 	const comment = await Comment.findById(id).exec();
@@ -16,12 +18,14 @@ const getComment = async (id: string) => {
 	return comment.toObject();
 };
 
-const searchCommentsByPost = async (
+const searchComments = async (
 	commentSearchOptions: TExtendedPageOptions<TComment>
 ) => {
-	const paginationResult = (await Comment.aggregate(
-		buildPaginationPipeline(commentSearchOptions)
-	).exec())[0] as any as IPaginationResult<TComment>;
+	const paginationResult = (
+		await Comment.aggregate(
+			buildPaginationPipeline(commentSearchOptions)
+		).exec()
+	)[0] as any as IPaginationResult<TComment>;
 	return buildPage(paginationResult, commentSearchOptions);
 };
 
@@ -45,7 +49,7 @@ const editComment = async (
 		throw Error(ReasonPhrases.UNAUTHORIZED);
 	}
 
-	existingComment.text = editedComment.text;
+	existingComment.text = editedComment.text || existingComment.text;
 	return (await existingComment.save()).toObject();
 };
 
@@ -101,9 +105,41 @@ const deleteLikeDislikeComment = async (
 	await existingComment.save();
 };
 
+const buildCommentVO = async (
+	comment: TComment,
+	authorizedUserId: string = ""
+): Promise<TCommentVO> => {
+	const users = await Promise.all([
+		User.findById(comment.createdById),
+		User.findById(comment.lastUpdatedById),
+	]);
+
+	let createdBy: TUserVO, lastUpdatedBy: TUserVO;
+	if (users.every((item) => item !== null)) {
+		[createdBy, lastUpdatedBy] = users as TUserVO[];
+	} else {
+		throw Error(EUserError.NOT_FOUND);
+	}
+
+	return {
+		id: comment.id,
+		postId: comment.postId,
+		parentCommentId: comment.parentCommentId,
+		text: comment.text,
+		createdBy,
+		createdAt: comment.createdAt,
+		lastUpdatedBy,
+		updatedAt: comment.updatedAt,
+		dislikeCount: comment.dislikes.length,
+		likeCount: comment.likes.length,
+		isLiked: comment.likes.includes(authorizedUserId),
+		isDisliked: comment.likes.includes(authorizedUserId),
+	};
+};
+
 export const CommentService = {
 	getComment,
-	searchCommentsByPost,
+	searchComments,
 	createComment,
 	editComment,
 	deleteComment,

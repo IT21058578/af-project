@@ -2,7 +2,6 @@ import { ELocationError, EUserError } from "../constants/constants.js";
 import { Location } from "../models/location-model.js";
 import { User } from "../models/user-model.js";
 import {
-	IAuthorizedUser,
 	IPaginationResult,
 	TExtendedPageOptions,
 } from "../types/misc-types.js";
@@ -48,8 +47,9 @@ const editLocation = async (
 		(existingLocation as any)[key] = value ?? (existingLocation as any)[key];
 	});
 	existingLocation.lastUpdatedById = authorizedUserId;
-
-	return (await existingLocation.save()).toObject;
+	const updatedLocation = await existingLocation.save();
+	const locationVO = await buildLocationVO(updatedLocation.toObject());
+	return locationVO;
 };
 
 const deleteLocation = async (locationId: string) => {
@@ -63,7 +63,9 @@ const createLocation = async (
 	authorizedUserId: string
 ) => {
 	newLocation.createdById = authorizedUserId;
-	return (await Location.create(newLocation)).toObject;
+	const createdLocation = await Location.create(newLocation);
+	const locationVO = await buildLocationVO(createdLocation.toObject());
+	return locationVO;
 };
 
 const buildLocationVO = async (location: TLocation): Promise<TLocationVO> => {

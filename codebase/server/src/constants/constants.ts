@@ -17,6 +17,9 @@ export const {
 export const CHECKOUT_SUCCESS_URL = `${WEB_CLIENT_DOMAIN}/checkout/success`;
 export const CHECKOUT_CANCEL_URL = `${WEB_CLIENT_DOMAIN}/checkout/cancel`;
 
+export const COMMENT_WEIGHT = 5;
+export const VIEW_WEIGHT = 1;
+
 export const Role = {
 	USER: "USER",
 	ADMIN: "ADMIN",
@@ -41,6 +44,7 @@ export const ELocationError = {
 
 export const EUserError = {
 	NOT_FOUND: "User not found",
+	UNAUTHORIZED: "User is not authorized",
 } as const;
 
 export const ETripPackageError = {

@@ -3,7 +3,7 @@ import initializeLogger from "./logger.js";
 import { ELodging, ETransport, MONGODB_URI } from "../constants/constants.js";
 import { faker } from "@faker-js/faker";
 import { User } from "../models/user-model.js";
-import { Post } from "../models/post-model.js";
+import { Post } from "../models/post/post-model.js";
 import { Comment } from "../models/comment-model.js";
 import { Location } from "../models/location-model.js";
 import { TripPackage } from "../models/package-model.js";

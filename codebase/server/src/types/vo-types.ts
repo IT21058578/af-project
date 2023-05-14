@@ -13,13 +13,15 @@ export type TUserVO = {
 	email: string;
 };
 
+export type TDetailedUserVO = {};
+
 export type TTripPackageVO = Omit<
 	TTripPackage,
 	"createdById" | "lastUpdatedById" | "plan"
 > & {
 	createdBy: TUserVO;
 	lastUpdatedBy: TUserVO;
-	plan: (TLocation & { activities: string[] })[];
+	plan: (TLocationVO & { activities: string[] })[];
 };
 
 export type TPostVO = Omit<
@@ -34,7 +36,10 @@ export type TPostVO = Omit<
 	isDisliked: boolean;
 };
 
-export type TCommentVO = Omit<TComment, "createdById" | "lastUpdatedById"> & {
+export type TCommentVO = Omit<
+	TComment,
+	"createdById" | "lastUpdatedById" | "likes" | "dislikes"
+> & {
 	createdBy: TUserVO;
 	lastUpdatedBy: TUserVO;
 	likeCount: number;
