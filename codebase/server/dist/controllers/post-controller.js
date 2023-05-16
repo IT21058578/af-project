@@ -7,9 +7,10 @@ const getPost = async (req, res, next) => {
     try {
         log.info("Intercepted getPost request");
         const { postId } = req.params;
-        const existingPost = await PostService.getPost(postId);
+        const userId = req.headers["user-id"];
+        const existingPost = await PostService.getPost(postId, userId);
         log.info("Successfully processed getPost request");
-        return res.send(StatusCodes.OK).json(existingPost);
+        return res.status(StatusCodes.OK).json(existingPost);
     }
     catch (error) {
         handleControllerError(next, error, []);
@@ -18,10 +19,11 @@ const getPost = async (req, res, next) => {
 const searchPosts = async (req, res, next) => {
     try {
         log.info("Intercepted searchPosts request");
+        const userId = req.headers["user-id"];
         const postSearchOptions = req.query;
-        const postPage = await PostService.searchPosts(postSearchOptions);
+        const postPage = await PostService.searchPosts(postSearchOptions, userId);
         log.info("Successfully processed searchPosts request");
-        return res.send(StatusCodes.OK).json(postPage);
+        return res.status(StatusCodes.OK).json(postPage);
     }
     catch (error) {
         handleControllerError(next, error, []);
@@ -35,9 +37,9 @@ const createPost = async (req, res, next) => {
         const createdPost = await PostService.createPost({
             userId,
             ...data,
-        });
+        }, userId);
         log.info("Successfully processed createPost request");
-        return res.send(StatusCodes.CREATED).json(createdPost);
+        return res.status(StatusCodes.CREATED).json(createdPost);
     }
     catch (error) {
         handleControllerError(next, error, []);
@@ -52,7 +54,7 @@ const editPost = async (req, res, next) => {
         const data = req.body;
         const editedPost = await PostService.editPost(postId, { id: userId || "", roles: userRoles || [] }, data);
         log.info("Successfully processed editPost request");
-        return res.send(StatusCodes.OK).json(editedPost);
+        return res.status(StatusCodes.OK).json(editedPost);
     }
     catch (error) {
         handleControllerError(next, error, []);

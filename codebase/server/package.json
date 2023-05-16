@@ -7,7 +7,7 @@
 		"gen-data": "ts-node-esm src/utils/setup-test-data.ts",
 		"dev": "nodemon src/server.ts",
 		"dev-start": "ts-node-esm src/server.ts",
-		"start": "node src/server.js"
+		"start": "node dist/server.js"
 	},
 	"nodemonConfig": {
 		"execMap": {

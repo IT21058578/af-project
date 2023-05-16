@@ -40,11 +40,13 @@ const deleteLocation = async (locationId) => {
 };
 const createLocation = async (newLocation, authorizedUserId) => {
     newLocation.createdById = authorizedUserId;
+    newLocation.lastUpdatedById = authorizedUserId;
     const createdLocation = await Location.create(newLocation);
     const locationVO = await buildLocationVO(createdLocation.toObject());
     return locationVO;
 };
 const buildLocationVO = async (location) => {
+    console.log(location);
     const [createdByUser, lastUpdatedByUser] = await Promise.all([
         User.findById(location.createdById),
         User.findById(location.lastUpdatedById),

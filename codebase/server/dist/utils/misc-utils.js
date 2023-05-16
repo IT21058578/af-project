@@ -25,6 +25,7 @@ export const handleControllerError = (next, error, errorOptions) => {
                 reasonPhrase = item.type || "";
             }
         }
+        console.log(error.stack);
     }
     const errorMessage = buildErrorMessage(reasonPhrase, cause, "CONTROLLER_SERVICE", error?.toString());
     next(errorMessage);

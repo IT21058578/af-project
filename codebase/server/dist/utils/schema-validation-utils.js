@@ -1,3 +1,4 @@
+import { ELodging, ETransport } from "../constants/constants.js";
 export const checkReactionType = {
     reactionType: {
         isIn: { options: [["likes", "dislikes"]] },
@@ -40,6 +41,51 @@ export const checkUserId = {
         in: ["params"],
     },
 };
+export const checkBookingId = {
+    bookingId: {
+        isMongoId: true,
+        errorMessage: "bookingId must be an ObjectId",
+        in: ["params"],
+    },
+};
+export const checkBookingFields = (optional, location = "body") => ({
+    createdById: {
+        optional,
+        isMongoId: true,
+        errorMessage: "createdById must be an ObjectId",
+        in: location,
+    },
+    stripeSessionId: {
+        optional,
+        isString: true,
+        errorMessage: "stripeSessionId must be a String",
+        in: location,
+    },
+    stripePaymentId: {
+        optional,
+        isString: true,
+        errorMessage: "stripePaymentId must be a String",
+        in: location,
+    },
+    "package.id": {
+        optional,
+        isMongoId: true,
+        errorMessage: "packageId must be an ObjectId",
+        in: location,
+    },
+    "package.lodging": {
+        optional,
+        isIn: { options: Object.values(ELodging) },
+        errorMessage: `package.lodging must be one of ${Object.values(ELodging).toString()}`,
+        in: location,
+    },
+    "package.transport": {
+        optional,
+        isIn: { options: Object.values(ETransport) },
+        errorMessage: `package.transport must be one of ${Object.values(ETransport).toString()}`,
+        in: location,
+    },
+});
 export const checkUserFields = (optional, location = "body") => {
     return {
         firstName: {
@@ -191,6 +237,12 @@ export const checkTripPackageFields = (optional, location = "body") => {
             errorMessage: "name must be a String",
             in: location,
         },
+        description: {
+            optional,
+            isString: true,
+            errorMessage: "description must be a String",
+            in: location,
+        },
         totalDistance: {
             optional,
             isNumeric: true,
@@ -240,13 +292,13 @@ export const checkTripPackageFields = (optional, location = "body") => {
             in: location,
         },
         "price.lodging.fiveStar": {
-            optional,
+            optional: true,
             isNumeric: true,
             errorMessage: "fiveStar must be a Number",
             in: location,
         },
         "discount.value": {
-            optional,
+            optional: true,
             isNumeric: true,
             errorMessage: "value must be a Number",
             in: location,
@@ -257,13 +309,13 @@ export const checkTripPackageFields = (optional, location = "body") => {
             errorMessage: "type must be either be 'FLAT' or 'PERCENT'",
             in: location,
         },
-        "price.*.locationId": {
+        "plan.*.locationId": {
             optional,
             isMongoId: true,
             errorMessage: "locationId must be an ObjectId",
             in: location,
         },
-        "price.*.activities.*": {
+        "plan.*.activities.*": {
             optional,
             isString: true,
             errorMessage: "Each value in activites must be a String",

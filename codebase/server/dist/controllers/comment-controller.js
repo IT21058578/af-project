@@ -6,10 +6,24 @@ const log = initializeLogger(import.meta.url.split("/").pop() || "");
 const getComment = async (req, res, next) => {
     try {
         log.info("Intercepted getComment request");
+        const userId = req.headers["user-id"];
         const { commentId } = req.params;
-        const existingComment = await CommentService.getComment(commentId);
+        const existingComment = await CommentService.getComment(commentId, userId);
         log.info("Successfully processed getComment request");
-        return res.send(StatusCodes.OK).json(existingComment);
+        return res.status(StatusCodes.OK).json(existingComment);
+    }
+    catch (error) {
+        handleControllerError(next, error, []);
+    }
+};
+const searchComments = async (req, res, next) => {
+    try {
+        log.info("Intercepted searchComments request");
+        const userId = req.headers["user-id"];
+        const commentSearchOptions = req.query;
+        const commentPage = await CommentService.searchComments(commentSearchOptions, userId);
+        log.info("Successfully processed searchComments request");
+        return res.status(StatusCodes.OK).json(commentPage);
     }
     catch (error) {
         handleControllerError(next, error, []);
@@ -26,9 +40,9 @@ const createComment = async (req, res, next) => {
             createdById: userId,
             parentCommentId: parentId,
             text,
-        });
+        }, userId);
         log.info("Successfully processed createComment request");
-        return res.send(StatusCodes.CREATED).json(createdComment);
+        return res.status(StatusCodes.CREATED).json(createdComment);
     }
     catch (error) {
         handleControllerError(next, error, []);
@@ -45,7 +59,7 @@ const editComment = async (req, res, next) => {
             text,
         });
         log.info("Successfully processed editComment request");
-        return res.send(StatusCodes.OK).json(editedComment);
+        return res.status(StatusCodes.OK).json(editedComment);
     }
     catch (error) {
         handleControllerError(next, error, []);
@@ -99,6 +113,7 @@ export const CommentController = {
     createComment,
     editComment,
     deleteComment,
+    searchComments,
     createlikeDislikeComment,
     deleteLikeDislikeComment,
 };

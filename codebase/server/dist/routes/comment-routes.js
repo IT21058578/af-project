@@ -1,11 +1,14 @@
 import express from "express";
 import { CommentController } from "../controllers/comment-controller.js";
 import validateSchema from "../middleware/validate-schema.js";
-import { checkCommentFields, checkCommentId, checkReactionType, checkUserDetails, } from "../utils/schema-validation-utils.js";
+import { checkCommentFields, checkCommentId, checkPageOptions, checkReactionType, checkUserDetails, } from "../utils/schema-validation-utils.js";
 import authorizeRequest from "../middleware/authorize-request.js";
 import { Role } from "../constants/constants.js";
 const router = express.Router();
-// TODO: Search comments
+router.route("/search").get(...validateSchema({
+    ...checkPageOptions,
+    ...checkCommentFields(true, false, "query"),
+}), CommentController.searchComments);
 router
     .route("/:commentId")
     .get(...validateSchema({
@@ -14,7 +17,7 @@ router
     .put(authorizeRequest([Role.USER]), ...validateSchema({
     ...checkUserDetails,
     ...checkCommentId,
-    ...checkCommentFields(undefined, true),
+    ...checkCommentFields(true, true),
 }), CommentController.editComment)
     .delete(authorizeRequest([Role.USER]), ...validateSchema({
     ...checkUserDetails,

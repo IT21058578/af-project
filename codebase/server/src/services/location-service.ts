@@ -76,7 +76,7 @@ const buildLocationVO = async (location: TLocation): Promise<TLocationVO> => {
 		User.findById(location.lastUpdatedById),
 	]);
 
-	let createdBy: TUserVO;
+	let createdBy: TUserVO | {};
 	if (createdByUser !== null) {
 		createdBy = UserService.buildUserVO(createdByUser);
 	} else {
@@ -84,7 +84,7 @@ const buildLocationVO = async (location: TLocation): Promise<TLocationVO> => {
 		throw Error(EUserError.NOT_FOUND);
 	}
 
-	let lastUpdatedBy: TUserVO;
+	let lastUpdatedBy: TUserVO | {};
 	if (lastUpdatedByUser !== null) {
 		lastUpdatedBy = UserService.buildUserVO(lastUpdatedByUser);
 	} else {

@@ -131,14 +131,14 @@ const buildTripPackageVO = async (
 
 	createdByUser?._id
 
-	let createdBy: TUserVO;
+	let createdBy: TUserVO | {};
 	if (createdByUser !== null) {
 		createdBy = UserService.buildUserVO(createdByUser);
 	} else {
 		throw Error(EUserError.NOT_FOUND);
 	}
 
-	let lastUpdatedBy: TUserVO;
+	let lastUpdatedBy: TUserVO | {};
 	if (lastUpdatedByUser !== null) {
 		lastUpdatedBy = UserService.buildUserVO(lastUpdatedByUser);
 	} else {

@@ -41,6 +41,8 @@ const editUser = async (userId, editedUser, authorizedUser) => {
     return userVO;
 };
 const buildUserVO = (user) => {
+    if (user === null)
+        return {};
     return {
         id: user._id ?? "",
         email: user.email ?? "",

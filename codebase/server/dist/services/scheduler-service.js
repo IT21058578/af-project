@@ -2,6 +2,7 @@ import { ELodging } from "../constants/constants.js";
 import { ETransport, } from "../constants/constants.js";
 import { Post } from "../models/post/post-model.js";
 import initializeLogger from "../utils/logger.js";
+import { schedule } from "node-cron";
 const log = initializeLogger(import.meta.url.split("/").pop() || "");
 const scheduledTasks = [];
 /**
@@ -153,7 +154,7 @@ const doPeriodicPostScoreUpdate = async () => {
         },
         {
             $merge: {
-                into: "Post",
+                into: "posts",
             },
         },
     ]).then(() => {
@@ -180,7 +181,7 @@ const doPeriodicPostScoresSnapshot = () => {
             },
         },
         {
-            $out: "PostAnalyticsSnapshot",
+            $out: "postanalyticsssnapshots",
         },
     ]).then(() => {
         log.info(`Finished taking post score snapshot`);
@@ -188,15 +189,13 @@ const doPeriodicPostScoresSnapshot = () => {
 };
 export const startScheduledTasks = () => {
     log.info("Starting scheduled tasks...");
-    // scheduledTasks.push(
-    // 	...[
-    // 		schedule(`* * * * *`, doPeriodicPostScoreUpdate, { runOnInit: true }),
-    // 		schedule(`* * * * *`, doPeriodicPostScoresSnapshot, {
-    // 			runOnInit: true,
-    // 		}),
-    // 		schedule(`* * * * *`, doPeriodicPackageScoreSnapshot, {
-    // 			runOnInit: true,
-    // 		}),
-    // 	]
-    // );
+    scheduledTasks.push(...[
+        schedule(`0 0 */1 * * *`, doPeriodicPostScoreUpdate, { runOnInit: true }),
+        // schedule(`* * * * *`, doPeriodicPostScoresSnapshot, {
+        // 	runOnInit: true,
+        // }),
+        // schedule(`* * * * *`, doPeriodicPackageScoreSnapshot, {
+        // 	runOnInit: true,
+        // }),
+    ]);
 };

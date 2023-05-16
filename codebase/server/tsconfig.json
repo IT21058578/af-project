@@ -1,5 +1,6 @@
 {
-	"exclude": ["./coverage", "./dist"],
+	"include": ["./src/**/*"],
+	"exclude": ["./coverage", "./dist", "/src/types/**"],
 	"ts-node": {
 		"transpileOnly": true,
 		"files": true
