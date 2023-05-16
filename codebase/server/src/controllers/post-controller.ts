@@ -16,9 +16,10 @@ const getPost = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		log.info("Intercepted getPost request");
 		const { postId } = req.params;
-		const existingPost = await PostService.getPost(postId);
+		const userId = req.headers["user-id"] as string;
+		const existingPost = await PostService.getPost(postId, userId);
 		log.info("Successfully processed getPost request");
-		return res.send(StatusCodes.OK).json(existingPost);
+		return res.status(StatusCodes.OK).json(existingPost);
 	} catch (error) {
 		handleControllerError(next, error, []);
 	}
@@ -27,10 +28,11 @@ const getPost = async (req: Request, res: Response, next: NextFunction) => {
 const searchPosts = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		log.info("Intercepted searchPosts request");
+		const userId = req.headers["user-id"] as string;
 		const postSearchOptions = req.query as Partial<TExtendedPageOptions<TPost>>;
-		const postPage = await PostService.searchPosts(postSearchOptions as any);
+		const postPage = await PostService.searchPosts(postSearchOptions as any, userId);
 		log.info("Successfully processed searchPosts request");
-		return res.send(StatusCodes.OK).json(postPage);
+		return res.status(StatusCodes.OK).json(postPage);
 	} catch (error) {
 		handleControllerError(next, error, []);
 	}
@@ -39,14 +41,17 @@ const searchPosts = async (req: Request, res: Response, next: NextFunction) => {
 const createPost = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		log.info("Intercepted createPost request");
-		const userId = req.headers["user-id"];
+		const userId = req.headers["user-id"] as string;
 		const data = req.body;
-		const createdPost = await PostService.createPost({
-			userId,
-			...data,
-		});
+		const createdPost = await PostService.createPost(
+			{
+				userId,
+				...data,
+			},
+			userId
+		);
 		log.info("Successfully processed createPost request");
-		return res.send(StatusCodes.CREATED).json(createdPost);
+		return res.status(StatusCodes.CREATED).json(createdPost);
 	} catch (error) {
 		handleControllerError(next, error, []);
 	}
@@ -65,7 +70,7 @@ const editPost = async (req: Request, res: Response, next: NextFunction) => {
 			data
 		);
 		log.info("Successfully processed editPost request");
-		return res.send(StatusCodes.OK).json(editedPost);
+		return res.status(StatusCodes.OK).json(editedPost);
 	} catch (error) {
 		handleControllerError(next, error, []);
 	}

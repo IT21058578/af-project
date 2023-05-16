@@ -161,7 +161,7 @@ const doPeriodicPostScoreUpdate = async () => {
 		},
 		{
 			$merge: {
-				into: "Post",
+				into: "posts",
 			},
 		},
 	]).then(() => {
@@ -189,7 +189,7 @@ const doPeriodicPostScoresSnapshot = () => {
 			},
 		},
 		{
-			$out: "PostAnalyticsSnapshot",
+			$out: "postanalyticsssnapshots",
 		},
 	]).then(() => {
 		log.info(`Finished taking post score snapshot`);
@@ -198,15 +198,15 @@ const doPeriodicPostScoresSnapshot = () => {
 
 export const startScheduledTasks = () => {
 	log.info("Starting scheduled tasks...");
-	// scheduledTasks.push(
-	// 	...[
-	// 		schedule(`* * * * *`, doPeriodicPostScoreUpdate, { runOnInit: true }),
-	// 		schedule(`* * * * *`, doPeriodicPostScoresSnapshot, {
-	// 			runOnInit: true,
-	// 		}),
-	// 		schedule(`* * * * *`, doPeriodicPackageScoreSnapshot, {
-	// 			runOnInit: true,
-	// 		}),
-	// 	]
-	// );
+	scheduledTasks.push(
+		...[
+			schedule(`0 0 */1 * * *`, doPeriodicPostScoreUpdate, { runOnInit: true }),
+			// schedule(`* * * * *`, doPeriodicPostScoresSnapshot, {
+			// 	runOnInit: true,
+			// }),
+			// schedule(`* * * * *`, doPeriodicPackageScoreSnapshot, {
+			// 	runOnInit: true,
+			// }),
+		]
+	);
 };

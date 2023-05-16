@@ -67,7 +67,8 @@ const editUser = async (
 	return userVO;
 };
 
-const buildUserVO = (user: TUser): TUserVO => {
+const buildUserVO = (user: TUser | null): TUserVO | {} => {
+	if (user === null) return {};
 	return {
 		id: user._id ?? "",
 		email: user.email ?? "",

@@ -68,7 +68,6 @@ mongoose.connect(MONGODB_URI || "", { dbName: "af-project" }).then(async () => {
 	log.info("Saving new comments");
 	const savedCommentIds: string[] = [];
 	for (const _i of Array(60)) {
-		console.log(savedUserIds);
 		const likes = selectRandom(savedUserIds);
 		const dislikes = selectRandom(savedUserIds);
 		const createdById = selectRandomOne(savedUserIds);

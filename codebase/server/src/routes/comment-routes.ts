@@ -4,6 +4,7 @@ import validateSchema from "../middleware/validate-schema.js";
 import {
 	checkCommentFields,
 	checkCommentId,
+	checkPageOptions,
 	checkReactionType,
 	checkUserDetails,
 } from "../utils/schema-validation-utils.js";
@@ -12,7 +13,14 @@ import { Role } from "../constants/constants.js";
 
 const router = express.Router();
 
-// TODO: Search comments
+router.route("/search").get(
+	...validateSchema({
+		...checkPageOptions,
+		...checkCommentFields(true, false, "query"),
+	}),
+	CommentController.searchComments
+);
+
 router
 	.route("/:commentId")
 	.get(
@@ -26,7 +34,7 @@ router
 		...validateSchema({
 			...checkUserDetails,
 			...checkCommentId,
-			...checkCommentFields(undefined, true),
+			...checkCommentFields(true, true),
 		}),
 		CommentController.editComment
 	)

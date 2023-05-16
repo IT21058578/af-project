@@ -15,16 +15,19 @@ import { TPostVO, TUserVO } from "../types/vo-types.js";
 import { User } from "../models/user-model.js";
 import { UserService } from "./user-service.js";
 
-const getPost = async (id: string) => {
+const getPost = async (id: string, authorizedUserId?: string) => {
 	const post = await Post.findById(id).exec();
 	if (post === null) throw Error(ReasonPhrases.NOT_FOUND);
 	post.views += 1;
 	post.save();
-	const postVO = await buildPostVO(post.toObject());
+	const postVO = await buildPostVO(post.toObject(), authorizedUserId);
 	return postVO;
 };
 
-const searchPosts = async (postSearchOptions: IPostPageOptions) => {
+const searchPosts = async (
+	postSearchOptions: IPostPageOptions,
+	authorizedUserId?: string
+) => {
 	const { data, ...rest } = (
 		await Post.aggregate(
 			buildPostPaginationPipeline(postSearchOptions as any)
@@ -32,16 +35,18 @@ const searchPosts = async (postSearchOptions: IPostPageOptions) => {
 	)[0] as any as IPaginationResult<TPost>;
 	const postVOs = await Promise.all(
 		data.map(async (post) => {
-			return await buildPostVO(post);
+			return await buildPostVO(post, authorizedUserId);
 		})
 	);
 	return buildPage({ data: postVOs, ...rest }, postSearchOptions);
 };
 
-const createPost = async (post: TPost) => {
+const createPost = async (post: TPost, authorizedUserId: string) => {
 	const newPost = new Post(post);
+	newPost.createdById = authorizedUserId;
+	newPost.lastUpdatedById = authorizedUserId;
 	const savedPost = await newPost.save();
-	const postVO = await buildPostVO(savedPost.toObject());
+	const postVO = await buildPostVO(savedPost.toObject(), authorizedUserId);
 	return postVO;
 };
 
@@ -60,9 +65,12 @@ const editPost = async (
 		throw Error(ReasonPhrases.UNAUTHORIZED);
 	}
 
-	// TODO: Add updating logic
+	Object.entries(editedPost).forEach(([key, value]) => {
+		(existingPost as any)[key] = value ?? (existingPost as any)[key];
+	});
+	existingPost.lastUpdatedById = authorizedUser.id;
 	const updatedPost = await existingPost.save();
-	const postVO = await buildPostVO(updatedPost.toObject());
+	const postVO = await buildPostVO(updatedPost.toObject(), authorizedUser.id);
 	return postVO;
 };
 
@@ -103,7 +111,7 @@ const createlikeDislikePost = async (
 	}
 
 	const updatedPost = await existingPost.save();
-	const postVO = await buildPostVO(updatedPost.toObject());
+	const postVO = await buildPostVO(updatedPost.toObject(), userId);
 	return postVO;
 };
 
@@ -130,13 +138,8 @@ const buildPostVO = async (
 		User.findById(post.createdById),
 		User.findById(post.lastUpdatedById),
 	]);
-
-	if (createdByUser === null || lastUpdatedByUser === null) {
-		throw Error(EUserError.NOT_FOUND);
-	}
-
-	const createdBy: TUserVO = UserService.buildUserVO(createdByUser);
-	const lastUpdatedBy: TUserVO = UserService.buildUserVO(lastUpdatedByUser);
+	const createdBy = UserService.buildUserVO(createdByUser);
+	const lastUpdatedBy = UserService.buildUserVO(lastUpdatedByUser);
 
 	return {
 		id: post._id,
@@ -150,7 +153,7 @@ const buildPostVO = async (
 		updatedAt: post.updatedAt,
 		tags: post.tags,
 		isLiked: post.likes.includes(authorizedUserId),
-		isDisliked: post.likes.includes(authorizedUserId),
+		isDisliked: post.dislikes.includes(authorizedUserId),
 		dislikeCount: post.dislikes.length,
 		likeCount: post.likes.length,
 		views: post.views,

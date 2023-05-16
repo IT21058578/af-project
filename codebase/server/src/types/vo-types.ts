@@ -30,8 +30,8 @@ export type TTripPackageVO = Omit<
 	"createdById" | "lastUpdatedById" | "plan" | "_id"
 > & {
 	id: string;
-	createdBy: TUserVO;
-	lastUpdatedBy: TUserVO;
+	createdBy: TUserVO | {};
+	lastUpdatedBy: TUserVO | {};
 	plan: (TLocationVO & { activities: string[] })[];
 };
 
@@ -40,8 +40,8 @@ export type TPostVO = Omit<
 	"createdById" | "lastUpdatedById" | "likes" | "dislikes" | "_id"
 > & {
 	id: string;
-	createdBy: TUserVO;
-	lastUpdatedBy: TUserVO;
+	createdBy: TUserVO | {};
+	lastUpdatedBy: TUserVO | {};
 	likeCount: number;
 	dislikeCount: number;
 	isLiked: boolean;
@@ -53,8 +53,8 @@ export type TCommentVO = Omit<
 	"createdById" | "lastUpdatedById" | "likes" | "dislikes" | "_id"
 > & {
 	id: string;
-	createdBy: TUserVO;
-	lastUpdatedBy: TUserVO;
+	createdBy: TUserVO | {};
+	lastUpdatedBy: TUserVO | {};
 	likeCount: number;
 	dislikeCount: number;
 	isLiked: boolean;
@@ -66,6 +66,6 @@ export type TLocationVO = Omit<
 	"createdById" | "lastUpdatedById" | "_id"
 > & {
 	id: string;
-	createdBy: TUserVO;
-	lastUpdatedBy: TUserVO;
+	createdBy: TUserVO | {};
+	lastUpdatedBy: TUserVO | {};
 };

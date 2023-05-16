@@ -70,6 +70,7 @@ const createLocation = async (
 };
 
 const buildLocationVO = async (location: TLocation): Promise<TLocationVO> => {
+	console.log(location);
 	const [createdByUser, lastUpdatedByUser] = await Promise.all([
 		User.findById(location.createdById),
 		User.findById(location.lastUpdatedById),

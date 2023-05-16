@@ -7,16 +7,41 @@ import {
 } from "../utils/misc-utils.js";
 import { Response, Request, NextFunction } from "express";
 import { TRoleValue } from "../types/constant-types.js";
+import { TComment } from "../types/model-types.js";
+import { TExtendedPageOptions } from "../types/misc-types.js";
 
 const log = initializeLogger(import.meta.url.split("/").pop() || "");
 
 const getComment = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		log.info("Intercepted getComment request");
+		const userId = req.headers["user-id"] as string | undefined;
 		const { commentId } = req.params;
-		const existingComment = await CommentService.getComment(commentId);
+		const existingComment = await CommentService.getComment(commentId, userId);
 		log.info("Successfully processed getComment request");
-		return res.send(StatusCodes.OK).json(existingComment);
+		return res.status(StatusCodes.OK).json(existingComment);
+	} catch (error) {
+		handleControllerError(next, error, []);
+	}
+};
+
+const searchComments = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		log.info("Intercepted searchComments request");
+		const userId = req.headers["user-id"] as string | undefined;
+		const commentSearchOptions = req.query as Partial<
+			TExtendedPageOptions<TComment>
+		>;
+		const commentPage = await CommentService.searchComments(
+			commentSearchOptions as any,
+			userId
+		);
+		log.info("Successfully processed searchComments request");
+		return res.status(StatusCodes.OK).json(commentPage);
 	} catch (error) {
 		handleControllerError(next, error, []);
 	}
@@ -32,14 +57,17 @@ const createComment = async (
 		const userId = req.headers["user-id"] as string | undefined;
 		const { postId } = req.params;
 		const { parentId, text } = req.body;
-		const createdComment = await CommentService.createComment({
-			postId,
-			createdById: userId,
-			parentCommentId: parentId,
-			text,
-		});
+		const createdComment = await CommentService.createComment(
+			{
+				postId,
+				createdById: userId,
+				parentCommentId: parentId,
+				text,
+			},
+			userId
+		);
 		log.info("Successfully processed createComment request");
-		return res.send(StatusCodes.CREATED).json(createdComment);
+		return res.status(StatusCodes.CREATED).json(createdComment);
 	} catch (error) {
 		handleControllerError(next, error, []);
 	}
@@ -60,7 +88,7 @@ const editComment = async (req: Request, res: Response, next: NextFunction) => {
 			}
 		);
 		log.info("Successfully processed editComment request");
-		return res.send(StatusCodes.OK).json(editedComment);
+		return res.status(StatusCodes.OK).json(editedComment);
 	} catch (error) {
 		handleControllerError(next, error, []);
 	}
@@ -134,6 +162,7 @@ export const CommentController = {
 	createComment,
 	editComment,
 	deleteComment,
+	searchComments,
 	createlikeDislikeComment,
 	deleteLikeDislikeComment,
 };
