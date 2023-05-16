@@ -5,8 +5,6 @@ const customFormat = format.printf(
 		`${timestamp} ${level} - [${label}] \{${moduleName}\} : ${message}`
 );
 
-// TODO: Colorize Output
-
 const logger = createLogger({
 	level: "info",
 	format: format.combine(

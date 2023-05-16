@@ -4,7 +4,7 @@ import {
 	EUserError,
 } from "../constants/constants.js";
 import { Location } from "../models/location-model.js";
-import { TripPackage } from "../models/package-model.js";
+import { TripPackage } from "../models/package/package-model.js";
 import { User } from "../models/user-model.js";
 import {
 	IPaginationResult,
@@ -129,6 +129,8 @@ const buildTripPackageVO = async (
 		User.findById(tripPackage.lastUpdatedById),
 	]);
 
+	createdByUser?._id
+
 	let createdBy: TUserVO;
 	if (createdByUser !== null) {
 		createdBy = UserService.buildUserVO(createdByUser);
@@ -153,7 +155,7 @@ const buildTripPackageVO = async (
 	});
 
 	return {
-		id: tripPackage.id,
+		id: tripPackage._id ?? "",
 		name: tripPackage.name,
 		description: tripPackage.description,
 		createdBy,
@@ -165,6 +167,7 @@ const buildTripPackageVO = async (
 		limitedDateRange: tripPackage.limitedDateRange,
 		totalDistance: tripPackage.totalDistance,
 		views: tripPackage.views,
+		isFeatured: tripPackage.isFeatured,
 		plan,
 	};
 };

@@ -57,3 +57,7 @@ export const EPaymentErrors = {
 	SESSION_URL_UNAVAILABLE: "Session URL unavailable",
 	UNAUTHORIZED_WEBHOOK: "Unauthorized Webhook endpoints access",
 };
+
+export const EBookingError = {
+	NOT_FOUND: "Booking not found",
+};

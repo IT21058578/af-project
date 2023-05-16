@@ -91,7 +91,7 @@ const deleteTripPackage = async (
 		const { tripPackageId } = req.params;
 		await TripPackageService.deleteTripPackage(tripPackageId);
 		log.info("Successfully processed deleteTripPackage request");
-		return res.status(StatusCodes.NO_CONTENT);
+		return res.status(StatusCodes.NO_CONTENT).send();
 	} catch (error) {
 		handleControllerError(next, error, []);
 	}

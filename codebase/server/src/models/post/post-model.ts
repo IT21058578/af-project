@@ -3,7 +3,8 @@ import { Schema, Types, model } from "mongoose";
 export const postSchema = new Schema(
 	{
 		createdById: { type: String, required: true },
-		lastUpdatedById: { type: String, required: true },
+		lastUpdatedById: String,
+
 		title: { type: String, required: true },
 		text: { type: String, required: true },
 		imageData: String,

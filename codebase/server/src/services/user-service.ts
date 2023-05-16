@@ -69,7 +69,7 @@ const editUser = async (
 
 const buildUserVO = (user: TUser): TUserVO => {
 	return {
-		id: user.id ?? "",
+		id: user._id ?? "",
 		email: user.email ?? "",
 		firstName: user.firstName ?? "",
 		lastName: user.lastName ?? "",
@@ -77,7 +77,19 @@ const buildUserVO = (user: TUser): TUserVO => {
 };
 
 const buildDetailedUserVO = (user: TUser): TDetailedUserVO => {
-	return {};
+	return {
+		id: user._id ?? "",
+		email: user.email ?? "",
+		firstName: user.firstName ?? "",
+		lastName: user.lastName ?? "",
+		createdAt: user.createdAt,
+		dateOfBirth: user.dateOfBirth,
+		isSubscribed: user.isSubscribed,
+		lastLoggedAt: user.lastLoggedAt,
+		mobile: user.mobile,
+		roles: user.roles as any,
+		updatedAt: user.updatedAt,
+	};
 };
 
 export const UserService = {

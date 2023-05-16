@@ -3,7 +3,8 @@ import { Schema, model } from "mongoose";
 export const locationSchema = new Schema(
 	{
 		createdById: { type: String, required: true },
-		lastUpdatedById: { type: String, required: true },
+		lastUpdatedById: String,
+
 		name: { type: String, required: true },
 		imageData: String,
 		address: {

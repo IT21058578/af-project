@@ -2,7 +2,7 @@ import Stripe from "stripe";
 import fs from "fs/promises";
 import initializeLogger from "../utils/logger.js";
 import { EmailService } from "./email-service.js";
-import { TripPackage } from "../models/package-model.js";
+import { TripPackage } from "../models/package/package-model.js";
 import {
 	CHECKOUT_CANCEL_URL,
 	CHECKOUT_SUCCESS_URL,

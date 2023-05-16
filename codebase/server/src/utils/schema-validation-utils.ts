@@ -48,12 +48,54 @@ export const checkUserId: Schema = {
 	},
 };
 
-// TODO: Complete Schema
 export const checkUserFields = (
 	optional?: true,
 	location: Location = "body"
 ): Schema => {
-	return {};
+	return {
+		firstName: {
+			optional,
+			isString: true,
+			errorMessage: "firstName must be a String",
+			in: location,
+		},
+		lastName: {
+			optional,
+			isString: true,
+			errorMessage: "lastName must be a String",
+			in: location,
+		},
+		mobile: {
+			optional,
+			isString: true,
+			errorMessage: "mobile must be a String",
+			in: location,
+		},
+		email: {
+			optional,
+			isEmail: true,
+			errorMessage: "email must be an Email",
+			in: location,
+		},
+		dateOfBirth: {
+			optional,
+			isDate: true,
+			errorMessage: "dateOfBirth must be a Date",
+			in: location,
+		},
+		isAuthorized: {
+			optional,
+			isBoolean: true,
+			errorMessage: "isAuthorized must be a Boolean",
+			in: location,
+		},
+		isSubscribed: {
+			optional,
+			isBoolean: true,
+			errorMessage: "isSubscribed must be a Boolean",
+			in: location,
+		},
+	};
 };
 
 export const checkPostFields = (

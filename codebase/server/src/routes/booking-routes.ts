@@ -20,4 +20,20 @@ router.route("/session").post(
 	BookingController.createCheckoutSession
 );
 
+router.route("/search").get(
+	authorizeRequest([Role.USER]),
+	...validateSchema({
+		...checkUserDetails,
+	}),
+	BookingController.searchBookings
+);
+
+router.route("/:bookingId").get(
+	authorizeRequest([Role.USER]),
+	...validateSchema({
+		...checkUserDetails,
+	}),
+	BookingController.getBooking
+);
+
 export default router;

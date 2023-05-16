@@ -8,7 +8,7 @@ export const userSchema = new Schema(
 		mobile: { type: String, required: true },
 		email: { type: String, required: true },
 		password: { type: String, required: true },
-		dateOfBirth: { type: String, required: true },
+		dateOfBirth: { type: Date, required: true },
 		isAuthorized: { type: Boolean, default: false },
 		isSubscribed: { type: Boolean, default: true },
 		resetToken: String,

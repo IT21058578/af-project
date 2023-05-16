@@ -1,3 +1,4 @@
+import { TRoleValue } from "./constant-types.js";
 import {
 	TComment,
 	TLocation,
@@ -13,21 +14,32 @@ export type TUserVO = {
 	email: string;
 };
 
-export type TDetailedUserVO = {};
+export type TDetailedUserVO = TUserVO & {
+	roles: TRoleValue[];
+	mobile: string;
+	email: string;
+	dateOfBirth: Date;
+	isSubscribed: boolean;
+	lastLoggedAt?: Date;
+	updatedAt: Date;
+	createdAt: Date;
+};
 
 export type TTripPackageVO = Omit<
 	TTripPackage,
-	"createdById" | "lastUpdatedById" | "plan"
+	"createdById" | "lastUpdatedById" | "plan" | "_id"
 > & {
+	id: string;
 	createdBy: TUserVO;
 	lastUpdatedBy: TUserVO;
-	plan: (TLocation & { activities: string[] })[];
+	plan: (TLocationVO & { activities: string[] })[];
 };
 
 export type TPostVO = Omit<
 	TPost,
-	"createdById" | "lastUpdatedById" | "likes" | "dislikes"
+	"createdById" | "lastUpdatedById" | "likes" | "dislikes" | "_id"
 > & {
+	id: string;
 	createdBy: TUserVO;
 	lastUpdatedBy: TUserVO;
 	likeCount: number;
@@ -38,8 +50,9 @@ export type TPostVO = Omit<
 
 export type TCommentVO = Omit<
 	TComment,
-	"createdById" | "lastUpdatedById" | "likes" | "dislikes"
+	"createdById" | "lastUpdatedById" | "likes" | "dislikes" | "_id"
 > & {
+	id: string;
 	createdBy: TUserVO;
 	lastUpdatedBy: TUserVO;
 	likeCount: number;
@@ -48,7 +61,11 @@ export type TCommentVO = Omit<
 	isDisliked: boolean;
 };
 
-export type TLocationVO = Omit<TLocation, "createdById" | "lastUpdatedById"> & {
+export type TLocationVO = Omit<
+	TLocation,
+	"createdById" | "lastUpdatedById" | "_id"
+> & {
+	id: string;
 	createdBy: TUserVO;
 	lastUpdatedBy: TUserVO;
 };

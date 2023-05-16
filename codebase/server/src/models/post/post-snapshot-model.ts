@@ -1,15 +1,18 @@
 import { Schema, Types, model } from "mongoose";
 
-export const postSchema = new Schema(
+export const postAnalyticsSnapshotSchema = new Schema(
 	{
-		likes: { type: [String], default: [] },
-		dislikes: { type: [String], default: [] },
+		postId: { type: String, required: true },
+		likesCount: { type: [String], default: [] },
+		dislikeCount: { type: [String], default: [] },
 		views: { type: Number, default: 0 },
 		controverisalScore: { type: Number, default: 0 },
 		hotScore: { type: Number, default: 0 },
-		isFeatured: { type: Boolean, default: false },
 	},
 	{ timestamps: true }
 );
 
-export const PostAnalyticsSnapshot = model("PostAnalyticsSnapshot", postSchema);
+export const PostAnalyticsSnapshot = model(
+	"PostAnalyticsSnapshot",
+	postAnalyticsSnapshotSchema
+);

@@ -5,7 +5,7 @@ import {
 	IPostPageOptions,
 	TExtendedPageOptions,
 } from "../types/misc-types.js";
-import { TComment, TContentItem, TPost } from "../types/model-types.js";
+import { TComment, TPost } from "../types/model-types.js";
 import { COMMENT_WEIGHT, VIEW_WEIGHT } from "../constants/constants.js";
 
 // Options parameter is an object having searchOptions, filteringOptions, and etc.
@@ -104,7 +104,7 @@ export const buildPage = <T>(
 			state: {
 				isEmpty: data?.length == 0,
 				isLast: countOfPages === pageNum,
-				isFirst: pageNum === 1,
+				isFirst: pageNum === 1 || pageNum === undefined,
 			},
 			count: {
 				inPage: countInPage,

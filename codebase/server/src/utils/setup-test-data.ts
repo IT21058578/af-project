@@ -6,20 +6,18 @@ import { User } from "../models/user-model.js";
 import { Post } from "../models/post/post-model.js";
 import { Comment } from "../models/comment-model.js";
 import { Location } from "../models/location-model.js";
-import { TripPackage } from "../models/package-model.js";
+import { TripPackage } from "../models/package/package-model.js";
 import { Booking } from "../models/booking-model.js";
 
 const log = initializeLogger(import.meta.url.split("/").pop() || "");
 
 const selectRandom = <T>(arr: T[], exclude?: T[]) => {
 	const res = faker.helpers.arrayElements(arr);
-	if (res.length === 0) throw Error();
 	return res;
 };
 
 const selectRandomOne = <T>(arr: T[]) => {
 	const result = faker.helpers.arrayElement(arr);
-	if (result === undefined) throw Error("Result was undefined");
 	return result;
 };
 
@@ -34,6 +32,7 @@ mongoose.connect(MONGODB_URI || "", { dbName: "af-project" }).then(async () => {
 			firstName: faker.name.firstName(),
 			lastName: faker.name.lastName(),
 			email: faker.internet.email(),
+			password: faker.datatype.string(),
 			isAuthorized: true,
 			isSubscribed: faker.datatype.boolean(),
 			lastLoggedAt: faker.date.recent(),
@@ -54,6 +53,8 @@ mongoose.connect(MONGODB_URI || "", { dbName: "af-project" }).then(async () => {
 		const post = new Post({
 			likes,
 			dislikes,
+			createdById: selectRandomOne(savedUserIds),
+			lastUpdatedById: selectRandomOne(savedUserIds),
 			tags: faker.datatype.array(),
 			text: faker.lorem.paragraphs(),
 			image: faker.internet.url(),
@@ -67,6 +68,7 @@ mongoose.connect(MONGODB_URI || "", { dbName: "af-project" }).then(async () => {
 	log.info("Saving new comments");
 	const savedCommentIds: string[] = [];
 	for (const _i of Array(60)) {
+		console.log(savedUserIds);
 		const likes = selectRandom(savedUserIds);
 		const dislikes = selectRandom(savedUserIds);
 		const createdById = selectRandomOne(savedUserIds);
@@ -119,6 +121,7 @@ mongoose.connect(MONGODB_URI || "", { dbName: "af-project" }).then(async () => {
 			createdById,
 			lastUpdatedById,
 			name: faker.lorem.words(),
+			description: faker.lorem.paragraph(),
 			price: {
 				perPerson: faker.datatype.number({ min: 0 }),
 				lodging: {

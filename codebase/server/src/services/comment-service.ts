@@ -122,7 +122,7 @@ const buildCommentVO = async (
 	}
 
 	return {
-		id: comment.id,
+		id: comment._id,
 		postId: comment.postId,
 		parentCommentId: comment.parentCommentId,
 		text: comment.text,

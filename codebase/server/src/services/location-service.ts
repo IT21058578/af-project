@@ -91,7 +91,7 @@ const buildLocationVO = async (location: TLocation): Promise<TLocationVO> => {
 	}
 
 	return {
-		id: location.id,
+		id: location._id,
 		name: location.name,
 		createdAt: location.createdAt,
 		updatedAt: location.updatedAt,

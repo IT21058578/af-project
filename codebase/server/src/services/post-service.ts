@@ -139,7 +139,7 @@ const buildPostVO = async (
 	const lastUpdatedBy: TUserVO = UserService.buildUserVO(lastUpdatedByUser);
 
 	return {
-		id: post.id,
+		id: post._id,
 		title: post.title,
 		text: post.text,
 		imageData: post.imageData,

@@ -5,7 +5,7 @@ export const tripPackageSchema = new Schema(
 		name: { type: String, required: true },
 		description: { type: String, required: true },
 		createdById: { type: String, required: true },
-		lastUpdatedById: { type: String, required: true },
+		lastUpdatedById: String,
 		totalDistance: { type: Number, required: true },
 		price: {
 			perPerson: Number,
@@ -36,6 +36,7 @@ export const tripPackageSchema = new Schema(
 			endDate: Date,
 		},
 		views: { type: Number, default: 0 },
+		isFeatured: { type: Boolean, default: false },
 	},
 	{ timestamps: true }
 );

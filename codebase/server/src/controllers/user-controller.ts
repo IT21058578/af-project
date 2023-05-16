@@ -13,7 +13,7 @@ const getUser = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		log.info("Intercepted getUser request");
 		const { userId } = req.params;
-		const existingUser = UserService.getUser(userId);
+		const existingUser = await UserService.getUser(userId);
 		log.info("Succesfully processed getUser request");
 		return res.status(StatusCodes.OK).send(existingUser);
 	} catch (error) {
@@ -25,7 +25,7 @@ const searchUsers = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		log.info("Intercepted searchUsers request");
 		const userSearchOptions = req.query as any as TExtendedPageOptions<TUser>;
-		const userPage = UserService.searchUsers(userSearchOptions);
+		const userPage = await UserService.searchUsers(userSearchOptions);
 		log.info("Succesfully processed searchUsers request");
 		return res.status(StatusCodes.OK).send(userPage);
 	} catch (error) {

@@ -4,7 +4,7 @@ export const commentSchema = new Schema(
 	{
 		postId: { type: String, required: true },
 		createdById: { type: String, required: true },
-		lastUpdatedById: { type: String, required: true },
+		lastUpdatedById: String,
 		parentCommentId: String,
 		text: { type: String, required: true },
 		likes: { type: [String], default: [] },

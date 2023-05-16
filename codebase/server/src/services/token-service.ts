@@ -53,6 +53,7 @@ const loadKeys = async () => {
 loadKeys();
 
 const decodeAccessToken = async (accessToken: string) => {
+	console.log(accessToken);
 	try {
 		const verifyResult = await jose.jwtVerify(
 			accessToken,

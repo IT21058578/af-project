@@ -96,6 +96,35 @@ const registerUser = async (
 	}
 };
 
+const authorizeUser = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		log.info("Intercepted authorize request");
+		const { email = "", authorizationToken = "" } = req.query as {
+			email: string;
+			authorizationToken: string;
+		};
+		await AuthService.authorizeUser(email, authorizationToken);
+		log.info("Succesfully processed authorize request");
+		return res.status(200).send();
+	} catch (error) {
+		handleControllerError(next, error, [
+			{
+				reasons: [EAuthErrors.ALREADY_AUTHORIZED],
+				type: ReasonPhrases.CONFLICT,
+				cause: "User with this email has already been authorized",
+			},
+			{
+				reasons: [EAuthErrors.USER_NOT_FOUND],
+				type: ReasonPhrases.NOT_FOUND,
+				cause: "User with this email was not found",
+			},
+		]);
+	}
+};
 const refreshTokens = async (
 	req: Request,
 	res: Response,
@@ -177,6 +206,7 @@ const changePassword = async (
 export const AuthController = {
 	loginUser,
 	logoutUser,
+	authorizeUser,
 	registerUser,
 	refreshTokens,
 	forgotPassword,
