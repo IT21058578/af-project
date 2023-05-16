@@ -1,9 +1,8 @@
 {
 	"type": "module",
 	"scripts": {
-		"test-debug": "node --inspect-brk --experimental-vm-modules ./node_modules/jest/bin/jest.js --runInBand",
-		"test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
 		"build": "tsc",
+		"test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
 		"gen-data": "ts-node-esm src/utils/setup-test-data.ts",
 		"dev": "nodemon src/server.ts",
 		"dev-start": "ts-node-esm src/server.ts",
@@ -15,20 +14,8 @@
 		}
 	},
 	"jest": {
-		"preset": "ts-jest/presets/default-esm",
-		"globalSetup": "./src/utils/test-utils/global-before-all.ts",
-		"globalTeardown": "./src/utils/test-utils/global-after-all.ts",
-		"moduleNameMapper": {
-			"^(\\.{1,2}/.*)\\.js$": "$1"
-		},
-		"transform": {
-			"^.+\\.[tj]sx?$": [
-				"ts-jest",
-				{
-					"useESM": true
-				}
-			]
-		}
+		"transform": {},
+		"verbose": true
 	},
 	"dependencies": {
 		"axios": "^1.4.0",

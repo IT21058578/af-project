@@ -19,4 +19,3 @@ describe(`DELETE /:userId`, () => {
         it.todo("should return a NO_CONTENT when post does not exist");
     });
 });
-export {};
