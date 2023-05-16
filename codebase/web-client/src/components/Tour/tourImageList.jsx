@@ -1,71 +1,102 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
-import ImageListItemBar from '@mui/material/ImageListItemBar';
+import "./details.css";
+import CancelIcon from '@mui/icons-material/Cancel';
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { useState } from "react";
 
-export default function DetailImageList() {
+const Hotel = () => {
+  const [slideNumber, setSlideNumber] = useState(0);
+  const [open, setOpen] = useState(false);
+
+  const photos = [
+    {
+      src: "https://media.tacdn.com/media/attractions-splice-spp-674x446/06/6a/e4/df.jpg",
+    },
+    {
+      src: "https://www.trawell.in/admin/images/upload/1894272Yala_Jeep_Safari.jpg",
+    },
+    {
+      src: "https://travellersisle.com/wp-content/uploads/2021/06/Yala-national-park-closure.jpg",
+    },
+    {
+      src: "https://img.traveltriangle.com/blog/wp-content/uploads/2017/10/Traveler-Reviews-for-Yala-National-Park.jpg",
+    },
+    {
+      src: "https://www.astraltravelsrilanka.com/wp-content/uploads/2021/12/yala-safari-arugam-bay.jpg",
+    },
+    {
+      src: "https://flashpackingfamily.com/wp-content/uploads/2019/12/Yala-National-park-leopard-sighting.jpg",
+    },
+  ];
+
+  const handleOpen = (i) => {
+    setSlideNumber(i);
+    setOpen(true);
+  };
+
+  const handleMove = (direction) => {
+    let newSlideNumber;
+
+    if (direction === "l") {
+      newSlideNumber = slideNumber === 0 ? 5 : slideNumber - 1;
+    } else {
+      newSlideNumber = slideNumber === 5 ? 0 : slideNumber + 1;
+    }
+
+    setSlideNumber(newSlideNumber)
+  };
+
   return (
     <div>
-    <Box sx={{ width: 500, height: 500, overflowY: 'scroll' ,margin:'20px' , marginLeft:'40px'}}>
-      <ImageList variant="masonry" cols={3} gap={8}>
-        {itemData.map((item) => (
-          <ImageListItem key={item.img} sx={{color:'black'}}>
-            <img
-              src={`${item.img}?w=248&fit=crop&auto=format`}
-              srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-              alt={item.title}
-              loading="lazy"
+      <div className="hotelContainer">
+        {open && (
+          <div className="slider">
+            <CancelIcon
+              className="close"
+              onClick={() => setOpen(false)}
             />
-            <ImageListItemBar position="below" title={item.author} />
-          </ImageListItem>
-        ))}
-      </ImageList>
-    </Box>
+            <ArrowCircleLeftIcon
+              className="arrow"
+              onClick={() => handleMove("l")}
+            />
+            <div className="sliderWrapper">
+              <img src={photos[slideNumber].src} alt="" className="sliderImg" />
+            </div>
+            <ArrowCircleRightIcon
+              className="arrow"
+              onClick={() => handleMove("r")}
+            />
+          </div>
+        )}
+        <div className="hotelWrapper">
+          <h1 className="hotelTitle">Yala national park</h1>
+          <div className="hotelAddress">
+            <LocationOnIcon/>
+            <span>Sri Lanka</span>
+          </div>
+          <span className="hotelDistance">
+            Excellent location to visit
+          </span>
+          <span className="hotelPriceHighlight">
+            Famous For: Wildlife, Flora & Fauna
+          </span>
+          <div className="hotelImages">
+            {photos.map((photo, i) => (
+              <div className="hotelImgWrapper" key={i}>
+                <img
+                  onClick={() => handleOpen(i)}
+                  src={photo.src}
+                  alt=""
+                  className="hotelImg"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
-}
+};
 
-const itemData = [
-  {
-    img: 'https://images.unsplash.com/photo-1549388604-817d15aa0110',
-    title: 'Bed',
-    author: 'swabdesign',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1525097487452-6278ff080c31',
-    title: 'Books',
-    author: 'Pavel Nekoranec',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1523413651479-597eb2da0ad6',
-    title: 'Sink',
-    author: 'Charles Deluvio',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1563298723-dcfebaa392e3',
-    title: 'Kitchen',
-    author: 'Christian Mackie',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1588436706487-9d55d73a39e3',
-    title: 'Blinds',
-    author: 'Darren Richardson',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1574180045827-681f8a1a9622',
-    title: 'Chairs',
-    author: 'Taylor Simpson',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1530731141654-5993c3016c77',
-    title: 'Laptop',
-    author: 'Ben Kolde',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1481277542470-605612bd2d61',
-    title: 'Doors',
-    author: 'Philipp Berndt',
-  },
-  
-];
+export default Hotel;

@@ -27,10 +27,10 @@ export default function NewBlog() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <NavBar />
-      <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
-        <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+      <Container component="main" maxWidth="lg" sx={{ mb: 4 }}>
+        <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 }, backgroundColor: 'antiquewhite', borderRadius:'20px',  }}>
           <Typography component="h1" variant="h4" align="center">
-            Add New Blog
+            Write a Blog
           </Typography><br></br>
             <Grid container spacing={3}>
                
@@ -45,6 +45,9 @@ export default function NewBlog() {
                 />
                 </Grid>
                 <Grid item xs={12}>
+                <Typography component="h1" variant="h6">
+                  Content *
+                </Typography>
                 <TextareaAutosize 
                     required
                     id="content"
@@ -54,9 +57,10 @@ export default function NewBlog() {
                     autoComplete="shipping address-line2"
                     variant="standard"
                     multiline minRows={8}
+                    sx={{ backgroundColor: 'lightgray', width:'100%' }}
                 />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12}>
                 {/* <ChipInput
                     name="tags"
                     variant="outlined"
@@ -67,12 +71,12 @@ export default function NewBlog() {
                     onDelete={(chip) => handleDeleteChip(chip)}
                 /> */}
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} >
                 <FileBase type="file" multiple={false} onDone={({ base64 }) => setPostData({ ...postData, selectedFile: base64 })} />
                 </Grid>
                 
             </Grid>
-            <Button variant="contained" sx={{ mt: 3, ml: 1 }}>Submit</Button>
+            <Button variant="contained" sx={{ mt: 3, ml: 1 }}>Publish</Button>
         </Paper>
       </Container>
       <Footer />

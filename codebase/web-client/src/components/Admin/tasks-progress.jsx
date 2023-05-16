@@ -32,7 +32,7 @@ export const OverviewTasksProgress = (props) => {
               Task Progress
             </Typography>
             <Typography variant="h4">
-              {value}%
+              {value}80%
             </Typography>
           </Stack>
           <Avatar

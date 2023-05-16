@@ -24,7 +24,7 @@ export const OverviewBudget = (props) => {
               Budget
             </Typography>
             <Typography variant="h4">
-              {value}
+              {value}420,000 LKR
             </Typography>
           </Stack>
           <Avatar

@@ -8,6 +8,8 @@ import Dashboard from './AdminDash';
 import PackageManagment from '../../components/Admin/packageManagment';
 import Navbar from '../../components/NavBar/NavBar';
 import Footer from '../../components/Footer';
+import UserManagment from '../../components/Admin/userManagment';
+import EmployeeManagment from '../../components/Admin/employeeManagment';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -55,9 +57,9 @@ export default function AdminHome() {
     <Box sx={{ width: '100%', marginTop:'30px'}}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="Dash Board" {...a11yProps(0)} />
+          <Tab label="DashBoard" {...a11yProps(0)} />
           <Tab label="User Managment" {...a11yProps(1)} />
-          <Tab label="Employee Managment" {...a11yProps(2)} />
+          <Tab label="Authors Managment" {...a11yProps(2)} />
           <Tab label="Tour Managment" {...a11yProps(3)} />
         </Tabs>
       </Box>
@@ -65,10 +67,10 @@ export default function AdminHome() {
         <Dashboard/>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <PackageManagment/>
+        <UserManagment/>
       </TabPanel>
       <TabPanel value={value} index={2}>
-       <PackageManagment/>
+       <EmployeeManagment/>
       </TabPanel>
       <TabPanel value={value} index={3}>
        <PackageManagment/>

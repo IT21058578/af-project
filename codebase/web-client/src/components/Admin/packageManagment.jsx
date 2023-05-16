@@ -14,7 +14,7 @@ import {
   Tooltip,
 } from '@mui/material';
 import { Delete, Edit } from '@mui/icons-material';
-import { data, states } from './makeData';
+import { data, locations } from './packageData';
 
 const PackageManagment = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -95,32 +95,32 @@ const PackageManagment = () => {
         size: 80,
       },
       {
-        accessorKey: 'firstName',
-        header: 'First Name',
+        accessorKey: 'packageTitle',
+        header: 'Package Title',
         size: 140,
         muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
           ...getCommonEditTextFieldProps(cell),
         }),
       },
       {
-        accessorKey: 'lastName',
-        header: 'Last Name',
+        accessorKey: 'packageDescription',
+        header: 'Package Description',
         size: 140,
         muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
           ...getCommonEditTextFieldProps(cell),
         }),
       },
       {
-        accessorKey: 'email',
-        header: 'Email',
+        accessorKey: 'catogery',
+        header: 'Catogery',
+        size: 140,
         muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
           ...getCommonEditTextFieldProps(cell),
-          type: 'email',
         }),
       },
       {
-        accessorKey: 'age',
-        header: 'Age',
+        accessorKey: 'price',
+        header: 'Price',
         size: 80,
         muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
           ...getCommonEditTextFieldProps(cell),
@@ -128,11 +128,11 @@ const PackageManagment = () => {
         }),
       },
       {
-        accessorKey: 'state',
-        header: 'State',
+        accessorKey: 'locations',
+        header: 'Locations',
         muiTableBodyCellEditTextFieldProps: {
           select: true, //change to select for a dropdown
-          children: states.map((state) => (
+          children: locations.map((state) => (
             <MenuItem key={state} value={state}>
               {state}
             </MenuItem>

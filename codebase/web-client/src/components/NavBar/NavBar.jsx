@@ -21,7 +21,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = ['Dashboard', 'Logout'];
 import Image from '../../assets/navBg.png';
 
 
@@ -88,12 +88,13 @@ const Navbar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
   return (
     <AppBar position="static" sx={{ backgroundColor: 'transparent !important', backgroundImage:`url(${Image})`, backgroundSize:'cover',backgroundRepeat:'no-repeat', opacity:"1.0", color:'black' , padding:'30px', minHeight:'480px' , boxShadow:'none'}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters >
-        <Link to="/Blogs" className="brandContainer">
-        <img component={Link} to="/Blogs" src={logoCH} alt="icon" height="50px" />
+        <Link to="/blog" className="brandContainer">
+        <img component={Link} to="/blog" src={logoCH} alt="icon" height="50px" />
         </Link>
           <Typography
             variant="h5"
@@ -114,7 +115,7 @@ const Navbar = () => {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
               <Stack direction="row" spacing={2}>
-              <Button variant="outlined" color="inherit" sx={{color:'white'}} onClick={() => navigate("/Blogs")}>
+              <Button variant="outlined" color="inherit" sx={{color:'white'}} onClick={() => navigate("/blog")}>
                 Blog
               </Button>
               <Button variant="outlined" color="inherit" sx={{color:'white'}} onClick={() => navigate("/tour")}>
@@ -149,10 +150,12 @@ const Navbar = () => {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+              <MenuItem key={setting}>
+                <Link to={setting === 'Dashboard' ? '/userbooking' : '/logout'} style={{ textDecoration: 'none' }}>
                   <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
+                </Link>
+              </MenuItem>
+            ))}
             </Menu>
           </Box>
         </Toolbar>

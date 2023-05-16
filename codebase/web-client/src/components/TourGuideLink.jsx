@@ -16,7 +16,7 @@ const TourGuideLink = () => {
       We provide Tour Guide packages, consectetur adipiscing elit. Sed nec mi vitae magna bibendum facilisis.
       </Typography>
       <Card sx={{ maxWidth: 100, align: 'center', marginLeft: '46%', marginTop: '10px', marginBottom: '50px' }}>
-        <CardActionArea component={Link} to="/page1">
+        <CardActionArea component={Link} to="/tour">
           <CardMedia
             component="img"
             image={Icon}
