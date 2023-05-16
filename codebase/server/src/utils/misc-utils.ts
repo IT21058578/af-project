@@ -43,6 +43,7 @@ export const handleControllerError = (
 				reasonPhrase = item.type || "";
 			}
 		}
+		console.log(error.stack);
 	}
 	const errorMessage = buildErrorMessage(
 		reasonPhrase,

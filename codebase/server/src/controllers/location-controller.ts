@@ -41,7 +41,7 @@ const searchLocations = async (
 			locationSearchOptions as any
 		);
 		log.info("Successfully processed searchLocation request");
-		return res.send(StatusCodes.OK).json(locationPage);
+		return res.status(StatusCodes.OK).json(locationPage);
 	} catch (error) {
 		handleControllerError(next, error, []);
 	}
@@ -85,7 +85,7 @@ const deleteLocation = async (
 		const { locationId } = req.params;
 		await LocationService.deleteLocation(locationId);
 		log.info("Successfully processed deleteLocation request");
-		return res.status(StatusCodes.NO_CONTENT);
+		return res.status(StatusCodes.NO_CONTENT).send();
 	} catch (error) {
 		handleControllerError(next, error, []);
 	}

@@ -27,7 +27,6 @@ export type TBooking = InferSchemaType<typeof bookingSchema> & {
 	_id?: any;
 };
 
-
 export type TLodging = keyof Required<
 	Required<TTripPackage>["price"]
 >["lodging"];

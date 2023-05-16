@@ -59,12 +59,13 @@ const createCheckoutSession = async (
 			{
 				price_data: {
 					currency: "lkr",
-					product: existingTripPackage.id,
+					unit_amount: calculatedPrice,
 					product_data: {
 						name: existingTripPackage.name ?? "",
 						description: existingTripPackage.description ?? "",
 						metadata: {
 							userId: userId,
+							packageId: existingTripPackage.id,
 							persons: pricingOptions.persons,
 							logding: pricingOptions.lodging,
 							transport: pricingOptions.transport,
@@ -72,7 +73,6 @@ const createCheckoutSession = async (
 						},
 					},
 				},
-				price: String(calculatedPrice),
 				quantity: 1,
 			},
 		],

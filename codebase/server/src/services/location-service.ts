@@ -63,6 +63,7 @@ const createLocation = async (
 	authorizedUserId: string
 ) => {
 	newLocation.createdById = authorizedUserId;
+	newLocation.lastUpdatedById = authorizedUserId;
 	const createdLocation = await Location.create(newLocation);
 	const locationVO = await buildLocationVO(createdLocation.toObject());
 	return locationVO;
