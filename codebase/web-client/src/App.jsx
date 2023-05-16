@@ -26,7 +26,7 @@ function App() {
           <Route path={['/creators/:name', '/tags/:name']} component={CreatorOrTag} /> */}
           {/* <Route path="/auth" exact component={() => (!user ? <Auth /> : <Redirect to="/blogs" />)} /> */}
           <Route exact path="/auth" element={<Auth />} />
-          <Route exact path="/blogs" element={<Blogs />} />
+          <Route exact path="/" element={<Blogs />} />
           <Route exact path="/new" element={<NewBlog />} />
           <Route exact path="/tour" element={<TourHome />} />
           <Route exact path="/tour/details/:title" element={<TourDetails />} />

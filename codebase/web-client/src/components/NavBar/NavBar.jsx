@@ -93,8 +93,8 @@ const Navbar = () => {
     <AppBar position="static" sx={{ backgroundColor: 'transparent !important', backgroundImage:`url(${Image})`, backgroundSize:'cover',backgroundRepeat:'no-repeat', opacity:"1.0", color:'black' , padding:'30px', minHeight:'480px' , boxShadow:'none'}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters >
-        <Link to="/Blogs" className="brandContainer">
-        <img component={Link} to="/Blogs" src={logoCH} alt="icon" height="50px" />
+        <Link to="/" className="brandContainer">
+        <img component={Link} to="/" src={logoCH} alt="icon" height="50px" />
         </Link>
           <Typography
             variant="h5"
@@ -115,7 +115,7 @@ const Navbar = () => {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
               <Stack direction="row" spacing={2}>
-              <Button variant="outlined" color="inherit" sx={{color:'white'}} onClick={() => navigate("/Blogs")}>
+              <Button variant="outlined" color="inherit" sx={{color:'white'}} onClick={() => navigate("/")}>
                 Blog
               </Button>
               <Button variant="outlined" color="inherit" sx={{color:'white'}} onClick={() => navigate("/tour")}>

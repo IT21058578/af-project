@@ -56,7 +56,7 @@ export default function StickyFooter() {
             <Link color="inherit" href="https://mui.com/">
                 Tour Guide
             </Link>&nbsp;&nbsp;
-            <Link color="inherit" to="/blogs">
+            <Link color="inherit" to="/">
                 Blog
             </Link>&nbsp;&nbsp;
             <Link color="inherit" href="https://mui.com/">
