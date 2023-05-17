@@ -12,8 +12,8 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Footer from '../components/Footer';
-import NavBar from '../components/NavBar/NavBar';
+import Footer from '../../components/Footer';
+import NavBar from '../../components/NavBar/NavBar';
 import FileBase from 'react-file-base64';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
 

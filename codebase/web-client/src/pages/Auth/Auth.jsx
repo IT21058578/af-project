@@ -15,8 +15,24 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 // import { GoogleLogin } from 'react-google-login';
 // import { useDispatch } from 'react-redux';
-
+import * as yup from "yup";
+// import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
 import bgImg from '../../assets/train.png';
+import { useRegisterUserMutation } from "../../store/api/auth-api-slice";
+import { useNavigate } from "react-router-dom";
+import * as jose from "jose";
+
+const authSchema = yup.object({
+	email: yup
+		.string()
+		.email("Invalid email")
+		.required("Please enter your email"),
+	mobile: yup.string().required("Please enter your mobile number"),
+	fullName: yup.string().required("Please enter your full name"),
+	password: yup.string().required("Please enter your password"),
+	matchPassword: yup.string().required("Please re-enter your password"),
+});
 
 function Copyright(props) {
   return (
@@ -38,22 +54,93 @@ const initialState = { fullName: '', lastName: '', email: '', password: '', conf
 export default function SignInSide() {
   const [form, setForm] = useState(initialState);
   const [isSignup, setIsSignup] = useState(false);
-  // const dispatch = useDispatch();
-  // const history = useHistory();
+  const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+	const {
+		register,
+		formState: { errors, isSubmitting },
+		handleSubmit,
+	} = useForm({ resolver: yupResolver(authSchema) });
+	// const [serverErrorMessage, setServerErrorMessage] = useState<
+	// 	string | undefined
+	// >();
+	const [registerUser, { isLoading, isSuccess, isError, reset }] =
+    useRegisterUserMutation();
+
+  const onSubmit = async (formData) => {
     if (isSignup) {
-      // dispatch(signup(form, history));
+      try {
+        const response = await registerUser({
+          ...formData,
+        }).unwrap();
+      } catch (error) {
+        if (error.status === 409) {
+          setServerErrorMessage("This email is already in use");
+        } else {
+          setServerErrorMessage("An error occurred. Please try again later");
+        }
+      }
+      reset();
     } else {
-      // dispatch(signin(form, history));
+      const { email, password } = formData;
+      try {
+        const { accessToken, refreshToken } = await loginUser({
+          email,
+          password,
+        }).unwrap();
+  
+        const secret = await jose.importSPKI(publicAccessTokenKey, "RS256");
+        const {
+          payload: { id },
+        } = await jose.jwtVerify(accessToken, secret);
+        
+        const { data } = await getUser({ userId: id });
+        if (!data) throw Error("This should not happen");
+  
+        const user = {
+          id,
+          email: data.email,
+          firstName: data.firstName,
+          isAuthorized: data.isAuthorized,
+          isSubscribed: data.isSubscribed,
+          lastName: data.lastName,
+          mobile: data.mobile,
+          roles: data.roles,
+        };
+        dispatch(setAuth({ user, accessToken, refreshToken }));
+        navigate("/");
+      } catch (error) {
+        if (error.status === 401) {
+          setServerErrorMessage("Invalid password or email");
+        } else {
+          setServerErrorMessage("An error occurred. Please try again later.");
+        }
+      }
     }
   };
+
+	useEffect(() => {
+		if (isSuccess) {
+			setIsRegisterSuccessful(true);
+		} else if (isError) {
+			setIsRegisterSuccessful(false);
+		}
+		reset();
+	}, [isSuccess, isError]);
+  
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   const data = new FormData(event.currentTarget);
+  //   console.log({
+  //     email: data.get('email'),
+  //     password: data.get('password'),
+  //   });
+  //   if (isSignup) {
+  //     // dispatch(signup(form, history));
+  //   } else {
+  //     // dispatch(signin(form, history));
+  //   }
+  // };
 
   const [showPassword, setShowPassword] = useState(false);
   const handleShowPassword = () => setShowPassword(!showPassword);
@@ -100,10 +187,13 @@ export default function SignInSide() {
             <Typography component="h1" variant="h5">
               { isSignup ? 'Sign up' : 'Sign in' }
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
               { isSignup && (
               <>
-                <TextField margin="normal" fullWidth required  name="fullName" label="Full Name" handleChange={handleChange} autoFocus />
+                <TextField margin="normal" fullWidth required  name="fullName" label="Full Name" handleChange={handleChange} autoFocus 
+                error={errors.fullName} 
+                isLoading={isSubmitting || isLoading}
+							  {...register("fullName")} />
               </>
               )}
               <TextField
@@ -115,6 +205,9 @@ export default function SignInSide() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                error={errors.email}
+                isLoading={isSubmitting || isLoading}
+                {...register("email")}
               />
               <TextField
                 margin="normal"
@@ -125,8 +218,14 @@ export default function SignInSide() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                error={errors.password}
+                isLoading={isSubmitting || isLoading}
+                {...register("password")}
               />
-              { isSignup && <TextField margin="normal" required fullWidth name="confirmPassword" label="Repeat Password" handleChange={handleChange} type="password" /> }
+              { isSignup && <TextField margin="normal" required fullWidth name="matchPassword" label="Repeat Password" handleChange={handleChange} type="password" 
+              error={errors.matchPassword}
+							isLoading={isSubmitting || isLoading}
+							{...register("matchPassword")}/> }
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
