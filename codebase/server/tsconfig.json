@@ -1,4 +1,10 @@
 {
+	"include": ["./src/**/*"],
+	"exclude": ["./coverage", "./dist", "/src/types/**"],
+	"ts-node": {
+		"transpileOnly": true,
+		"files": true
+	},
 	"compilerOptions": {
 		"outDir": "./dist",
 		"rootDir": "./src",
@@ -13,6 +19,5 @@
 		"moduleResolution": "nodenext",
 		"resolveJsonModule": true,
 		"isolatedModules": true
-	},
-	"include": ["src"]
+	}
 }

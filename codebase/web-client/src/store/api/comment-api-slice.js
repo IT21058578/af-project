@@ -9,7 +9,6 @@ export const commentsApi = baseApi.injectEndpoints({
 			}),
 		}),
 		searchComments: builder.query({
-			/** TODO: This is yet to be implemented in the backend */
 			query: ({ searchOptions }) => ({
 				url: `${COMMENTS_URL}/search?${new URLSearchParams(
 					searchOptions
@@ -17,9 +16,9 @@ export const commentsApi = baseApi.injectEndpoints({
 			}),
 		}),
 		createComment: builder.mutation({
-			query: ({ postId, parentId, text }) => ({
+			query: ({ postId, parentCommentId, text }) => ({
 				url: `${POSTS_URL}/${postId}/comments/`,
-				body: { parentId, text },
+				body: { parentCommentId, text },
 				method: "POST",
 			}),
 		}),

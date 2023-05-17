@@ -15,11 +15,12 @@ const getTripPackage = async (
 	next: NextFunction
 ) => {
 	try {
-		log.info(`Request with url ${req.url} has reached controller function`);
+		log.info("Intercepted getTripPackage request");
 		const { tripPackageId } = req.params;
 		const existingTripPackage = await TripPackageService.getTripPackage(
 			tripPackageId
 		);
+		log.info("Successfully processed getTripPackage request");
 		return res.status(StatusCodes.OK).json(existingTripPackage);
 	} catch (error) {
 		handleControllerError(next, error, [
@@ -38,15 +39,15 @@ const searchTripPackages = async (
 	next: NextFunction
 ) => {
 	try {
-		log.info(`Request with url ${req.url} has reached controller function`);
-		const locationSearchOptions = req.params as Partial<
+		log.info("Intercepted searchTripPackages request");
+		const tripPackageSearchOptions = req.query as Partial<
 			TExtendedPageOptions<TTripPackage>
 		>;
-		const locationPage = await TripPackageService.searchTripPackages(
-			locationSearchOptions as any
+		const tripPackagePage = await TripPackageService.searchTripPackages(
+			tripPackageSearchOptions as any
 		);
-		log.info("Successfully processed searchPosts request");
-		return res.send(StatusCodes.OK).json(locationPage);
+		log.info("Successfully processed searchTripPackages request");
+		return res.status(StatusCodes.OK).json(tripPackagePage);
 	} catch (error) {
 		handleControllerError(next, error, []);
 	}
@@ -58,7 +59,7 @@ const editTripPackage = async (
 	next: NextFunction
 ) => {
 	try {
-		log.info(`Request with url ${req.url} has reached controller function`);
+		log.info("Intercepted editTripPackage request");
 		const { tripPackageId } = req.params;
 		const editedTripPackage = req.body;
 		const authorizedUserId = req.headers["user-id"] as string;
@@ -67,6 +68,7 @@ const editTripPackage = async (
 			editedTripPackage,
 			authorizedUserId
 		);
+		log.info("Successfully processed editTripPackage request");
 		return res.status(StatusCodes.OK).json(existingTripPackage);
 	} catch (error) {
 		handleControllerError(next, error, [
@@ -85,10 +87,11 @@ const deleteTripPackage = async (
 	next: NextFunction
 ) => {
 	try {
-		log.info(`Request with url ${req.url} has reached controller function`);
+		log.info("Intercepted deleteTripPackage request");
 		const { tripPackageId } = req.params;
 		await TripPackageService.deleteTripPackage(tripPackageId);
-		return res.status(StatusCodes.NO_CONTENT);
+		log.info("Successfully processed deleteTripPackage request");
+		return res.status(StatusCodes.NO_CONTENT).send();
 	} catch (error) {
 		handleControllerError(next, error, []);
 	}
@@ -100,13 +103,14 @@ const createTripPackage = async (
 	next: NextFunction
 ) => {
 	try {
-		log.info(`Request with url ${req.url} has reached controller function`);
+		log.info("Intercepted createTripPackage request");
 		const newTripPackage = req.body;
 		const authorizedUserId = req.headers["user-id"] as string;
 		const savedTripPackage = await TripPackageService.createTripPackage(
 			newTripPackage,
 			authorizedUserId
 		);
+		log.info("Successfully processed createTripPackage request");
 		return res.status(StatusCodes.OK).json(savedTripPackage);
 	} catch (error) {
 		handleControllerError(next, error, []);

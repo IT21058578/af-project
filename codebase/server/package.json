@@ -1,12 +1,12 @@
 {
 	"type": "module",
 	"scripts": {
-		"test": "jest --forceExit",
 		"build": "tsc",
+		"test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
 		"gen-data": "ts-node-esm src/utils/setup-test-data.ts",
-		"dev": "nodemon src/index.ts",
-		"dev-start": "ts-node-esm src/index.ts",
-		"start": "node src/index.js"
+		"dev": "nodemon src/server.ts",
+		"dev-start": "ts-node-esm src/server.ts",
+		"start": "node dist/server.js"
 	},
 	"nodemonConfig": {
 		"execMap": {
@@ -14,10 +14,8 @@
 		}
 	},
 	"jest": {
-		"verbose": true,
-		"globalSetup": "./src/utils/test-utils/global-before-all.ts",
-		"globalTeardown": "./src/utils/test-utils/global-after-all.ts",
-		"preset": "ts-jest"
+		"transform": {},
+		"verbose": true
 	},
 	"dependencies": {
 		"axios": "^1.4.0",
@@ -32,8 +30,10 @@
 		"jose": "^4.13.1",
 		"jsonwebtoken": "^9.0.0",
 		"mongoose": "^7.0.2",
+		"node-cron": "^3.0.2",
 		"nodemailer": "^6.9.1",
 		"openai": "^3.2.1",
+		"stripe": "^12.4.0",
 		"uuid": "^9.0.0",
 		"winston": "^3.8.2"
 	},
@@ -48,7 +48,9 @@
 		"@types/http-status-codes": "^1.2.0",
 		"@types/jest": "^29.5.1",
 		"@types/mongoose": "^5.11.97",
+		"@types/node-cron": "^3.0.7",
 		"@types/nodemailer": "^6.4.7",
+		"@types/stripe": "^8.0.417",
 		"@types/supertest": "^2.0.12",
 		"@types/uuid": "^9.0.1",
 		"@types/winston": "^2.4.4",

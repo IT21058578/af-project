@@ -2,7 +2,6 @@ import { USERS_URL } from "../../constants/constants";
 import { baseApi } from "./base-api-slice";
 
 export const usersApi = baseApi.injectEndpoints({
-	/** TODO: None of these are implemented yet */
 	endpoints: (builder) => ({
 		getUser: builder.query({
 			query: ({ userId }) => ({

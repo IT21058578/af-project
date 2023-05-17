@@ -1,5 +1,5 @@
 import { Comment } from "../models/comment-model.js";
-import { Post } from "../models/post-model.js";
+import { Post } from "../models/post/post-model.js";
 import { ReasonPhrases } from "http-status-codes";
 import { buildPage, buildPaginationPipeline } from "../utils/mongoose-utils.js";
 import { TComment } from "../types/model-types.js";
@@ -8,26 +8,41 @@ import {
 	IPaginationResult,
 	TExtendedPageOptions,
 } from "../types/misc-types.js";
-import { Role } from "../constants/constants.js";
+import { EUserError, Role } from "../constants/constants.js";
+import { TCommentVO, TUserVO } from "../types/vo-types.js";
+import { User } from "../models/user-model.js";
+import { UserService } from "./user-service.js";
 
-const getComment = async (id: string) => {
+const getComment = async (id: string, authorizedUserId?: string) => {
 	const comment = await Comment.findById(id).exec();
 	if (comment === null) throw Error(ReasonPhrases.NOT_FOUND);
-	return comment.toObject();
+	return await buildCommentVO(comment.toObject(), authorizedUserId);
 };
 
-const searchCommentsByPost = async (
-	commentSearchOptions: TExtendedPageOptions<TComment>
+const searchComments = async (
+	commentSearchOptions: TExtendedPageOptions<TComment>,
+	authorizedUserId?: string
 ) => {
-	const paginationResult = (await Comment.aggregate(
-		buildPaginationPipeline(commentSearchOptions)
-	).exec()) as any as IPaginationResult<TComment>;
-	return buildPage(paginationResult, commentSearchOptions);
+	const { data, ...rest } = (
+		await Comment.aggregate(
+			buildPaginationPipeline(commentSearchOptions)
+		).exec()
+	)[0] as any as IPaginationResult<TComment>;
+	const commentVOs = await Promise.all(
+		data.map(async (comment) => {
+			return await buildCommentVO(comment, authorizedUserId);
+		})
+	);
+	return buildPage({ data: commentVOs, ...rest }, commentSearchOptions);
 };
 
-const createComment = async (comment: Partial<TComment>) => {
+const createComment = async (
+	comment: Partial<TComment>,
+	authorizedUserId?: string
+) => {
 	const newComment = new Comment(comment);
-	return await newComment.save();
+	const savedComment = await newComment.save();
+	return await buildCommentVO(savedComment.toObject(), authorizedUserId);
 };
 
 const editComment = async (
@@ -39,14 +54,14 @@ const editComment = async (
 	if (existingComment === null) throw Error(ReasonPhrases.NOT_FOUND);
 
 	if (
-		authorizedUser.id !== existingComment.userId &&
+		authorizedUser.id !== existingComment.createdById &&
 		!authorizedUser.roles.includes(Role.ADMIN)
 	) {
 		throw Error(ReasonPhrases.UNAUTHORIZED);
 	}
 
-	existingComment.text = editedComment.text;
-	return (await existingComment.save()).toObject();
+	existingComment.text = editedComment.text || existingComment.text;
+	return buildCommentVO((await existingComment.save()).toObject());
 };
 
 const deleteComment = async (id: string, authorizedUser: IAuthorizedUser) => {
@@ -54,7 +69,7 @@ const deleteComment = async (id: string, authorizedUser: IAuthorizedUser) => {
 	if (existingComment === null) throw Error(ReasonPhrases.NOT_FOUND);
 
 	if (
-		authorizedUser.id !== existingComment.userId &&
+		authorizedUser.id !== existingComment.createdById &&
 		!authorizedUser.roles.includes("ADMIN")
 	) {
 		throw Error(ReasonPhrases.UNAUTHORIZED);
@@ -83,7 +98,7 @@ const createlikeDislikeComment = async (
 		existingComment[reactionType].push(userId);
 	}
 
-	return (await existingComment.save()).toObject();
+	return buildCommentVO((await existingComment.save()).toObject(), userId);
 };
 
 const deleteLikeDislikeComment = async (
@@ -91,7 +106,7 @@ const deleteLikeDislikeComment = async (
 	userId: string,
 	reactionType: "likes" | "dislikes"
 ) => {
-	const existingComment = await Post.findById(id);
+	const existingComment = await Comment.findById(id);
 	if (existingComment === null) throw Error(ReasonPhrases.NOT_FOUND);
 	if (!existingComment[reactionType].includes(userId))
 		throw Error(ReasonPhrases.NOT_FOUND);
@@ -101,9 +116,38 @@ const deleteLikeDislikeComment = async (
 	await existingComment.save();
 };
 
+const buildCommentVO = async (
+	comment: TComment,
+	authorizedUserId: string = ""
+): Promise<TCommentVO> => {
+	const users = await Promise.all([
+		User.findById(comment.createdById),
+		User.findById(comment.lastUpdatedById),
+	]);
+
+	const [createdBy, lastUpdatedBy] = users.map((user) =>
+		UserService.buildUserVO(user)
+	);
+
+	return {
+		id: comment._id,
+		postId: comment.postId,
+		parentCommentId: comment.parentCommentId,
+		text: comment.text,
+		createdBy,
+		createdAt: comment.createdAt,
+		lastUpdatedBy,
+		updatedAt: comment.updatedAt,
+		dislikeCount: comment.dislikes.length,
+		likeCount: comment.likes.length,
+		isLiked: comment.likes.includes(authorizedUserId),
+		isDisliked: comment.dislikes.includes(authorizedUserId),
+	};
+};
+
 export const CommentService = {
 	getComment,
-	searchCommentsByPost,
+	searchComments,
 	createComment,
 	editComment,
 	deleteComment,

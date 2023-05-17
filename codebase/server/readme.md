@@ -22,3 +22,7 @@ WARN - Handled errors or situations that indicate suspicious activity
     errors: A field containing the error(s)
 }
 ```
+
+## Special Configurations
+
+In testing to get stripe `checkout.session.completed` event to trigger. I turned of 3DS in the rules section of the fraud & risk tab of payments in stripe developer dashboard. This was in accordance with https://stackoverflow.com/questions/74310412/stripe-cli-stripe-trigger-not-sending-event-checkout-session-completed

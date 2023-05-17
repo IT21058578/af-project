@@ -196,9 +196,24 @@ const changePassword = async (
 	await user.save();
 };
 
+const authorizeUser = async (email: string, authorizationToken: string) => {
+	const user = await User.findOne({ email }).exec();
+	if (!user) {
+		throw new Error("User does not exist");
+	}
+
+	if (user.authorizationToken !== authorizationToken)
+		throw new Error("Authorization token is invalid");
+
+	user.isAuthorized = true;
+
+	await user.save();
+};
+
 export const AuthService = {
 	loginUser,
 	refreshTokens,
+	authorizeUser,
 	logoutUser,
 	registerUser,
 	forgotPassword,

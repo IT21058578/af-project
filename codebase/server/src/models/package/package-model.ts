@@ -2,10 +2,11 @@ import { Schema, model } from "mongoose";
 
 export const tripPackageSchema = new Schema(
 	{
-		name: String,
-		createdById: String,
+		name: { type: String, required: true },
+		description: { type: String, required: true },
+		createdById: { type: String, required: true },
 		lastUpdatedById: String,
-		totalDistance: Number,
+		totalDistance: { type: Number, required: true },
 		price: {
 			perPerson: Number,
 			transport: {
@@ -26,8 +27,8 @@ export const tripPackageSchema = new Schema(
 		},
 		plan: [
 			{
-				locationId: String,
-				activities: [String],				
+				locationId: { type: String, required: true },
+				activities: { type: [String], default: [] },
 			},
 		],
 		limitedDateRange: {
@@ -35,6 +36,7 @@ export const tripPackageSchema = new Schema(
 			endDate: Date,
 		},
 		views: { type: Number, default: 0 },
+		isFeatured: { type: Boolean, default: false },
 	},
 	{ timestamps: true }
 );

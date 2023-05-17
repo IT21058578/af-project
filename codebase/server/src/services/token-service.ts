@@ -43,16 +43,17 @@ const loadKeys = async () => {
 			}),
 			algorithm
 		);
+		log.info("Succesfully loaded all keys.");
 	} catch (error) {
 		log.error("Failed to load keys");
 		throw error;
 	}
-	log.info("Succesfully loaded all keys.");
 };
 
 loadKeys();
 
 const decodeAccessToken = async (accessToken: string) => {
+	console.log(accessToken);
 	try {
 		const verifyResult = await jose.jwtVerify(
 			accessToken,
