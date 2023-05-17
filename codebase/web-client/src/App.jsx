@@ -1,14 +1,14 @@
 import "./App.css";
 import NavBar from "./components/NavBar/NavBar";
 import Footer from "./components/Footer";
-import Auth from "./pages/Auth/auth";
+import Auth from "./pages/Auth/Auth";
 import Blogs from "./pages/Blog/Blogs";
 import BlogDetail from "./pages/Blog/BlogDetails";
-import NewBlog from "./pages/NewBlog";
+import NewBlog from "./pages/Blog/NewBlog";
 import TourHome from "./pages/Tours/tourHome";
 import TourDetails from "./pages/Tours/tourDetail";
 import AdminHome from "./pages/Admin/AdminHome";
-import Author from "./pages/Author";
+import Author from "./pages/Blog/Author";
 import UserOrder from "./pages/Tours/BookingHistory";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -31,7 +31,7 @@ function App() {
 						<Route path="/" exact component={() => <Redirect to="/blog" />} />
 						<Route exact path="/auth" element={<Auth />} />
 						<Route exact path="/blog" element={<Blogs />} />
-						<Route exact path="/new" element={<NewBlog />} />
+						<Route exact path="/blog/new" element={<NewBlog />} />
 						<Route exact path="/tour" element={<TourHome />} />
 						<Route exact path="/details" element={<TourDetails />} />
 						<Route
@@ -41,7 +41,7 @@ function App() {
 						/>
 						<Route exact path="/admin" element={<AdminHome />} />
 						<Route exact path="/blogdetail" element={<BlogDetail />} />
-						<Route exact path="/author" element={<Author />} />
+						<Route exact path="/blog/author" element={<Author />} />
 						<Route exact path="/userbooking" element={<UserOrder />} />
 					</Routes>
 				</div>
