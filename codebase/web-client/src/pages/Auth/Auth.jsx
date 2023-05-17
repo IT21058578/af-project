@@ -1,18 +1,18 @@
-import * as React from 'react';
-import { useState, useEffect } from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import * as React from "react";
+import { useState, useEffect } from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Link from "@mui/material/Link";
+import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 // import { GoogleLogin } from 'react-google-login';
 // import { useDispatch } from 'react-redux';
 import * as yup from "yup";
@@ -35,21 +35,32 @@ const authSchema = yup.object({
 });
 
 function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Culture Hub
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
+	return (
+		<Typography
+			variant="body2"
+			color="text.secondary"
+			align="center"
+			{...props}
+		>
+			{"Copyright © "}
+			<Link color="inherit" href="https://mui.com/">
+				Culture Hub
+			</Link>{" "}
+			{new Date().getFullYear()}
+			{"."}
+		</Typography>
+	);
 }
 
 const theme = createTheme();
 
-const initialState = { fullName: '', lastName: '', email: '', password: '', confirmPassword: '' };
+const initialState = {
+	fullName: "",
+	lastName: "",
+	email: "",
+	password: "",
+	confirmPassword: "",
+};
 
 export default function Auth() {
   const [form, setForm] = useState(initialState);
@@ -147,13 +158,14 @@ export default function Auth() {
   const [showPassword, setShowPassword] = useState(false);
   const handleShowPassword = () => setShowPassword(!showPassword);
 
-  const switchMode = () => {
-    setForm(initialState);
-    setIsSignup((prevIsSignup) => !prevIsSignup);
-    setShowPassword(false);
-  };
+	const switchMode = () => {
+		setForm(initialState);
+		setIsSignup((prevIsSignup) => !prevIsSignup);
+		setShowPassword(false);
+	};
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+	const handleChange = (e) =>
+		setForm({ ...form, [e.target.name]: e.target.value });
 
   return (
     <ThemeProvider theme={theme}>
@@ -251,23 +263,25 @@ export default function Auth() {
                 onFailure={googleError}
                 cookiePolicy="single_host_origin"
               /> */}
-              <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link onClick={switchMode} variant="body2">
-                    { isSignup ? 'Already have an account? Sign in' : "Don't have an account? Sign Up" }
-                  </Link>
-                </Grid>
-              </Grid>
-              <Copyright sx={{ mt: 5 }} />
-            </Box>
-          </Box>
-        </Grid>
-      </Grid>
-    </ThemeProvider>
-  );
+							<Grid container>
+								<Grid item xs>
+									<Link href="#" variant="body2">
+										Forgot password?
+									</Link>
+								</Grid>
+								<Grid item>
+									<Link onClick={switchMode} variant="body2">
+										{isSignup
+											? "Already have an account? Sign in"
+											: "Don't have an account? Sign Up"}
+									</Link>
+								</Grid>
+							</Grid>
+							<Copyright sx={{ mt: 5 }} />
+						</Box>
+					</Box>
+				</Grid>
+			</Grid>
+		</ThemeProvider>
+	);
 }
