@@ -28,7 +28,6 @@ const authSchema = yup.object({
 		.string()
 		.email("Invalid email")
 		.required("Please enter your email"),
-	mobile: yup.string().required("Please enter your mobile number"),
 	fullName: yup.string().required("Please enter your full name"),
 	password: yup.string().required("Please enter your password"),
 	matchPassword: yup.string().required("Please re-enter your password"),
@@ -72,9 +71,9 @@ export default function Auth() {
 		formState: { errors, isSubmitting },
 		handleSubmit,
 	} = useForm({ resolver: yupResolver(authSchema) });
-	// const [serverErrorMessage, setServerErrorMessage] = useState<
-	// 	string | undefined
-	// >();
+
+  // const [serverErrorMessage, setServerErrorMessage] = useState<string | undefined>();
+
 
 	const [registerUser, { isLoading, isSuccess, isError, reset }] =
     useRegisterUserMutation();
@@ -86,11 +85,14 @@ export default function Auth() {
         const response = await registerUser({
           ...formData,
         }).unwrap();
+        console.log(response);
       } catch (error) {
         if (error.status === 409) {
-          setServerErrorMessage("This email is already in use");
+          // setServerErrorMessage("This email is already in use");
+          console.log("409 error");
         } else {
-          setServerErrorMessage("An error occurred. Please try again later");
+          // setServerErrorMessage("An error occurred. Please try again later");
+          console.log(" error");
         }
       }
       reset();
@@ -132,14 +134,14 @@ export default function Auth() {
     }
   };
 
-	useEffect(() => {
-		if (isSuccess) {
-			setIsRegisterSuccessful(true);
-		} else if (isError) {
-			setIsRegisterSuccessful(false);
-		}
-		reset();
-	}, [isSuccess, isError]);
+	// useEffect(() => {
+	// 	if (isSuccess) {
+	// 		setIsRegisterSuccessful(true);
+	// 	} else if (isError) {
+	// 		setIsRegisterSuccessful(false);
+	// 	}
+	// 	reset();
+	// }, [isSuccess, isError]);
   
   // const handleSubmit = (event) => {
   //   event.preventDefault();
@@ -164,8 +166,8 @@ export default function Auth() {
 		setShowPassword(false);
 	};
 
-	const handleChange = (e) =>
-		setForm({ ...form, [e.target.name]: e.target.value });
+	// const handleChange = (e) =>
+	// 	setForm({ ...form, [e.target.name]: e.target.value });
 
   return (
     <ThemeProvider theme={theme}>
@@ -204,7 +206,7 @@ export default function Auth() {
             <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
               { isSignup && (
               <>
-                <TextField margin="normal" fullWidth required  name="fullName" label="Full Name" handleChange={handleChange} autoFocus 
+                <TextField margin="normal" fullWidth required  name="fullName" label="Full Name"  autoFocus 
                 error={errors.fullName} 
                 isLoading={isSubmitting || isLoading}
 							  {...register("fullName")} />
@@ -236,7 +238,7 @@ export default function Auth() {
                 isLoading={isSubmitting || isLoading}
                 {...register("password")}
               />
-              { isSignup && <TextField margin="normal" required fullWidth name="matchPassword" label="Repeat Password" handleChange={handleChange} type="password" 
+              { isSignup && <TextField margin="normal" required fullWidth name="matchPassword" label="Repeat Password"  type="password" 
               error={errors.matchPassword}
 							isLoading={isSubmitting || isLoading}
 							{...register("matchPassword")}/> }
