@@ -80,6 +80,8 @@ export const authApi = baseApi.injectEndpoints({
 	}),
 });
 
+console.log(authApi);
+
 export const {
 	useLoginUserMutation,
 	useLogoutUserMutation,

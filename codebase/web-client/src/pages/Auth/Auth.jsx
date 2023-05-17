@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -16,7 +16,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 // import { GoogleLogin } from 'react-google-login';
 // import { useDispatch } from 'react-redux';
 import * as yup from "yup";
-// import { yupResolver } from "@hookform/resolvers/yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import bgImg from '../../assets/train.png';
 import { useRegisterUserMutation } from "../../store/api/auth-api-slice";
@@ -51,7 +51,7 @@ const theme = createTheme();
 
 const initialState = { fullName: '', lastName: '', email: '', password: '', confirmPassword: '' };
 
-export default function SignInSide() {
+export default function Auth() {
   const [form, setForm] = useState(initialState);
   const [isSignup, setIsSignup] = useState(false);
   const navigate = useNavigate();
@@ -64,8 +64,10 @@ export default function SignInSide() {
 	// const [serverErrorMessage, setServerErrorMessage] = useState<
 	// 	string | undefined
 	// >();
+
 	const [registerUser, { isLoading, isSuccess, isError, reset }] =
     useRegisterUserMutation();
+   
 
   const onSubmit = async (formData) => {
     if (isSignup) {

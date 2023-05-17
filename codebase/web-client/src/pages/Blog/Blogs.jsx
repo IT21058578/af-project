@@ -125,7 +125,7 @@ const theme = createTheme();
 export default function Blog() {
   return (
     <ThemeProvider theme={theme}>
-      <Link to="/new">
+      <Link to="/blog/new">
         <Fab aria-label="edit" variant="extended" sx={{ position: 'fixed', marginLeft: '80%', marginTop: '550px' }}>
           <EditIcon sx={{ mr: 1 }} /> Write a blog
         </Fab>
