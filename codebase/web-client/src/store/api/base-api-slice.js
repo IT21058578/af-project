@@ -1,4 +1,4 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 import { VITE_API_URI } from "../../constants/constants";
 import { removeUser } from "../slices/auth-slice";
 
@@ -14,7 +14,6 @@ const baseQuery = fetchBaseQuery({
 });
 const baseQueryWithReauth = async (args, api, extraOptions) => {
 	let result = await baseQuery(args, api, extraOptions);
-	console.log(data);
 	if (
 		result.error &&
 		result.error.status === 401 &&
