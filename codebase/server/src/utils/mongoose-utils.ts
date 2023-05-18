@@ -77,7 +77,7 @@ export const buildPostPaginationPipeline = ({
 	return paginationPipeline;
 };
 
-export const buildPage = <T>(
+const buildPage = <T>(
 	{ data, countInPage, countInQuery }: IPaginationResult<T>,
 	{
 		pageSize,
@@ -115,4 +115,8 @@ export const buildPage = <T>(
 		},
 		content: data ?? [],
 	};
+};
+
+export const PageUtils = {
+	buildPage,
 };

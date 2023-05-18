@@ -5,7 +5,7 @@ import {
 	TExtendedPageOptions,
 } from "../types/misc-types.js";
 import { TBooking } from "../types/model-types.js";
-import { buildPage, buildPaginationPipeline } from "../utils/mongoose-utils.js";
+import { PageUtils, buildPaginationPipeline } from "../utils/mongoose-utils.js";
 
 // TODO: Create VO
 
@@ -15,11 +15,11 @@ const searchBookings = async (
 	const { data, ...rest } = (
 		await Booking.aggregate(buildPaginationPipeline(bookingSearchOptions))
 	)[0] as any as IPaginationResult<TBooking>;
-	return buildPage({ ...rest, data }, bookingSearchOptions);
+	return PageUtils.buildPage({ ...rest, data }, bookingSearchOptions);
 };
 
 const getBooking = async (bookingId: string) => {
-	const existingBooking = await Booking.findById(bookingId).exec();
+	const existingBooking = await Booking.findById(bookingId);
 	if (existingBooking == null) throw Error(EBookingError.NOT_FOUND);
 	return existingBooking;
 };

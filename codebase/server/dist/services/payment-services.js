@@ -28,7 +28,7 @@ const loadKeys = async () => {
 };
 loadKeys();
 const createCheckoutSession = async (id, pricingOptions, userId) => {
-    const existingTripPackage = await TripPackage.findById(id).exec();
+    const existingTripPackage = await TripPackage.findById(id);
     if (existingTripPackage === null)
         throw Error(ETripPackageError.TRIP_PKG_NOT_FOUND);
     const calculatedPrice = TripPackageService.calculatePrice(existingTripPackage, pricingOptions);
