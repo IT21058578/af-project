@@ -32,10 +32,10 @@ app.use("/api/v1/webhooks", webhookRoutes);
 log.info("Configuring middleware...");
 app.use(helmet());
 app.use(cors());
-app.use(urlencoded());
+app.use(urlencoded({ limit: "50mb" }));
+app.use(json({ limit: "50mb" }));
 app.use(requestLogger());
 app.use(decodeToken());
-app.use(json());
 
 // Routes
 log.info("Attaching parsed routes...");
