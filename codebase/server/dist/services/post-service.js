@@ -1,6 +1,6 @@
 import { Post } from "../models/post/post-model.js";
 import { ReasonPhrases } from "http-status-codes";
-import { buildPage, buildPostPaginationPipeline, } from "../utils/mongoose-utils.js";
+import { PageUtils, buildPostPaginationPipeline, } from "../utils/mongoose-utils.js";
 import { Role } from "../constants/constants.js";
 import { PostTransformer } from "../transformers/post-transformer.js";
 const getPost = async (id, authorizedUserId) => {
@@ -17,7 +17,7 @@ const searchPosts = async (postSearchOptions, authorizedUserId) => {
     const postVOs = await Promise.all(data.map(async (post) => {
         return await PostTransformer.buildPostVO(post, authorizedUserId);
     }));
-    return buildPage({ data: postVOs, ...rest }, postSearchOptions);
+    return PageUtils.buildPage({ data: postVOs, ...rest }, postSearchOptions);
 };
 const createPost = async (post, authorizedUserId) => {
     const newPost = new Post(post);

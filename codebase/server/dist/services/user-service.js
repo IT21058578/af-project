@@ -2,7 +2,7 @@ import { EUserError, Role } from "../constants/constants.js";
 import { User } from "../models/user-model.js";
 import { UserTransformer } from "../transformers/user-transformer.js";
 import initializeLogger from "../utils/logger.js";
-import { buildPage, buildPaginationPipeline } from "../utils/mongoose-utils.js";
+import { PageUtils, buildPaginationPipeline } from "../utils/mongoose-utils.js";
 const log = initializeLogger(import.meta.url.split("/").pop() || "");
 const getUser = async (id) => {
     const user = await User.findById(id);
@@ -16,7 +16,7 @@ const searchUsers = async (userSearchOptions) => {
     const userVOs = await Promise.all(data.map(async (user) => {
         return UserTransformer.buildUserVO(user);
     }));
-    return buildPage({ data: userVOs, ...rest }, userSearchOptions);
+    return PageUtils.buildPage({ data: userVOs, ...rest }, userSearchOptions);
 };
 const deleteUser = async (userId, authorizedUser) => {
     if (!authorizedUser.roles.includes(Role.ADMIN) &&

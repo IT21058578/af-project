@@ -7,7 +7,7 @@ import {
 } from "../types/misc-types.js";
 import { TPricingOptions, TTripPackage } from "../types/model-types.js";
 import initializeLogger from "../utils/logger.js";
-import { buildPage, buildPaginationPipeline } from "../utils/mongoose-utils.js";
+import { PageUtils, buildPaginationPipeline } from "../utils/mongoose-utils.js";
 
 const log = initializeLogger(import.meta.url.split("/").pop() || "");
 
@@ -36,7 +36,10 @@ const searchTripPackages = async (
 			return await PackageTransformer.buildTripPackageVO(tripPackage);
 		})
 	);
-	return buildPage({ ...rest, data: tripPackageVOs }, tripPackageSearchOptions);
+	return PageUtils.buildPage(
+		{ ...rest, data: tripPackageVOs },
+		tripPackageSearchOptions
+	);
 };
 
 const editTripPackage = async (
@@ -87,7 +90,7 @@ const calculatePrice = (
 	if (price) {
 		let result = 0;
 		const { lodging, perPerson, perPersonFood, transport } = price;
-		result += perPerson ?? 0 * pricingOptions.persons;
+		result += (perPerson ?? 0) * pricingOptions.persons;
 		result += lodging?.[pricingOptions.lodging] ?? 0;
 		result += transport?.[pricingOptions.transport] ?? 0;
 		result +=

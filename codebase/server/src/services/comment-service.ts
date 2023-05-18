@@ -1,6 +1,6 @@
 import { Comment } from "../models/comment-model.js";
 import { ReasonPhrases } from "http-status-codes";
-import { buildPage, buildPaginationPipeline } from "../utils/mongoose-utils.js";
+import {  PageUtils, buildPaginationPipeline } from "../utils/mongoose-utils.js";
 import { TComment } from "../types/model-types.js";
 import {
 	IAuthorizedUser,
@@ -31,7 +31,10 @@ const searchComments = async (
 			return await CommentTransformer.buildCommentVO(comment, authorizedUserId);
 		})
 	);
-	return buildPage({ data: commentVOs, ...rest }, commentSearchOptions);
+	return PageUtils.buildPage(
+		{ data: commentVOs, ...rest },
+		commentSearchOptions
+	);
 };
 
 const createComment = async (

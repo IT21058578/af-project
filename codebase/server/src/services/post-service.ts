@@ -1,7 +1,7 @@
 import { Post } from "../models/post/post-model.js";
 import { ReasonPhrases } from "http-status-codes";
 import {
-	buildPage,
+	PageUtils,
 	buildPostPaginationPipeline,
 } from "../utils/mongoose-utils.js";
 import {
@@ -18,7 +18,10 @@ const getPost = async (id: string, authorizedUserId?: string) => {
 	if (post === null) throw Error(ReasonPhrases.NOT_FOUND);
 	post.views += 1;
 	post.save();
-	const postVO = await PostTransformer.buildPostVO(post.toObject(), authorizedUserId);
+	const postVO = await PostTransformer.buildPostVO(
+		post.toObject(),
+		authorizedUserId
+	);
 	return postVO;
 };
 
@@ -34,7 +37,7 @@ const searchPosts = async (
 			return await PostTransformer.buildPostVO(post, authorizedUserId);
 		})
 	);
-	return buildPage({ data: postVOs, ...rest }, postSearchOptions);
+	return PageUtils.buildPage({ data: postVOs, ...rest }, postSearchOptions);
 };
 
 const createPost = async (post: TPost, authorizedUserId: string) => {
@@ -42,7 +45,10 @@ const createPost = async (post: TPost, authorizedUserId: string) => {
 	newPost.createdById = authorizedUserId;
 	newPost.lastUpdatedById = authorizedUserId;
 	const savedPost = await newPost.save();
-	const postVO = await PostTransformer.buildPostVO(savedPost.toObject(), authorizedUserId);
+	const postVO = await PostTransformer.buildPostVO(
+		savedPost.toObject(),
+		authorizedUserId
+	);
 	return postVO;
 };
 
@@ -66,7 +72,10 @@ const editPost = async (
 	});
 	existingPost.lastUpdatedById = authorizedUser.id;
 	const updatedPost = await existingPost.save();
-	const postVO = await PostTransformer.buildPostVO(updatedPost.toObject(), authorizedUser.id);
+	const postVO = await PostTransformer.buildPostVO(
+		updatedPost.toObject(),
+		authorizedUser.id
+	);
 	return postVO;
 };
 
@@ -107,7 +116,10 @@ const createlikeDislikePost = async (
 	}
 
 	const updatedPost = await existingPost.save();
-	const postVO = await PostTransformer.buildPostVO(updatedPost.toObject(), userId);
+	const postVO = await PostTransformer.buildPostVO(
+		updatedPost.toObject(),
+		userId
+	);
 	return postVO;
 };
 

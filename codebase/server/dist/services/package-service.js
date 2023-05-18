@@ -2,7 +2,7 @@ import { ELodging, ETripPackageError } from "../constants/constants.js";
 import { TripPackage } from "../models/package/package-model.js";
 import { PackageTransformer } from "../transformers/package-transformer.js";
 import initializeLogger from "../utils/logger.js";
-import { buildPage, buildPaginationPipeline } from "../utils/mongoose-utils.js";
+import { PageUtils, buildPaginationPipeline } from "../utils/mongoose-utils.js";
 const log = initializeLogger(import.meta.url.split("/").pop() || "");
 const getTripPackage = async (tripPackageId) => {
     const existingTripPackage = await TripPackage.findById(tripPackageId);
@@ -18,7 +18,7 @@ const searchTripPackages = async (tripPackageSearchOptions) => {
     const tripPackageVOs = await Promise.all(data.map(async (tripPackage) => {
         return await PackageTransformer.buildTripPackageVO(tripPackage);
     }));
-    return buildPage({ ...rest, data: tripPackageVOs }, tripPackageSearchOptions);
+    return PageUtils.buildPage({ ...rest, data: tripPackageVOs }, tripPackageSearchOptions);
 };
 const editTripPackage = async (tripPackageId, editedTripPackage, authorizedUserId) => {
     const existingTripPackage = await TripPackage.findById(tripPackageId);
@@ -51,7 +51,7 @@ const calculatePrice = ({ price }, pricingOptions) => {
     if (price) {
         let result = 0;
         const { lodging, perPerson, perPersonFood, transport } = price;
-        result += perPerson ?? 0 * pricingOptions.persons;
+        result += (perPerson ?? 0) * pricingOptions.persons;
         result += lodging?.[pricingOptions.lodging] ?? 0;
         result += transport?.[pricingOptions.transport] ?? 0;
         result +=

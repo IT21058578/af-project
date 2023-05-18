@@ -1,6 +1,6 @@
 import { Comment } from "../models/comment-model.js";
 import { ReasonPhrases } from "http-status-codes";
-import { buildPage, buildPaginationPipeline } from "../utils/mongoose-utils.js";
+import { PageUtils, buildPaginationPipeline } from "../utils/mongoose-utils.js";
 import { Role } from "../constants/constants.js";
 import { CommentTransformer } from "../transformers/comment-transformer.js";
 const getComment = async (id, authorizedUserId) => {
@@ -14,7 +14,7 @@ const searchComments = async (commentSearchOptions, authorizedUserId) => {
     const commentVOs = await Promise.all(data.map(async (comment) => {
         return await CommentTransformer.buildCommentVO(comment, authorizedUserId);
     }));
-    return buildPage({ data: commentVOs, ...rest }, commentSearchOptions);
+    return PageUtils.buildPage({ data: commentVOs, ...rest }, commentSearchOptions);
 };
 const createComment = async (comment, authorizedUserId) => {
     const newComment = new Comment(comment);

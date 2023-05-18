@@ -1,15 +1,5 @@
-import { Comment } from "../models/comment-model.js";
-import { Post } from "../models/post/post-model.js";
-import { ReasonPhrases } from "http-status-codes";
-import { buildPage, buildPaginationPipeline } from "../utils/mongoose-utils.js";
 import { TComment } from "../types/model-types.js";
-import {
-	IAuthorizedUser,
-	IPaginationResult,
-	TExtendedPageOptions,
-} from "../types/misc-types.js";
-import { EUserError, Role } from "../constants/constants.js";
-import { TCommentVO, TUserVO } from "../types/vo-types.js";
+import { TCommentVO } from "../types/vo-types.js";
 import { User } from "../models/user-model.js";
 import { UserTransformer } from "./user-transformer.js";
 

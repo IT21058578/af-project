@@ -5,7 +5,7 @@ import {
 	TExtendedPageOptions,
 } from "../types/misc-types.js";
 import { TLocation } from "../types/model-types.js";
-import { buildPage, buildPaginationPipeline } from "../utils/mongoose-utils.js";
+import { PageUtils, buildPaginationPipeline } from "../utils/mongoose-utils.js";
 import initializeLogger from "../utils/logger.js";
 import { LocationTransformer } from "../transformers/location-transformer.js";
 
@@ -31,7 +31,10 @@ const searchLocations = async (
 			return await LocationTransformer.buildLocationVO(location);
 		})
 	);
-	return buildPage({ ...rest, data: locationVOs }, locationSearchOptions);
+	return PageUtils.buildPage(
+		{ ...rest, data: locationVOs },
+		locationSearchOptions
+	);
 };
 
 const editLocation = async (

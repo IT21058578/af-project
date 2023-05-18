@@ -1,6 +1,6 @@
 import { ELocationError } from "../constants/constants.js";
 import { Location } from "../models/location-model.js";
-import { buildPage, buildPaginationPipeline } from "../utils/mongoose-utils.js";
+import { PageUtils, buildPaginationPipeline } from "../utils/mongoose-utils.js";
 import initializeLogger from "../utils/logger.js";
 import { LocationTransformer } from "../transformers/location-transformer.js";
 const log = initializeLogger(import.meta.url.split("/").pop() || "");
@@ -16,7 +16,7 @@ const searchLocations = async (locationSearchOptions) => {
     const locationVOs = await Promise.all(data.map(async (location) => {
         return await LocationTransformer.buildLocationVO(location);
     }));
-    return buildPage({ ...rest, data: locationVOs }, locationSearchOptions);
+    return PageUtils.buildPage({ ...rest, data: locationVOs }, locationSearchOptions);
 };
 const editLocation = async (locationId, editedLocation, authorizedUserId) => {
     const existingLocation = await Location.findById(locationId);

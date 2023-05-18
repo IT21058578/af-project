@@ -7,9 +7,8 @@ import {
 	TExtendedPageOptions,
 } from "../types/misc-types.js";
 import { TUser } from "../types/model-types.js";
-import { TDetailedUserVO, TUserVO } from "../types/vo-types.js";
 import initializeLogger from "../utils/logger.js";
-import { buildPage, buildPaginationPipeline } from "../utils/mongoose-utils.js";
+import { PageUtils, buildPaginationPipeline } from "../utils/mongoose-utils.js";
 
 const log = initializeLogger(import.meta.url.split("/").pop() || "");
 
@@ -29,7 +28,7 @@ const searchUsers = async (userSearchOptions: TExtendedPageOptions<TUser>) => {
 			return UserTransformer.buildUserVO(user);
 		})
 	);
-	return buildPage({ data: userVOs, ...rest }, userSearchOptions);
+	return PageUtils.buildPage({ data: userVOs, ...rest }, userSearchOptions);
 };
 
 const deleteUser = async (userId: string, authorizedUser: IAuthorizedUser) => {
