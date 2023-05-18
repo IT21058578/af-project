@@ -5,7 +5,7 @@ import { Role } from "../constants/constants.js";
 import { User } from "../models/user-model.js";
 import { UserService } from "./user-service.js";
 const getPost = async (id, authorizedUserId) => {
-    const post = await Post.findById(id).exec();
+    const post = await Post.findById(id);
     if (post === null)
         throw Error(ReasonPhrases.NOT_FOUND);
     post.views += 1;
@@ -14,7 +14,7 @@ const getPost = async (id, authorizedUserId) => {
     return postVO;
 };
 const searchPosts = async (postSearchOptions, authorizedUserId) => {
-    const { data, ...rest } = (await Post.aggregate(buildPostPaginationPipeline(postSearchOptions)).exec())[0];
+    const { data, ...rest } = (await Post.aggregate(buildPostPaginationPipeline(postSearchOptions)))[0];
     const postVOs = await Promise.all(data.map(async (post) => {
         return await buildPostVO(post, authorizedUserId);
     }));
@@ -29,7 +29,7 @@ const createPost = async (post, authorizedUserId) => {
     return postVO;
 };
 const editPost = async (id, authorizedUser, editedPost) => {
-    const existingPost = await Post.findById(id).exec();
+    const existingPost = await Post.findById(id);
     if (existingPost === null)
         throw Error(ReasonPhrases.NOT_FOUND);
     if (authorizedUser.id !== existingPost.createdById &&

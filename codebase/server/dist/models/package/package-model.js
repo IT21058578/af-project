@@ -5,6 +5,7 @@ export const tripPackageSchema = new Schema({
     createdById: { type: String, required: true },
     lastUpdatedById: String,
     totalDistance: { type: Number, required: true },
+    imageURLs: { type: [String], default: [] },
     price: {
         perPerson: Number,
         transport: {

@@ -24,7 +24,7 @@ import { UserService } from "./user-service.js";
 const log = initializeLogger(import.meta.url.split("/").pop() || "");
 
 const getTripPackage = async (tripPackageId: string) => {
-	const existingTripPackage = await TripPackage.findById(tripPackageId).exec();
+	const existingTripPackage = await TripPackage.findById(tripPackageId);
 	if (existingTripPackage == null)
 		throw Error(ETripPackageError.TRIP_PKG_NOT_FOUND);
 	existingTripPackage.views += 1;
@@ -56,7 +56,7 @@ const editTripPackage = async (
 	editedTripPackage: Partial<TTripPackage>,
 	authorizedUserId: string
 ) => {
-	const existingTripPackage = await TripPackage.findById(tripPackageId).exec();
+	const existingTripPackage = await TripPackage.findById(tripPackageId);
 	if (existingTripPackage == null)
 		throw Error(ETripPackageError.TRIP_PKG_NOT_FOUND);
 	// FIXME: Dangerous type coercion
@@ -71,7 +71,7 @@ const editTripPackage = async (
 };
 
 const deleteTripPackage = async (tripPackageId: string) => {
-	const existingTripPackage = await TripPackage.findById(tripPackageId).exec();
+	const existingTripPackage = await TripPackage.findById(tripPackageId);
 	if (existingTripPackage == null)
 		throw Error(ETripPackageError.TRIP_PKG_NOT_FOUND);
 	await existingTripPackage.deleteOne();
@@ -129,7 +129,7 @@ const buildTripPackageVO = async (
 		User.findById(tripPackage.lastUpdatedById),
 	]);
 
-	createdByUser?._id
+	createdByUser?._id;
 
 	let createdBy: TUserVO | {};
 	if (createdByUser !== null) {
@@ -158,6 +158,7 @@ const buildTripPackageVO = async (
 		id: tripPackage._id ?? "",
 		name: tripPackage.name,
 		description: tripPackage.description,
+		imageURLs: tripPackage.imageURLs,
 		createdBy,
 		createdAt: tripPackage.createdAt,
 		lastUpdatedBy,

@@ -19,7 +19,7 @@ const searchBookings = async (
 };
 
 const getBooking = async (bookingId: string) => {
-	const existingBooking = await Booking.findById(bookingId).exec();
+	const existingBooking = await Booking.findById(bookingId);
 	if (existingBooking == null) throw Error(EBookingError.NOT_FOUND);
 	return existingBooking;
 };

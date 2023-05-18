@@ -45,7 +45,7 @@ const createCheckoutSession = async (
 	pricingOptions: TPricingOptions,
 	userId: string
 ) => {
-	const existingTripPackage = await TripPackage.findById(id).exec();
+	const existingTripPackage = await TripPackage.findById(id);
 	if (existingTripPackage === null)
 		throw Error(ETripPackageError.TRIP_PKG_NOT_FOUND);
 

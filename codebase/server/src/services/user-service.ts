@@ -13,7 +13,7 @@ import { buildPage, buildPaginationPipeline } from "../utils/mongoose-utils.js";
 const log = initializeLogger(import.meta.url.split("/").pop() || "");
 
 const getUser = async (id: string) => {
-	const user = await User.findById(id).exec();
+	const user = await User.findById(id);
 	if (user === null) throw Error(EUserError.NOT_FOUND);
 	const userVO = buildDetailedUserVO(user.toObject());
 	return userVO;
@@ -21,9 +21,7 @@ const getUser = async (id: string) => {
 
 const searchUsers = async (userSearchOptions: TExtendedPageOptions<TUser>) => {
 	const { data, ...rest } = (
-		await User.aggregate(
-			buildPaginationPipeline(userSearchOptions as any)
-		).exec()
+		await User.aggregate(buildPaginationPipeline(userSearchOptions as any))
 	)[0] as any as IPaginationResult<TUser>;
 	const userVOs = await Promise.all(
 		data.map(async (user) => {
@@ -56,7 +54,7 @@ const editUser = async (
 		throw Error(EUserError.UNAUTHORIZED);
 	}
 
-	const existingUser = await User.findById(userId).exec();
+	const existingUser = await User.findById(userId);
 	if (existingUser == null) throw Error(EUserError.NOT_FOUND);
 	// FIXME: Dangerous type coercion
 	Object.entries(editedUser).forEach(([key, value]) => {
