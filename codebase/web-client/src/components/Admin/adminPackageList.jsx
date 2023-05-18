@@ -1,14 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import info1 from "../../assets/info1.png";
-import info2 from "../../assets/info2.png";
-import info3 from "../../assets/info3.png";
 import { useSelector, useDispatch } from "react-redux";
 import { useLazyGetTripPackgeQuery } from "../../store/api/package-api-slice";
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "@mui/material";
 
-const Package = ({packages}) =>{
+const AdminPackage = ({packages}) =>{
   
   const navigate = useNavigate();
   const [getTripPackageQuery] = useLazyGetTripPackgeQuery();
@@ -16,61 +13,24 @@ const Package = ({packages}) =>{
   const handleViewDetails = (tripPackageId) => {
     getTripPackageQuery({ tripPackageId }).then((result) => {
       if (!result.error) {
-        navigate(`/tour/details/${tripPackageId}`);
+        navigate(`/tour/add/${tripPackageId}`);
       }
     });
   };
 
-
-  const typepackages = [
-    "New Packages",
-    "Most Popular Packages",
-    "Short Term Travel",
-    "Long Term Slow Travel",
-  ];
-
-  const [active, setActive] = useState(1);
   // const [tour, setTour] = useState(data);
   return (
     <Section id="recommend">
-      <div className="title">
-        <h2>Explore Destinations</h2>
-      </div>
-      <div className="packages">
-        <ul>
-          {typepackages.map((pkg, index) => {
-            return (
-              <li
-                className={active === index + 1 ? "active" : ""}
-                onClick={() => setActive(index + 1)}
-              >
-                {pkg}
-              </li>
-            );
-          })}
-        </ul>
+      <div className="title" style={{marginBottom:'20px'}}>
+        <h2>Manage Destinations</h2>
       </div>
       <div className="destinations">
         {packages.map((tour) => {
           return (
             <div className="destination" key={tour.id}>
-              <Button onClick={() => handleViewDetails(tour.id)}>View detail</Button>
-              {/* <Link to={`/tour/details/${tour.name}`}>View details</Link> */}
-              <img src={packages.imageURLs} alt="" />
               <h3>{tour.name}</h3>
-              {/* <p>{packages.subTitle}</p> */}
-              <div className="info">
-                <div className="services">
-                  <img src={info1} alt="" />
-                  <img src={info2} alt="" />
-                  <img src={info3} alt="" />
-                </div>
-                {/* <h4>{packages.cost}</h4> */}
-              </div>
-              <div className="distance">
-                {/* <span>1000 Kms</span> */}
-                <span>{tour.totalDistance} Kms</span>
-              </div>
+              <Button onClick={() => handleViewDetails(tour.id)}>Edit Package</Button>
+              <Button onClick={() => handleViewDetails(tour.id)}>Delete Package</Button>
             </div>
           );
         })}
@@ -79,7 +39,7 @@ const Package = ({packages}) =>{
   );
 }
 
-export default Package;
+export default AdminPackage;
 
 const Section = styled.section`
   padding: 2rem 0;

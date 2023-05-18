@@ -1,19 +1,21 @@
-import React from "react";
+import React, { useEffect } from 'react';
 import styled from "styled-components";
 import service1 from "../../assets/service1.png";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate} from "react-router-dom";
+import { useLazyGetTripPackgeQuery } from "../../store/api/package-api-slice";
+import '../../pages/Tours/loading.css';
 
-const LocationList = ({ locations }) => {
-  return (
-    <ul className="list">
-      {locations.map(location => (
-        <li key={location}>{location}</li>
-      ))}
-    </ul>
-  );
-};
+// const LocationList = ({ locations }) => {
+//   return (
+//     <ul className="list">
+//       {locations.map(location => (
+//         <li key={location}>{location}</li>
+//       ))}
+//     </ul>
+//   );
+// };
 
-const DetailCard = ({packages}) => {
+const DetailCard = ({tripPackage}) => {
   // const data = [
   //   {
   //     images: [service1],
@@ -25,36 +27,69 @@ const DetailCard = ({packages}) => {
   //     packagePrice:1000.00
   //   },
   // ];
+  // const { tripPackageId } = useParams();
+  const navigate = useNavigate();
+  // const [getTripPackageQuery, { data: tripPackage, isLoading, isError }] = useLazyGetTripPackgeQuery();
 
-  const { packageID } = useParams();
-  const tour = packages.find((p) => p.id === packageID)
 
-  if (!tour){
-    return <div>Package not found.</div>
-  }
+  // useEffect(() => {
+  //   console.log(tripPackageId)
+  //   if (tripPackageId) {
+  //     getTripPackageQuery({ tripPackageId });
+  //   }
+  // }, [getTripPackageQuery, tripPackageId]);
+
+
+  const handleBack = () => {
+    navigate('/tour');
+  };
+
+  // if (isLoading) {
+  //   return <div>
+  //     <div className="loader-container">
+  //     	  <div className="spinner"></div>
+  //     </div>
+  //   </div>;
+  // }
+
+  // if (isError) {
+  //   return <div>Error occurred while fetching package details</div>;
+  // }
+
+  const endDatetime = new Date(tripPackage?.limitedDateRange?.endDate);
+  const startDatetime = new Date(tripPackage?.limitedDateRange?.startDate);
+  const lodging = new Number(tripPackage?.price?.lodging?.threeStar);
+  const perPerson = new Number(tripPackage?.price?.perPerson);
+  const perPersonFood = new Number(tripPackage?.price?.perPersonFood);
+  const transport = new Number(tripPackage?.price?.transport?.group);
+
+  const sum = lodging + perPerson + perPersonFood + transport;
+  
+  const timeDifference = endDatetime.getTime() - startDatetime.getTime();
+  const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
 
   return (
     <Section id="services">
       {/* {data.map((service, index) => { */}
-        return (
           <div className="service">
             <div className="title">
-               <h3>{tour.name}</h3>
+               <h3>{tripPackage?.name}</h3>
             </div>
             <h3 className="hed">Description</h3>
-            <p className="description">{tour.description}</p>
+            <p className="description">{tripPackage?.description}</p>
             <h3 className="hed">Locations That you can visit</h3>
-            <LocationList locations={tour.locations}></LocationList>
+            {/* <LocationList locations={tripPackage?.plan}></LocationList> */}
             <div className="hed">
               <h3>Days of tour: </h3>
-              <span >{tour.days}</span>
+              <span >Days: {days} Hours: {hours}</span>
             </div>
             <div className="hed">
               <h3>Price Starts from: </h3>
-              <span >{tour.packagePrice}$</span>
+              <span >Rs. {sum}</span>
             </div>
+            <button style={{background:'green' , maxWidth:'200px' ,color:"white", border:'none', borderRadius:'20px' , marginLeft:'230px', marginTop:'40px'}} onClick={handleBack}>Back to Packages</button>
           </div>
-        );
       {/* })} */}
     </Section>
   );

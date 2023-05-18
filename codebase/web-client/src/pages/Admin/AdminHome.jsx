@@ -5,7 +5,7 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Dashboard from './AdminDash';
-import PackageManagment from '../../components/Admin/packageManagment';
+import AdminTourHome from '../../components/Admin/tourPlanManagment';
 import Navbar from '../../components/NavBar/NavBar';
 import Footer from '../../components/Footer';
 import UserManagment from '../../components/Admin/userManagment';
@@ -73,7 +73,7 @@ export default function AdminHome() {
        <EmployeeManagment/>
       </TabPanel>
       <TabPanel value={value} index={3}>
-       <PackageManagment/>
+       <AdminTourHome/>
       </TabPanel>
     </Box>
     <Footer />

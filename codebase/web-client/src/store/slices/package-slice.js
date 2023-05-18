@@ -20,6 +20,30 @@ const packageSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    addTripPackage: (state, action) => {
+      state.push(action.payload);
+    },
+    updateTripPackage: (state, action) => {
+      const { tripPackageId, updatedData } = action.payload;
+      const tripPackageIndex = state.findIndex(
+        (tripPackage) => tripPackage._id === tripPackageId
+      );
+      if (tripPackageIndex !== -1) {
+        state[tripPackageIndex] = {
+          ...state[tripPackageIndex],
+          ...updatedData,
+        };
+      }
+    },
+    deleteTripPackage: (state, action) => {
+      const tripPackageId = action.payload;
+      const tripPackageIndex = state.findIndex(
+        (tripPackage) => tripPackage._id === tripPackageId
+      );
+      if (tripPackageIndex !== -1) {
+        state.splice(tripPackageIndex, 1);
+      }
+    },
   },
 });
 
@@ -27,6 +51,9 @@ export const {
   fetchpackageStart,
   fetchpackageSuccess,
   fetchpackageFailure,
+  addTripPackage, 
+  updateTripPackage, 
+  deleteTripPackage
 } = packageSlice.actions;
 
 export const packageReducer = packageSlice.reducer;

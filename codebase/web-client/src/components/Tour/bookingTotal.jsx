@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
@@ -6,6 +6,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
+
 
 const people = [
   {
@@ -68,7 +69,7 @@ const hotel = [
     },
   ];
 
-export default function Total() {
+export default function Total({tripPackage}) {
 
     const [isChecked, setIsChecked] = useState(false);
 

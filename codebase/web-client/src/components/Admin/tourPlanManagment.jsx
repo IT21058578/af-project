@@ -1,16 +1,10 @@
 import React, { useEffect } from "react";
-import Hero from "../../components/Tour/BookingImgPost";
-import Navbar from "../../components/NavBar/NavBar";
-import Footer from "../../components/Footer";
-import Services from "../../components/Tour/Services";
-import Package from "../../components/Tour/packages";
-import './loading.css';
-
-import { Box } from "@mui/material";
+import AdminPackage from "./adminPackageList";
+import '../../pages/Tours/loading.css';
 import { useLazySearchTripPackgesQuery } from "../../store/api/package-api-slice";
 
 
-function TourHome(){
+function AdminTourHome(){
 
   const [fetchPackages , {data: packages , isLoading , isError , error }] = useLazySearchTripPackgesQuery();
 
@@ -31,19 +25,13 @@ function TourHome(){
   }
     return (
         <div>
-          <Navbar/>
-          <Hero />
-          <Box sx={{marginLeft:'30px', marginRight:'30px'}}>
-            <Services/>
-          </Box>
           {packages?.content && packages?.content?.length > 0 ? (
-            <Package packages={packages?.content} />
+            <AdminPackage packages={packages?.content} />
           ) : (
             <div>No packages found.</div>
           )}
-          <Footer />
         </div>
       );
 }
 
-export default TourHome;
+export default AdminTourHome;
