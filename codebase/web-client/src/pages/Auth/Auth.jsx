@@ -14,23 +14,40 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 // import { GoogleLogin } from 'react-google-login';
-// import { useDispatch } from 'react-redux';
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import bgImg from '../../assets/train.png';
 import { useRegisterUserMutation } from "../../store/api/auth-api-slice";
+import { useLoginUserMutation } from "../../store/api/auth-api-slice";
+import { useLazyGetUserQuery } from "../../store/api/user-api-slice";
 import { useNavigate } from "react-router-dom";
 import * as jose from "jose";
+import { setUser } from "../../store/slices/auth-slice";
+import { useDispatch } from "react-redux";
 
-const authSchema = yup.object({
-	email: yup
-		.string()
-		.email("Invalid email")
-		.required("Please enter your email"),
-	fullName: yup.string().required("Please enter your full name"),
-	password: yup.string().required("Please enter your password"),
-	matchPassword: yup.string().required("Please re-enter your password"),
+const publicAccessTokenKey = import.meta.env.VITE_PUBLIC_ACCESS_KEY;
+
+const authSchema = yup.object().shape({
+  email: yup.string().email("Invalid email").required("Please enter your email"),
+  firstName: yup.string().when("isSignup", {
+    is: true,
+    then: yup.string().required("Please enter your first name"),
+  }),
+  lastName: yup.string().when("isSignup", {
+    is: true,
+    then: yup.string().required("Please enter your last name"),
+  }),
+  password: yup.string().required("Please enter your password"),
+  matchPassword: yup
+    .string()
+    .when("isSignup", {
+      is: true,
+      then: yup
+        .string()
+        .required("Please re-enter your password")
+        .oneOf([yup.ref("password")], "Passwords must match"),
+    }),
 });
 
 function Copyright(props) {
@@ -54,9 +71,10 @@ function Copyright(props) {
 const theme = createTheme();
 
 const initialState = {
-	fullName: "",
+	firstName: "",
 	lastName: "",
 	email: "",
+  mobile: "",
 	password: "",
 	confirmPassword: "",
 };
@@ -65,6 +83,9 @@ export default function Auth() {
   const [form, setForm] = useState(initialState);
   const [isSignup, setIsSignup] = useState(false);
   const navigate = useNavigate();
+  const [isSubscribed, setIsSubscribed] = useState(false);
+
+  const dispatch = useDispatch();
 
 	const {
 		register,
@@ -74,18 +95,22 @@ export default function Auth() {
 
   // const [serverErrorMessage, setServerErrorMessage] = useState<string | undefined>();
 
-
-	const [registerUser, { isLoading, isSuccess, isError, reset }] =
-    useRegisterUserMutation();
-   
+  const [loginUser, { isLoading: isLoginLoading }] = useLoginUserMutation();
+	const [registerUser, { isLoading, isSuccess, isError, reset }] = useRegisterUserMutation();
+  const [getUser, { isLoading: isUserLoading }] = useLazyGetUserQuery();
 
   const onSubmit = async (formData) => {
+    formData.mobile = "1234567890";
+    formData.dateOfBirth = "01/01/2000";
+    
     if (isSignup) {
       try {
         const response = await registerUser({
           ...formData,
+          isSubscribed,
         }).unwrap();
         console.log(response);
+        setIsSignup(false);
       } catch (error) {
         if (error.status === 409) {
           // setServerErrorMessage("This email is already in use");
@@ -99,36 +124,21 @@ export default function Auth() {
     } else {
       const { email, password } = formData;
       try {
-        const { accessToken, refreshToken } = await loginUser({
+        const { tokens, user } = await loginUser({
           email,
           password,
         }).unwrap();
-  
-        const secret = await jose.importSPKI(publicAccessTokenKey, "RS256");
-        const {
-          payload: { id },
-        } = await jose.jwtVerify(accessToken, secret);
         
-        const { data } = await getUser({ userId: id });
-        if (!data) throw Error("This should not happen");
-  
-        const user = {
-          id,
-          email: data.email,
-          firstName: data.firstName,
-          isAuthorized: data.isAuthorized,
-          isSubscribed: data.isSubscribed,
-          lastName: data.lastName,
-          mobile: data.mobile,
-          roles: data.roles,
-        };
-        dispatch(setAuth({ user, accessToken, refreshToken }));
-        navigate("/");
+        dispatch(setUser({ user,tokens }));
+        navigate("/blog");
       } catch (error) {
+        console.log(error);
         if (error.status === 401) {
-          setServerErrorMessage("Invalid password or email");
+          // setServerErrorMessage("Invalid password or email");
+          console.log("409 error");
         } else {
-          setServerErrorMessage("An error occurred. Please try again later.");
+          // setServerErrorMessage("An error occurred. Please try again later.");
+          console.log(" error");
         }
       }
     }
@@ -142,20 +152,6 @@ export default function Auth() {
 	// 	}
 	// 	reset();
 	// }, [isSuccess, isError]);
-  
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-  //   const data = new FormData(event.currentTarget);
-  //   console.log({
-  //     email: data.get('email'),
-  //     password: data.get('password'),
-  //   });
-  //   if (isSignup) {
-  //     // dispatch(signup(form, history));
-  //   } else {
-  //     // dispatch(signin(form, history));
-  //   }
-  // };
 
   const [showPassword, setShowPassword] = useState(false);
   const handleShowPassword = () => setShowPassword(!showPassword);
@@ -206,10 +202,14 @@ export default function Auth() {
             <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
               { isSignup && (
               <>
-                <TextField margin="normal" fullWidth required  name="fullName" label="Full Name"  autoFocus 
-                error={errors.fullName} 
+                <TextField margin="normal" fullWidth required  name="firstName" label="First Name"  autoFocus 
+                error={errors.firstName} 
                 isLoading={isSubmitting || isLoading}
-							  {...register("fullName")} />
+							  {...register("firstName")} />
+                <TextField margin="normal" fullWidth required  name="lastName" label="Last Name"  autoFocus 
+                error={errors.lastName} 
+                isLoading={isSubmitting || isLoading}
+							  {...register("lastName")} />
               </>
               )}
               <TextField
@@ -243,7 +243,7 @@ export default function Auth() {
 							isLoading={isSubmitting || isLoading}
 							{...register("matchPassword")}/> }
               <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
+                control={<Checkbox value={isSubscribed} color="primary" />}
                 label="Remember me"
               />
               <Button

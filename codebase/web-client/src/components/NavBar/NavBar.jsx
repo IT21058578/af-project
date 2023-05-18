@@ -151,7 +151,7 @@ const Navbar = () => {
             >
               {settings.map((setting) => (
               <MenuItem key={setting}>
-                <Link to={setting === 'Dashboard' ? '/userbooking' : '/logout'} style={{ textDecoration: 'none' }}>
+                <Link to={setting === 'Dashboard' ? '/userbooking' : '/auth'} style={{ textDecoration: 'none' }}>
                   <Typography textAlign="center">{setting}</Typography>
                 </Link>
               </MenuItem>

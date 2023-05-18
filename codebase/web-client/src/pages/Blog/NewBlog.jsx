@@ -17,11 +17,30 @@ import FileBase from 'react-file-base64';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
 import { useSelector } from 'react-redux';
 import { useCreatePostMutation, useEditPostMutation } from "../../store/api/posts-api-slice";
-// import ReactChipInput from "react-chip-input";
+// import ChipInput from 'material-ui-chip-input';
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+const newBlogSchema = yup.object({
+	title: yup.string().required("Please enter the title"),
+	content: yup.string().required("Please enter the content"),
+});
 
 const theme = createTheme();
 
-export default function NewBlog() {
+export default function NewBlog({ currentId, setCurrentId }) {
+
+  const {
+		register,
+		formState: { errors, isSubmitting },
+		handleSubmit,
+	} = useForm({ resolver: yupResolver(newBlogSchema) });
+
+  // const clear = () => {
+  //   setCurrentId(0);
+  //   setPostData({ title: '', content: '', tags: [], selectedFile: '' });
+  // };
 
   const user = useSelector((state) => state.user); 
 
@@ -29,7 +48,7 @@ export default function NewBlog() {
   const [content, setContent] = useState('');
   const [selectedFile, setSelectedFile] = useState('');
 
-  const [createBlog, { isLoading: isCreating }] = useCreatePostMutation();
+  const [createBlog, { isLoading }] = useCreatePostMutation();
   const [updateBlog, { isLoading: isUpdating }] = useEditPostMutation();
 
   const postId = useSelector((state) => (currentId ? state.posts.posts.find((title) => title._id === currentId) : null));
@@ -43,17 +62,14 @@ export default function NewBlog() {
   }, [postId]);
 
   const handlePublish = () => {
-    if (!user.isLoggedIn) {
-      // User is not logged in, handle accordingly (e.g., show error message, redirect to login page)
-      return;
-    }
 
-    const postData = { title, content, selectedFile };
+    const postData = { title, content, selectedFile: selectedFile};
 
     if (postId) {
       updateBlog({ id: postId, data: postData });
     } else {
       createBlog(postData);
+      console.log("done");
     }
   };
 
@@ -70,7 +86,7 @@ export default function NewBlog() {
       <CssBaseline />
       <NavBar />
       <Container component="main" maxWidth="lg" sx={{ mb: 4 }}>
-        <Paper component="form" onSubmit={handlePublish} variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 }, backgroundColor: 'antiquewhite', borderRadius:'20px',  }}>
+        <Paper component="form" onSubmit={handleSubmit(handlePublish)} variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 }, backgroundColor: 'antiquewhite', borderRadius:'20px',  }}>
           <Typography component="h1" variant="h4" align="center">
             Write a Blog
           </Typography><br></br>
@@ -84,8 +100,9 @@ export default function NewBlog() {
                     label="Title of the Blog"
                     fullWidth
                     variant="standard"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                    error={errors.title}
+                    isLoading={isSubmitting || isLoading}
+                    {...register("title")}
                 />
                 </Grid>
                 <Grid item xs={12}>
@@ -101,8 +118,9 @@ export default function NewBlog() {
                     variant="standard"
                     multiline minRows={8}
                     sx={{ backgroundColor: 'lightgray', width:'100%' }}
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
+                    error={errors.content}
+                    isLoading={isSubmitting || isLoading}
+                    {...register("content")}
                 />
                 </Grid>
                 <Grid item xs={12}>
@@ -115,20 +133,13 @@ export default function NewBlog() {
                     onAdd={(chip) => handleAddChip(chip)}
                     onDelete={(chip) => handleDeleteChip(chip)}
                 /> */}
-                  {/* <ReactChipInput
-                    chip-color="grey"
-                    classes="class1 class2 chipinput"
-                    chips={this.state.chips}
-                    onSubmit={(value) => this.handleAddChip(value)}
-                    onRemove={(index) => this.handleDeleteChip(index)}
-                  /> */}
                 </Grid>
                 <Grid item xs={12} >
-                <FileBase type="file" multiple={false} onDone={({ base64 }) => setSelectedFile({ ...postData, selectedFile: base64 })} />
+                <FileBase type="file" multiple={false} onDone={({ base64 }) => setSelectedFile({ selectedFile: base64 })} />
                 </Grid>
                 
             </Grid>
-            <Button variant="contained" sx={{ mt: 3, ml: 1 }}>Publish</Button>
+            <Button type="submit" variant="contained" sx={{ mt: 3, ml: 1 }}>Publish</Button>
         </Paper>
       </Container>
       <Footer />

@@ -11,13 +11,18 @@ import { Button } from '@mui/material';
 // import { useDispatch } from 'react-redux';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import { useDispatch } from 'react-redux';
+
 
 function FeaturedPost(props) {
   const { post } = props;
 
+  const user = JSON.parse(localStorage.getItem('profile'));
   const [likes, setLikes] = useState(post?.likes);
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
+  // const history = useHistory();
 
+  const userId = user?.result.googleId || user?.result?._id;
   // const hasLikedPost = post.likes.find((like) => like === userId);
 
   const handleLike = async () => {
@@ -42,6 +47,12 @@ function FeaturedPost(props) {
 
     return <><ThumbUpOffAltIcon fontSize="small" />&nbsp;</>;
   };
+
+  // const openPost = (e) => {
+  //   dispatch(getPost(post._id, history));
+
+  //   history.push(`/posts/${post._id}`);
+  // };
 
   return (
     <Grid item xs={12} md={6}>
