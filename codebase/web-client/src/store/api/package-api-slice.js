@@ -3,6 +3,11 @@ import { baseApi } from "./base-api-slice";
 
 export const tripPackagesApi = baseApi.injectEndpoints({
 	endpoints: (builder) => ({
+		getTripPackges: builder.query({
+			query: () => ({
+				url: `${PACKAGE_URL}`,
+			}),
+		}),
 		getTripPackge: builder.query({
 			query: ({ tripPackageId }) => ({
 				url: `${PACKAGE_URL}/${tripPackageId}`,
@@ -40,6 +45,7 @@ export const tripPackagesApi = baseApi.injectEndpoints({
 
 export const {
 	useLazyGetTripPackgeQuery,
+	useLazyGetTripPackgesQuery,
 	useLazySearchTripPackgesQuery,
 	useCreateTripPackgeMutation,
 	useEditTripPackgeMutation,

@@ -4,54 +4,55 @@ import info1 from "../../assets/info1.png";
 import info2 from "../../assets/info2.png";
 import info3 from "../../assets/info3.png";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
-export default function Package() {
-  const data = [
-    {
-      image: "https://assets.traveltriangle.com/blog/wp-content/uploads/2014/11/Yala-National-Park-in-Sri-Lanka_23rd-oct.jpg",
-      title: "Yala",
-      subTitle: "Home To A Host Of Wildlife And Birds",
-      cost: "1,000",
-      duration: "Approx 2 night trip",
-    },
-    {
-      image: "https://res.cloudinary.com/thrillophilia/image/upload/c_fill,f_auto,fl_progressive.strip_profile,g_auto,h_600,q_auto,w_auto/v1/filestore/9kabqd8s5e0rjw51vpwfbjku9wxd_couple%20at%20bentota.jpg",
-      title: "Benthota",
-      subTitle: "Weekend Island Break with Colombo and Bentota",
-      cost: "1,200",
-      duration: "Approx 2 night trip",
-    },
-    {
-      image: "https://res.cloudinary.com/thrillophilia/image/upload/c_fill,f_auto,fl_progressive.strip_profile,g_auto,h_600,q_auto,w_auto/v1/filestore/twgr8e61ekm83i2swa2f93fpozrx_Nuwara%20Eliya%2010.jpg",
-      title: "Kandy",
-      subTitle: "Sweet Escapade to Sri Lanka with Kandy",
-      cost: "2,500",
-      duration: "Approx 2 night trip",
-    },
-    {
-      image: "https://res.cloudinary.com/thrillophilia/image/upload/c_fill,f_auto,fl_progressive.strip_profile,g_auto,h_600,q_auto,w_auto/v1/filestore/7xvzjq6q8ch5a5ueq3rw9ng77k08_%5BDownloader.la%5D-619ca07794280.jpg",
-      title: "Mirissa",
-      subTitle: "1 Day Splendors of Sri Lanka with Mirissa",
-      cost: "1,100",
-      duration: "Approx 1 night trip",
-    },
-    {
-      image: "https://assets.traveltriangle.com/blog/wp-content/uploads/2015/02/Sea-Surfing-at-Arugam-Bay.jpg",
-      title: "Arugam Bay",
-      subTitle: "Turquoise Heaven For Adrenaline-Junkies",
-      cost: "1,400",
-      duration: "Approx 2 night 2 day trip",
-    },
-    {
-      image: "https://assets.traveltriangle.com/blog/wp-content/uploads/2015/02/Sigiriya-rock-fortress-in-Sri-Lanka.jpg",
-      title: "Sigiriya and Polonnaruwa",
-      subTitle: "Ruggedness Amidst The Greenery",
-      cost: "2,800",
-      duration: "Approx 3 night 2 day trip",
-    },
-  ];
+const Package = ({packages}) =>{
+  // const data = [
+  //   {
+  //     image: "https://assets.traveltriangle.com/blog/wp-content/uploads/2014/11/Yala-National-Park-in-Sri-Lanka_23rd-oct.jpg",
+  //     title: "Yala",
+  //     subTitle: "Home To A Host Of Wildlife And Birds",
+  //     cost: "1,000",
+  //     duration: "Approx 2 night trip",
+  //   },
+  //   {
+  //     image: "https://res.cloudinary.com/thrillophilia/image/upload/c_fill,f_auto,fl_progressive.strip_profile,g_auto,h_600,q_auto,w_auto/v1/filestore/9kabqd8s5e0rjw51vpwfbjku9wxd_couple%20at%20bentota.jpg",
+  //     title: "Benthota",
+  //     subTitle: "Weekend Island Break with Colombo and Bentota",
+  //     cost: "1,200",
+  //     duration: "Approx 2 night trip",
+  //   },
+  //   {
+  //     image: "https://res.cloudinary.com/thrillophilia/image/upload/c_fill,f_auto,fl_progressive.strip_profile,g_auto,h_600,q_auto,w_auto/v1/filestore/twgr8e61ekm83i2swa2f93fpozrx_Nuwara%20Eliya%2010.jpg",
+  //     title: "Kandy",
+  //     subTitle: "Sweet Escapade to Sri Lanka with Kandy",
+  //     cost: "2,500",
+  //     duration: "Approx 2 night trip",
+  //   },
+  //   {
+  //     image: "https://res.cloudinary.com/thrillophilia/image/upload/c_fill,f_auto,fl_progressive.strip_profile,g_auto,h_600,q_auto,w_auto/v1/filestore/7xvzjq6q8ch5a5ueq3rw9ng77k08_%5BDownloader.la%5D-619ca07794280.jpg",
+  //     title: "Mirissa",
+  //     subTitle: "1 Day Splendors of Sri Lanka with Mirissa",
+  //     cost: "1,100",
+  //     duration: "Approx 1 night trip",
+  //   },
+  //   {
+  //     image: "https://assets.traveltriangle.com/blog/wp-content/uploads/2015/02/Sea-Surfing-at-Arugam-Bay.jpg",
+  //     title: "Arugam Bay",
+  //     subTitle: "Turquoise Heaven For Adrenaline-Junkies",
+  //     cost: "1,400",
+  //     duration: "Approx 2 night 2 day trip",
+  //   },
+  //   {
+  //     image: "https://assets.traveltriangle.com/blog/wp-content/uploads/2015/02/Sigiriya-rock-fortress-in-Sri-Lanka.jpg",
+  //     title: "Sigiriya and Polonnaruwa",
+  //     subTitle: "Ruggedness Amidst The Greenery",
+  //     cost: "2,800",
+  //     duration: "Approx 3 night 2 day trip",
+  //   },
+  // ];
 
-  const packages = [
+  const typepackages = [
     "New Packages",
     "Most Popular Packages",
     "Short Term Travel",
@@ -67,7 +68,7 @@ export default function Package() {
       </div>
       <div className="packages">
         <ul>
-          {packages.map((pkg, index) => {
+          {typepackages.map((pkg, index) => {
             return (
               <li
                 className={active === index + 1 ? "active" : ""}
@@ -80,24 +81,24 @@ export default function Package() {
         </ul>
       </div>
       <div className="destinations">
-        {tour.map((destination) => {
+        {packages.map((tour) => {
           return (
-            <div className="destination" key={destination.title}>
-              <Link to={`/tour/details/${destination.title}`}>View details</Link>
-              <img src={destination.image} alt="" />
-              <h3>{destination.title}</h3>
-              <p>{destination.subTitle}</p>
+            <div className="destination" key={tour.id}>
+              <Link to={`/tour/details/${tour.name}`}>View details</Link>
+              {/* <img src={packages.image} alt="" /> */}
+              <h3>{tour.name}</h3>
+              {/* <p>{packages.subTitle}</p> */}
               <div className="info">
                 <div className="services">
                   <img src={info1} alt="" />
                   <img src={info2} alt="" />
                   <img src={info3} alt="" />
                 </div>
-                <h4>{destination.cost}</h4>
+                {/* <h4>{packages.cost}</h4> */}
               </div>
               <div className="distance">
-                <span>1000 Kms</span>
-                <span>{destination.duration}</span>
+                {/* <span>1000 Kms</span> */}
+                <span>{tour.totalDistance}</span>
               </div>
             </div>
           );
@@ -106,6 +107,8 @@ export default function Package() {
     </Section>
   );
 }
+
+export default Package;
 
 const Section = styled.section`
   padding: 2rem 0;

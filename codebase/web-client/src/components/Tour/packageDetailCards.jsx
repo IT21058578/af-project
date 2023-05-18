@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import service1 from "../../assets/service1.png";
+import { useParams } from "react-router-dom";
 
 const LocationList = ({ locations }) => {
   return (
@@ -12,44 +13,54 @@ const LocationList = ({ locations }) => {
   );
 };
 
-export default function DetailCard() {
-  const data = [
-    {
-      images: [service1],
-      title: "Yala",
-      description: "Yala National Park is expected to be closed again this year, from September 1 to October 15. It is the height of the annual drought in the area but Park officials also use the time to attend to development work.",
-      locations:["Yala safari","Yala camping","Culturel event"],
-      catogery:"new",
-      days:"2",
-      packagePrice:1000.00
-    },
-  ];
+const DetailCard = ({packages}) => {
+  // const data = [
+  //   {
+  //     images: [service1],
+  //     title: "Yala",
+  //     description: "Yala National Park is expected to be closed again this year, from September 1 to October 15. It is the height of the annual drought in the area but Park officials also use the time to attend to development work.",
+  //     locations:["Yala safari","Yala camping","Culturel event"],
+  //     catogery:"new",
+  //     days:"2",
+  //     packagePrice:1000.00
+  //   },
+  // ];
+
+  const { packageID } = useParams();
+  const tour = packages.find((p) => p.id === packageID)
+
+  if (!tour){
+    return <div>Package not found.</div>
+  }
+
   return (
     <Section id="services">
-      {data.map((service, index) => {
+      {/* {data.map((service, index) => { */}
         return (
           <div className="service">
             <div className="title">
-               <h3>{service.title}</h3>
+               <h3>{tour.name}</h3>
             </div>
             <h3 className="hed">Description</h3>
-            <p className="description">{service.description}</p>
+            <p className="description">{tour.description}</p>
             <h3 className="hed">Locations That you can visit</h3>
-            <LocationList locations={service.locations}></LocationList>
+            <LocationList locations={tour.locations}></LocationList>
             <div className="hed">
               <h3>Days of tour: </h3>
-              <span >{service.days}</span>
+              <span >{tour.days}</span>
             </div>
             <div className="hed">
               <h3>Price Starts from: </h3>
-              <span >{service.packagePrice}$</span>
+              <span >{tour.packagePrice}$</span>
             </div>
           </div>
         );
-      })}
+      {/* })} */}
     </Section>
   );
 }
+
+export default DetailCard;
 
 const Section = styled.section`
   padding: 2rem 0;
