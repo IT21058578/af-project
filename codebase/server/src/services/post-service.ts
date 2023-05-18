@@ -16,7 +16,7 @@ import { User } from "../models/user-model.js";
 import { UserService } from "./user-service.js";
 
 const getPost = async (id: string, authorizedUserId?: string) => {
-	const post = await Post.findById(id).exec();
+	const post = await Post.findById(id);
 	if (post === null) throw Error(ReasonPhrases.NOT_FOUND);
 	post.views += 1;
 	post.save();
@@ -29,9 +29,7 @@ const searchPosts = async (
 	authorizedUserId?: string
 ) => {
 	const { data, ...rest } = (
-		await Post.aggregate(
-			buildPostPaginationPipeline(postSearchOptions as any)
-		).exec()
+		await Post.aggregate(buildPostPaginationPipeline(postSearchOptions as any))
 	)[0] as any as IPaginationResult<TPost>;
 	const postVOs = await Promise.all(
 		data.map(async (post) => {
@@ -55,7 +53,7 @@ const editPost = async (
 	authorizedUser: IAuthorizedUser,
 	editedPost: Partial<TPost>
 ) => {
-	const existingPost = await Post.findById(id).exec();
+	const existingPost = await Post.findById(id);
 	if (existingPost === null) throw Error(ReasonPhrases.NOT_FOUND);
 
 	if (

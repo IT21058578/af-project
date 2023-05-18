@@ -249,6 +249,18 @@ export const checkTripPackageFields = (optional, location = "body") => {
             errorMessage: "totalDistance must be a Number",
             in: location,
         },
+        imageURLs: {
+            optional,
+            isArray: true,
+            errorMessage: "imageURLs must be an Array",
+            in: location,
+        },
+        "imageURLs.*": {
+            optional,
+            isURL: true,
+            errorMessage: "each value in activities must be an URL",
+            in: location,
+        },
         "price.perPerson": {
             optional,
             isNumeric: true,

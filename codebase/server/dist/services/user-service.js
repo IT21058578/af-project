@@ -4,14 +4,14 @@ import initializeLogger from "../utils/logger.js";
 import { buildPage, buildPaginationPipeline } from "../utils/mongoose-utils.js";
 const log = initializeLogger(import.meta.url.split("/").pop() || "");
 const getUser = async (id) => {
-    const user = await User.findById(id).exec();
+    const user = await User.findById(id);
     if (user === null)
         throw Error(EUserError.NOT_FOUND);
     const userVO = buildDetailedUserVO(user.toObject());
     return userVO;
 };
 const searchUsers = async (userSearchOptions) => {
-    const { data, ...rest } = (await User.aggregate(buildPaginationPipeline(userSearchOptions)).exec())[0];
+    const { data, ...rest } = (await User.aggregate(buildPaginationPipeline(userSearchOptions)))[0];
     const userVOs = await Promise.all(data.map(async (user) => {
         return buildUserVO(user);
     }));
@@ -29,7 +29,7 @@ const editUser = async (userId, editedUser, authorizedUser) => {
         authorizedUser.id !== userId) {
         throw Error(EUserError.UNAUTHORIZED);
     }
-    const existingUser = await User.findById(userId).exec();
+    const existingUser = await User.findById(userId);
     if (existingUser == null)
         throw Error(EUserError.NOT_FOUND);
     // FIXME: Dangerous type coercion

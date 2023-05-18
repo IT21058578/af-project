@@ -9,7 +9,7 @@ import { EAuthErrors } from "../constants/auth-constants.js";
 const log = initializeLogger(import.meta.url.split("/").pop() || "");
 const loginUser = async (email, password) => {
     log.info("Validating user details...");
-    const user = await User.findOne({ email }).exec();
+    const user = await User.findOne({ email });
     if (!user) {
         throw new Error(EAuthErrors.USER_NOT_FOUND);
     }
@@ -46,7 +46,7 @@ const loginUser = async (email, password) => {
 };
 const refreshTokens = async (userId, refreshToken) => {
     log.info("Validating user details...");
-    const user = await User.findById(userId).exec();
+    const user = await User.findById(userId);
     if (!user) {
         throw Error(EAuthErrors.USER_NOT_FOUND);
     }
@@ -77,7 +77,7 @@ const refreshTokens = async (userId, refreshToken) => {
     };
 };
 const logoutUser = async (id) => {
-    const user = await User.findById(id).exec();
+    const user = await User.findById(id);
     if (!user)
         throw new Error(EAuthErrors.USER_NOT_FOUND);
     if (user.tokenFamily === undefined)
@@ -86,7 +86,7 @@ const logoutUser = async (id) => {
     await user.save();
 };
 const registerUser = async (user) => {
-    const existingUser = await User.findOne({ email: user.email }).exec();
+    const existingUser = await User.findOne({ email: user.email });
     if (existingUser) {
         throw new Error(EAuthErrors.USER_ALREADY_EXISTS);
     }
@@ -106,7 +106,7 @@ const registerUser = async (user) => {
     await newUser.save();
 };
 const forgotPassword = async (email) => {
-    const user = await User.findOne({ email }).exec();
+    const user = await User.findOne({ email });
     if (!user) {
         throw new Error("User does not exist");
     }
@@ -115,7 +115,7 @@ const forgotPassword = async (email) => {
     await user.save();
 };
 const resetPassword = async (email, resetToken, newPassword) => {
-    const user = await User.findOne({ email }).exec();
+    const user = await User.findOne({ email });
     if (!user) {
         throw new Error("User does not exist");
     }
@@ -128,7 +128,7 @@ const resetPassword = async (email, resetToken, newPassword) => {
     await user.save();
 };
 const changePassword = async (userId, newPassword, oldPassword) => {
-    const user = await User.findById(userId).exec();
+    const user = await User.findById(userId);
     if (!user) {
         throw new Error("User does not exist");
     }
@@ -141,7 +141,7 @@ const changePassword = async (userId, newPassword, oldPassword) => {
     await user.save();
 };
 const authorizeUser = async (email, authorizationToken) => {
-    const user = await User.findOne({ email }).exec();
+    const user = await User.findOne({ email });
     if (!user) {
         throw new Error("User does not exist");
     }

@@ -8,7 +8,7 @@ import { LocationService } from "./location-service.js";
 import { UserService } from "./user-service.js";
 const log = initializeLogger(import.meta.url.split("/").pop() || "");
 const getTripPackage = async (tripPackageId) => {
-    const existingTripPackage = await TripPackage.findById(tripPackageId).exec();
+    const existingTripPackage = await TripPackage.findById(tripPackageId);
     if (existingTripPackage == null)
         throw Error(ETripPackageError.TRIP_PKG_NOT_FOUND);
     existingTripPackage.views += 1;
@@ -24,7 +24,7 @@ const searchTripPackages = async (tripPackageSearchOptions) => {
     return buildPage({ ...rest, data: tripPackageVOs }, tripPackageSearchOptions);
 };
 const editTripPackage = async (tripPackageId, editedTripPackage, authorizedUserId) => {
-    const existingTripPackage = await TripPackage.findById(tripPackageId).exec();
+    const existingTripPackage = await TripPackage.findById(tripPackageId);
     if (existingTripPackage == null)
         throw Error(ETripPackageError.TRIP_PKG_NOT_FOUND);
     // FIXME: Dangerous type coercion
@@ -38,7 +38,7 @@ const editTripPackage = async (tripPackageId, editedTripPackage, authorizedUserI
     return tripPackageVO;
 };
 const deleteTripPackage = async (tripPackageId) => {
-    const existingTripPackage = await TripPackage.findById(tripPackageId).exec();
+    const existingTripPackage = await TripPackage.findById(tripPackageId);
     if (existingTripPackage == null)
         throw Error(ETripPackageError.TRIP_PKG_NOT_FOUND);
     await existingTripPackage.deleteOne();
@@ -110,6 +110,7 @@ const buildTripPackageVO = async (tripPackage) => {
         id: tripPackage._id ?? "",
         name: tripPackage.name,
         description: tripPackage.description,
+        imageURLs: tripPackage.imageURLs,
         createdBy,
         createdAt: tripPackage.createdAt,
         lastUpdatedBy,

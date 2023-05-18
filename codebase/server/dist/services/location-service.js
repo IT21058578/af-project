@@ -6,7 +6,7 @@ import { UserService } from "./user-service.js";
 import initializeLogger from "../utils/logger.js";
 const log = initializeLogger(import.meta.url.split("/").pop() || "");
 const getLocation = async (locationId) => {
-    const existingLocation = await Location.findById(locationId).exec();
+    const existingLocation = await Location.findById(locationId);
     if (existingLocation == null)
         throw Error(ELocationError.LOCATION_NOT_FOUND);
     const locationVO = await buildLocationVO(existingLocation.toObject());
@@ -20,7 +20,7 @@ const searchLocations = async (locationSearchOptions) => {
     return buildPage({ ...rest, data: locationVOs }, locationSearchOptions);
 };
 const editLocation = async (locationId, editedLocation, authorizedUserId) => {
-    const existingLocation = await Location.findById(locationId).exec();
+    const existingLocation = await Location.findById(locationId);
     if (existingLocation == null)
         throw Error(ELocationError.LOCATION_NOT_FOUND);
     // FIXME: Dangerous type coercion
@@ -33,7 +33,7 @@ const editLocation = async (locationId, editedLocation, authorizedUserId) => {
     return locationVO;
 };
 const deleteLocation = async (locationId) => {
-    const existingLocation = await Location.findById(locationId).exec();
+    const existingLocation = await Location.findById(locationId);
     if (existingLocation == null)
         throw Error(ELocationError.LOCATION_NOT_FOUND);
     await existingLocation.deleteOne();

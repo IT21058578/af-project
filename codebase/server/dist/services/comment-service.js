@@ -5,13 +5,13 @@ import { Role } from "../constants/constants.js";
 import { User } from "../models/user-model.js";
 import { UserService } from "./user-service.js";
 const getComment = async (id, authorizedUserId) => {
-    const comment = await Comment.findById(id).exec();
+    const comment = await Comment.findById(id);
     if (comment === null)
         throw Error(ReasonPhrases.NOT_FOUND);
     return await buildCommentVO(comment.toObject(), authorizedUserId);
 };
 const searchComments = async (commentSearchOptions, authorizedUserId) => {
-    const { data, ...rest } = (await Comment.aggregate(buildPaginationPipeline(commentSearchOptions)).exec())[0];
+    const { data, ...rest } = (await Comment.aggregate(buildPaginationPipeline(commentSearchOptions)))[0];
     const commentVOs = await Promise.all(data.map(async (comment) => {
         return await buildCommentVO(comment, authorizedUserId);
     }));
@@ -23,7 +23,7 @@ const createComment = async (comment, authorizedUserId) => {
     return await buildCommentVO(savedComment.toObject(), authorizedUserId);
 };
 const editComment = async (id, authorizedUser, editedComment) => {
-    const existingComment = await Comment.findById(id).exec();
+    const existingComment = await Comment.findById(id);
     if (existingComment === null)
         throw Error(ReasonPhrases.NOT_FOUND);
     if (authorizedUser.id !== existingComment.createdById &&

@@ -14,7 +14,7 @@ import initializeLogger from "../utils/logger.js";
 const log = initializeLogger(import.meta.url.split("/").pop() || "");
 
 const getLocation = async (locationId: string) => {
-	const existingLocation = await Location.findById(locationId).exec();
+	const existingLocation = await Location.findById(locationId);
 	if (existingLocation == null) throw Error(ELocationError.LOCATION_NOT_FOUND);
 	const locationVO = await buildLocationVO(existingLocation.toObject());
 	return locationVO;
@@ -39,7 +39,7 @@ const editLocation = async (
 	editedLocation: Partial<TLocation>,
 	authorizedUserId: string
 ) => {
-	const existingLocation = await Location.findById(locationId).exec();
+	const existingLocation = await Location.findById(locationId);
 	if (existingLocation == null) throw Error(ELocationError.LOCATION_NOT_FOUND);
 
 	// FIXME: Dangerous type coercion
@@ -53,7 +53,7 @@ const editLocation = async (
 };
 
 const deleteLocation = async (locationId: string) => {
-	const existingLocation = await Location.findById(locationId).exec();
+	const existingLocation = await Location.findById(locationId);
 	if (existingLocation == null) throw Error(ELocationError.LOCATION_NOT_FOUND);
 	await existingLocation.deleteOne();
 };

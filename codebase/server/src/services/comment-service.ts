@@ -14,7 +14,7 @@ import { User } from "../models/user-model.js";
 import { UserService } from "./user-service.js";
 
 const getComment = async (id: string, authorizedUserId?: string) => {
-	const comment = await Comment.findById(id).exec();
+	const comment = await Comment.findById(id);
 	if (comment === null) throw Error(ReasonPhrases.NOT_FOUND);
 	return await buildCommentVO(comment.toObject(), authorizedUserId);
 };
@@ -24,9 +24,7 @@ const searchComments = async (
 	authorizedUserId?: string
 ) => {
 	const { data, ...rest } = (
-		await Comment.aggregate(
-			buildPaginationPipeline(commentSearchOptions)
-		).exec()
+		await Comment.aggregate(buildPaginationPipeline(commentSearchOptions))
 	)[0] as any as IPaginationResult<TComment>;
 	const commentVOs = await Promise.all(
 		data.map(async (comment) => {
@@ -50,7 +48,7 @@ const editComment = async (
 	authorizedUser: IAuthorizedUser,
 	editedComment: Partial<TComment>
 ) => {
-	const existingComment = await Comment.findById(id).exec();
+	const existingComment = await Comment.findById(id);
 	if (existingComment === null) throw Error(ReasonPhrases.NOT_FOUND);
 
 	if (

@@ -7,7 +7,7 @@ const searchBookings = async (bookingSearchOptions) => {
     return buildPage({ ...rest, data }, bookingSearchOptions);
 };
 const getBooking = async (bookingId) => {
-    const existingBooking = await Booking.findById(bookingId).exec();
+    const existingBooking = await Booking.findById(bookingId);
     if (existingBooking == null)
         throw Error(EBookingError.NOT_FOUND);
     return existingBooking;
