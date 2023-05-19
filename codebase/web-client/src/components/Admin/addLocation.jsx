@@ -14,6 +14,7 @@ import Navbar from '../NavBar/NavBar';
 import Footer from '../../components/Footer';
 import { useSelector } from 'react-redux';
 import { states } from './userData';
+import { useNavigate } from 'react-router-dom';
 
 const validationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
@@ -25,6 +26,7 @@ const validationSchema = Yup.object({
 
 const AddLocationPage = () => {
   const [createLocation, { isLoading, isError }] = useCreateLocationsMutation();
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -43,6 +45,7 @@ const AddLocationPage = () => {
       createLocation(locationData)
         .then(() => {
           console.log('Location created successfully');
+          navigate('/admin')
         })
         .catch((error) => {
           console.error('Failed to create location:', error);
