@@ -19,7 +19,6 @@
     "@reduxjs/toolkit": "^1.9.3",
     "export-to-csv": "^0.2.1",
     "formik": "^2.2.9",
-    "jose": "^4.14.4",
     "jwt-decode": "^3.1.2",
     "material-react-table": "^1.11.2",
     "material-ui-chip-input": "^1.1.0",
@@ -33,6 +32,7 @@
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.10.0",
     "redux": "^4.2.1",
+    "redux-persist": "^6.0.0",
     "styled-components": "^5.3.10",
     "yup": "^1.1.1"
   },

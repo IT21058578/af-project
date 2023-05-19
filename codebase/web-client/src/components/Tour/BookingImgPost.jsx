@@ -1,9 +1,19 @@
-import React from "react";
+import React, { useState } from 'react';
 import styled from "styled-components";
 // import homeImage from "../../assets/hero.jpeg";
 
 const homeImage = "https://oxfordbusinessgroup.com/wp-content/uploads/2022/10/Sri-Lanka-banner_2.png"
-export default function Hero() {
+const Hero = ({ onSearch }) => {
+  const [searchText, setSearchText] = useState('');
+
+  const handleSearch = () => {
+    // Validate search input
+    if (searchText.trim() !== '') {
+      onSearch(searchText);
+    } else {
+      alert('Please enter a search term');
+    }
+  };
   return (
     <Section id="hero">
       <div className="background">
@@ -22,20 +32,26 @@ export default function Hero() {
             <label htmlFor="">Where you want to go</label>
             <input type="text" placeholder="Search Your location" />
           </div>
-          <div className="container">
+          {/* <div className="container">
             <label htmlFor="">Tour-Start-Day</label>
             <input type="date" />
-          </div>
+          </div> */}
           <div className="container">
-            <label htmlFor="">Tour-End-Day</label>
-            <input type="date" />
+            <label htmlFor="">Seach Hear</label>
+            <input
+              type="text"
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+            />
           </div>
-          <button>Explore Now</button>
+          <button onClick={handleSearch}>Explore Now</button>
         </div>
       </div>
     </Section>
   );
 }
+
+export default Hero;
 
 const Section = styled.section`
   position: relative;
