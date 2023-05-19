@@ -6,7 +6,7 @@ import Navbar from '../NavBar/NavBar';
 import Footer from '../../components/Footer';
 
 const EditLocationPage = () => {
-  const { tripLocationId } = useParams();
+  const { locationId } = useParams();
   const navigate = useNavigate();
 
   const [getLocation, { data: locationData, isFetching }] = useLazyGetLocationsQuery();
@@ -20,10 +20,10 @@ const EditLocationPage = () => {
   const [province, setProvince] = useState('');
 
   useEffect(() => {
-    if (tripLocationId) {
-      getLocation({ tripLocationId });
+    if (locationId) {
+      getLocation({ locationId });
     }
-  }, [getLocation, tripLocationId]);
+  }, [getLocation, locationId]);
 
   useEffect(() => {
     if (locationData) {
@@ -42,7 +42,7 @@ const EditLocationPage = () => {
 
     try {
       const updatedLocation = {
-        id: tripLocationId,
+        id:locationId,
         name,
         imageUrl,
         address: {
@@ -53,7 +53,7 @@ const EditLocationPage = () => {
         },
       };
 
-      await editLocation(updatedLocation).unwrap();
+      await editLocation({...updatedLocation , locationId}).unwrap();
       navigate('/admin'); // Redirect back to the locations list page
     } catch (error) {
       console.log('Error editing location:', error);
@@ -67,7 +67,7 @@ const EditLocationPage = () => {
   return (
     <div>
     <Navbar/>
-    <Container maxWidth="md">
+    <Container maxWidth="md" sx={{marginTop:'60px' , marginBottom:'70px'}}>
       <Typography variant="h4" align="center" gutterBottom>
         Edit Location
       </Typography>
@@ -123,7 +123,7 @@ const EditLocationPage = () => {
               />
             </Grid>
             <Grid item xs={12} align="center">
-              <Button type="submit" variant="contained" color="primary">
+              <Button type="submit" variant="contained" color="success">
                 Save Changes
               </Button>
             </Grid>

@@ -16,7 +16,7 @@ const AdminPackage = ({packages}) =>{
     try {
       await deleteTripPackage({ tripPackageId: id });
       // Perform any other necessary tasks upon successful deletion
-      navigate(`/`) // Navigate back to the trip package list page
+      navigate(`/admin`) // Navigate back to the trip package list page
     } catch (error) {
       console.log('Error deleting trip package:', error);
     }

@@ -22,7 +22,6 @@ import { useRegisterUserMutation } from "../../store/api/auth-api-slice";
 import { useLoginUserMutation } from "../../store/api/auth-api-slice";
 import { useLazyGetUserQuery } from "../../store/api/user-api-slice";
 import { useNavigate } from "react-router-dom";
-import * as jose from "jose";
 import { setUser } from "../../store/slices/auth-slice";
 import { useDispatch } from "react-redux";
 

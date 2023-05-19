@@ -12,6 +12,8 @@ import {
 import { useCreateLocationsMutation } from '../../store/api/location-api-slice';
 import Navbar from '../NavBar/NavBar';
 import Footer from '../../components/Footer';
+import { useSelector } from 'react-redux';
+import { states } from './userData';
 
 const validationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
@@ -47,6 +49,9 @@ const AddLocationPage = () => {
         });
     },
   });
+
+  const user = useSelector(state => state.auth.user)
+  console.log(user)
 
   return (
     <div>

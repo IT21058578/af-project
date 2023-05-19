@@ -99,7 +99,7 @@ const EditTripPackage = () => {
 
       await editTripPackage(updatedTripPackage).unwrap();
       // Perform any other necessary tasks upon successful edit
-      history.push('/'); // Redirect back to the trip package list page
+      history('/'); // Redirect back to the trip package list page
     } catch (error) {
       console.log('Error editing trip package:', error);
     }

@@ -14,18 +14,18 @@ const AdminLocation = ({locations}) =>{
   
   const handleDelete = async (id) => {
     try {
-      await deleteLocation({ tripLocationId: id });
+      await deleteLocation({ locationId: id });
       // Perform any other necessary tasks upon successful deletion
-      navigate(`/`) // Navigate back to the trip Location list page
+      navigate(`/admin`) // Navigate back to the trip Location list page
     } catch (error) {
       console.log('Error deleting Location:', error);
     }
   };
 
-  const handleEditDetails = (tripLocationId) => {
-    getLocationQuery({ tripLocationId }).then((result) => {
+  const handleEditDetails = (locationId) => {
+    getLocationQuery({ locationId }).then((result) => {
       if (!result.error) {
-        navigate(`/location/edit/${tripLocationId}`);
+        navigate(`/location/edit/${locationId}`);
       }
     });
   };
