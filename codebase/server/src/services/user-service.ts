@@ -1,21 +1,21 @@
 import { EUserError, Role } from "../constants/constants.js";
 import { User } from "../models/user-model.js";
+import { UserTransformer } from "../transformers/user-transformer.js";
 import {
 	IAuthorizedUser,
 	IPaginationResult,
 	TExtendedPageOptions,
 } from "../types/misc-types.js";
 import { TUser } from "../types/model-types.js";
-import { TDetailedUserVO, TUserVO } from "../types/vo-types.js";
 import initializeLogger from "../utils/logger.js";
-import { buildPage, buildPaginationPipeline } from "../utils/mongoose-utils.js";
+import { PageUtils, buildPaginationPipeline } from "../utils/mongoose-utils.js";
 
 const log = initializeLogger(import.meta.url.split("/").pop() || "");
 
 const getUser = async (id: string) => {
 	const user = await User.findById(id);
 	if (user === null) throw Error(EUserError.NOT_FOUND);
-	const userVO = buildDetailedUserVO(user.toObject());
+	const userVO = UserTransformer.buildDetailedUserVO(user.toObject());
 	return userVO;
 };
 
@@ -25,10 +25,10 @@ const searchUsers = async (userSearchOptions: TExtendedPageOptions<TUser>) => {
 	)[0] as any as IPaginationResult<TUser>;
 	const userVOs = await Promise.all(
 		data.map(async (user) => {
-			return buildUserVO(user);
+			return UserTransformer.buildUserVO(user);
 		})
 	);
-	return buildPage({ data: userVOs, ...rest }, userSearchOptions);
+	return PageUtils.buildPage({ data: userVOs, ...rest }, userSearchOptions);
 };
 
 const deleteUser = async (userId: string, authorizedUser: IAuthorizedUser) => {
@@ -61,38 +61,10 @@ const editUser = async (
 		(existingUser as any)[key] = value ?? (existingUser as any)[key];
 	});
 	const updatedUser = await existingUser.save();
-	const userVO = buildDetailedUserVO(updatedUser.toObject());
+	const userVO = UserTransformer.buildDetailedUserVO(updatedUser.toObject());
 	return userVO;
 };
-
-const buildUserVO = (user: TUser | null): TUserVO | {} => {
-	if (user === null) return {};
-	return {
-		id: user._id ?? "",
-		email: user.email ?? "",
-		firstName: user.firstName ?? "",
-		lastName: user.lastName ?? "",
-	};
-};
-
-const buildDetailedUserVO = (user: TUser): TDetailedUserVO => {
-	return {
-		id: user._id ?? "",
-		email: user.email ?? "",
-		firstName: user.firstName ?? "",
-		lastName: user.lastName ?? "",
-		createdAt: user.createdAt,
-		dateOfBirth: user.dateOfBirth,
-		isSubscribed: user.isSubscribed,
-		lastLoggedAt: user.lastLoggedAt,
-		mobile: user.mobile,
-		roles: user.roles as any,
-		updatedAt: user.updatedAt,
-	};
-};
-
 export const UserService = {
-	buildUserVO,
 	getUser,
 	searchUsers,
 	deleteUser,

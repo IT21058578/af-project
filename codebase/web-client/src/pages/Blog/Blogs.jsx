@@ -100,22 +100,6 @@ const featuredPosts = [
     image: 'https://worldtravelfamily.com/wp-content/uploads/2013/12/Sri-Lanka-Travel-Blog.jpg',
     imageLabel: 'Image Text',
   },
-  // {
-  //   title: 'Post title',
-  //   date: 'Nov 11',
-  //   description:
-  //     'This is a wider card with supporting text below as a natural lead-in to additional content.',
-  //   image: 'https://source.unsplash.com/random',
-  //   imageLabel: 'Image Text',
-  // },
-  // {
-  //   title: 'Post title',
-  //   date: 'Nov 11',
-  //   description:
-  //     'This is a wider card with supporting text below as a natural lead-in to additional content.',
-  //   image: 'https://source.unsplash.com/random',
-  //   imageLabel: 'Image Text',
-  // },
 ];
 
 // const posts = [post1, post2, post3];
@@ -125,7 +109,7 @@ const theme = createTheme();
 export default function Blog() {
   return (
     <ThemeProvider theme={theme}>
-      <Link to="/new">
+      <Link to="/blog/new">
         <Fab aria-label="edit" variant="extended" sx={{ position: 'fixed', marginLeft: '80%', marginTop: '550px' }}>
           <EditIcon sx={{ mr: 1 }} /> Write a blog
         </Fab>

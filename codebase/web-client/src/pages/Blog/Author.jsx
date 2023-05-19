@@ -4,9 +4,9 @@ import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import Blog from './Blog/Blog';
-import Navbar from '../components/NavBar/NavBar';
-import Footer from '../components/Footer';
+import Blog from './Blog';
+import Navbar from '../../components/NavBar/NavBar';
+import Footer from '../../components/Footer';
 
 const author = {
     name: 'John Doe',

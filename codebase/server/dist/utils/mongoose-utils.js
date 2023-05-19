@@ -57,7 +57,7 @@ export const buildPostPaginationPipeline = ({ authorName, ...rest }) => {
     // );
     return paginationPipeline;
 };
-export const buildPage = ({ data, countInPage, countInQuery }, { pageSize, pageNum, sortField, sortDir, ...searchOptions }) => {
+const buildPage = ({ data, countInPage, countInQuery }, { pageSize, pageNum, sortField, sortDir, ...searchOptions }) => {
     const countOfPages = Math.ceil(countInQuery / (pageSize || 10));
     return {
         _metadata: {
@@ -86,4 +86,7 @@ export const buildPage = ({ data, countInPage, countInQuery }, { pageSize, pageN
         },
         content: data ?? [],
     };
+};
+export const PageUtils = {
+    buildPage,
 };
