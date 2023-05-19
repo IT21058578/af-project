@@ -1,6 +1,8 @@
 import { User } from "../models/user-model.js";
 import { UserTransformer } from "./user-transformer.js";
 const buildPostVO = async (post, authorizedUserId = "") => {
+    if (post === null)
+        return {};
     const [createdByUser, lastUpdatedByUser] = await Promise.all([
         User.findById(post.createdById),
         User.findById(post.lastUpdatedById),

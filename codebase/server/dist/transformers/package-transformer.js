@@ -1,9 +1,10 @@
-import { EUserError } from "../constants/constants.js";
 import { Location } from "../models/location-model.js";
 import { User } from "../models/user-model.js";
 import { LocationTransformer } from "./location-transformer.js";
 import { UserTransformer } from "./user-transformer.js";
 const buildTripPackageVO = async (tripPackage) => {
+    if (tripPackage === null)
+        return {};
     // Start fetching locations
     const locationVOPromises = [];
     for (const { locationId } of tripPackage.plan) {
@@ -15,25 +16,11 @@ const buildTripPackageVO = async (tripPackage) => {
         })());
     }
     // Start fetching and wait for both users
-    const [createdByUser, lastUpdatedByUser] = await Promise.all([
+    const users = await Promise.all([
         User.findById(tripPackage.createdById),
         User.findById(tripPackage.lastUpdatedById),
     ]);
-    createdByUser?._id;
-    let createdBy;
-    if (createdByUser !== null) {
-        createdBy = UserTransformer.buildUserVO(createdByUser);
-    }
-    else {
-        throw Error(EUserError.NOT_FOUND);
-    }
-    let lastUpdatedBy;
-    if (lastUpdatedByUser !== null) {
-        lastUpdatedBy = UserTransformer.buildUserVO(lastUpdatedByUser);
-    }
-    else {
-        throw Error(EUserError.NOT_FOUND);
-    }
+    const [createdBy, lastUpdatedBy] = users.map((user) => UserTransformer.buildUserVO(user));
     const plan = [];
     const locationVOs = await Promise.all(locationVOPromises);
     locationVOs.forEach((item, idx) => {
