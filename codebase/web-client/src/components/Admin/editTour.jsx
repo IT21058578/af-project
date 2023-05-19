@@ -44,8 +44,8 @@ const EditTripPackage = () => {
     },
   ]);
   const [limitedDateRange, setLimitedDateRange] = useState({
-    startDate: '',
-    endDate: '',
+    startDate: new Date(),
+    endDate: new Date(),
   });
   const [views, setViews] = useState(0);
   const [isFeatured, setIsFeatured] = useState(false);
@@ -62,7 +62,10 @@ const EditTripPackage = () => {
       setPrice(tripPackage?.price);
       setDiscount(tripPackage?.discount);
       setPlan(tripPackage?.plan);
-      setLimitedDateRange(tripPackage?.limitedDateRange);
+      setLimitedDateRange({
+        startDate: new Date(tripPackage?.limitedDateRange?.startDate),
+        endDate: new Date(tripPackage?.limitedDateRange?.endDate),
+      });
       setViews(tripPackage?.views);
       setIsFeatured(tripPackage?.isFeatured);
     }
@@ -97,7 +100,7 @@ const EditTripPackage = () => {
         isFeatured,
       };
 
-      await editTripPackage(updatedTripPackage).unwrap();
+      await editTripPackage({...updatedTripPackage , tripPackageId}).unwrap();
       // Perform any other necessary tasks upon successful edit
       history('/'); // Redirect back to the trip package list page
     } catch (error) {
@@ -142,20 +145,32 @@ const EditTripPackage = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                label="Created By"
-                value={createdById}
-                onChange={(e) => setCreatedById(e.target.value)}
-                fullWidth
-              />
+            <TextField
+              label="Start Date"
+              type="date"
+              value={limitedDateRange.startDate instanceof Date ? limitedDateRange.startDate.toISOString().split('T')[0] : ''}
+              onChange={(e) =>
+                setLimitedDateRange((prevRange) => ({
+                  ...prevRange,
+                  startDate: new Date(e.target.value),
+                }))
+              }
+              fullWidth
+            />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                label="Last Updated By"
-                value={lastUpdatedById}
-                onChange={(e) => setLastUpdatedById(e.target.value)}
-                fullWidth
-              />
+            <TextField
+              label="End Date"
+              type="date"
+              value={limitedDateRange.endDate instanceof Date ? limitedDateRange.endDate.toISOString().split('T')[0] : ''}
+              onChange={(e) =>
+                setLimitedDateRange((prevRange) => ({
+                  ...prevRange,
+                  endDate: new Date(e.target.value),
+                }))
+              }
+              fullWidth
+            />
             </Grid>
             <Grid item xs={12}>
               <TextField

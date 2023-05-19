@@ -6,6 +6,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
+import { useCreateCheckoutSessionMutation } from '../../store/api/booking-api-slice';
 
 const people = [
   {
@@ -59,15 +60,15 @@ const vehicle = [
 
 const hotel = [
   {
-    value: '3 star',
+    value: 'threeStar',
     label: '3 star',
   },
   {
-    value: '4 star',
+    value: 'fourStar',
     label: '4 star',
   },
   {
-    value: '5 star',
+    value: 'fiveStar',
     label: '5 star',
   },
 ];
@@ -76,8 +77,39 @@ export default function Total({ tripPackage }) {
   const [isChecked, setIsChecked] = useState(false);
   const [selectedPeople, setSelectedPeople] = useState('1');
   const [selectedVehicle, setSelectedVehicle] = useState('group');
-  const [selectedHotel, setSelectedHotel] = useState('3 star');
+  const [selectedHotel, setSelectedHotel] = useState('threeStar');
   const [totalCharge, setTotalCharge] = useState(0);
+
+  const [createCheckoutSession, { isLoading, isError, isSuccess, error }] =
+  useCreateCheckoutSessionMutation();
+
+const handleCheckout = () => {
+  const tripPackageId = tripPackage?.id;
+  const pricingOptions = {
+    persons: parseInt(selectedPeople),
+    withFood: true,
+    lodging: (selectedHotel),
+    transport: (selectedVehicle),
+  };
+
+  createCheckoutSession({ tripPackageId, pricingOptions });
+};
+
+if (isLoading) {
+  return <div>Loading...</div>;
+}
+
+if (isError) {
+  return <div>Error: {error.message}</div>;
+}
+
+if (isSuccess) {
+  // Handle successful checkout here
+  // Access the response data from `createCheckoutSession` mutation
+  // using `data` property
+  console.log('Checkout success:', data);
+  return <div>Checkout success!</div>;
+}
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
@@ -106,7 +138,7 @@ export default function Total({ tripPackage }) {
       perPersonPrice * parseInt(selectedPeople) +
       perPersonFoodPrice * parseInt(selectedPeople) +
       transportPrice +
-      (selectedHotel !== '3 star'
+      (selectedHotel !== 'threeStar'
         ? perPersonFoodPrice * parseInt(selectedPeople)
         : 0);
 
@@ -231,7 +263,7 @@ export default function Total({ tripPackage }) {
         variant="contained"
         color="primary"
         sx={{ marginLeft: '5px' }}
-        onClick={calculateTotal}
+        onClick={calculateTotal && handleCheckout}
       >
         Make the Booking
       </Button>

@@ -16,29 +16,24 @@ import './loading.css';
 
 const columns = [
   {
-    accessorKey: 'packageName',
-    header: 'Booked Package',
-    align: 'left',
-  },
-  {
     accessorKey: 'createdAt',
     header: 'Date',
-    align: 'right',
+    align: 'left',
   },
   {
     accessorKey: 'package.lodging',
     header: 'Hotel',
-    align: 'right',
+    align: 'left',
   },
   {
     accessorKey: 'package.transport',
     header: 'Vehicle',
-    align: 'right',
+    align: 'left',
   },
   {
     accessorKey: 'createdById',
     header: 'User ID',
-    align: 'right',
+    align: 'left',
   },
 ];
 
@@ -84,6 +79,17 @@ export default function UserOrder() {
     <div>
       <Navbar />
       <h3 style={{ marginLeft: '10%' }}>Booking history</h3>
+
+      <Button
+          color="primary"
+          onClick={handleExportData}
+          startIcon={<FileDownloadIcon />}
+          sx={{marginLeft:'150px' , background:'green' , marginBottom:'10px'}}
+          variant="contained"
+        >
+          Export All Data
+        </Button>
+
       <TableContainer
         component={Paper}
         sx={{
@@ -118,10 +124,8 @@ export default function UserOrder() {
                     key={column.accessorKey}
                     align={column.align || 'left'}
                   >
-                    {column.accessorKey === 'createdAt' ? (
+                    { column.accessorKey === 'createdAt' ? (
                       <TableCell align="right">{row.createdAt}</TableCell>
-                    ) : column.accessorKey === 'packageName' ? (
-                      <TableCell align="left">{row.packageName}</TableCell>
                     ) : column.accessorKey === 'package.lodging' ? (
                       <TableCell align="right">{row.package.lodging}</TableCell>
                     ) : column.accessorKey === 'package.transport' ? (
@@ -145,14 +149,6 @@ export default function UserOrder() {
           marginBottom: '20px',
         }}
       >
-        <Button
-          color="primary"
-          onClick={handleExportData}
-          startIcon={<FileDownloadIcon />}
-          variant="contained"
-        >
-          Export All Data
-        </Button>
       </Box>
       <Footer />
     </div>
