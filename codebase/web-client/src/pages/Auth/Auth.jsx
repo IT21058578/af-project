@@ -26,8 +26,6 @@ import * as jose from "jose";
 import { setUser } from "../../store/slices/auth-slice";
 import { useDispatch } from "react-redux";
 
-const publicAccessTokenKey = import.meta.env.VITE_PUBLIC_ACCESS_KEY;
-
 const authSchema = yup.object().shape({
   email: yup.string().email("Invalid email").required("Please enter your email"),
   firstName: yup.string().when("isSignup", {

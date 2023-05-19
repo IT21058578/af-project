@@ -12,47 +12,52 @@ import { Button } from '@mui/material';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import { useDispatch } from 'react-redux';
+import { useLazyGetPostQuery, useLikeDislikePostMutation } from "../../store/api/posts-api-slice";
+import { useNavigate } from 'react-router-dom';
 
-
-function FeaturedPost(props) {
-  const { post } = props;
-
+function FeaturedPost(post, setCurrentId) {
   const user = JSON.parse(localStorage.getItem('profile'));
-  const [likes, setLikes] = useState(post?.likes);
+  // const [likes, setLikes] = useState(post?.likes);
   const dispatch = useDispatch();
-  // const history = useHistory();
+  const navigate = useNavigate();
 
   const userId = user?.result.googleId || user?.result?._id;
-  // const hasLikedPost = post.likes.find((like) => like === userId);
+  // const hasLikedPost = likes.find((like) => like === userId);
+
+  const { data: postDetails } = useLazyGetPostQuery(post._id);
+  const [likes, setLikes] = useState(postDetails?.likes);
+  // const hasLikedPost = likes.find((like) => like === userId);
+  const [likeDislikePost] = useLikeDislikePostMutation();
 
   const handleLike = async () => {
-    dispatch(likePost(post._id));
+    await likeDislikePost({ postId: post._id });
 
     if (hasLikedPost) {
-      setLikes(post.likes.filter((id) => id !== userId));
+      setLikes(likes.filter((id) => id !== userId));
     } else {
-      setLikes([...post.likes, userId]);
+      setLikes([...likes, userId]);
     }
   };
 
   const Likes = () => {
-    // if (likes.length > 0) {
-    //   return likes.find((like) => like === userId)
-    //     ? (
-    //       <><ThumbUpAltIcon fontSize="small" />&nbsp;{likes.length}</>
-    //     ) : (
-    //       <><ThumbUpOffAltIcon fontSize="small" />&nbsp;{likes.length} </>
-    //     );
-    // }
+  //   if (likes.length > 0) {
+  //     return likes.find((like) => like === userId)
+  //       ? (
+  //         <><ThumbUpAltIcon fontSize="small" />&nbsp;{likes.length}</>
+  //       ) : (
+  //         <><ThumbUpOffAltIcon fontSize="small" />&nbsp;{likes.length} </>
+  //       );
+  //   }
 
-    return <><ThumbUpOffAltIcon fontSize="small" />&nbsp;</>;
+  //   return <><ThumbUpOffAltIcon fontSize="small" />&nbsp;</>;
   };
 
-  // const openPost = (e) => {
-  //   dispatch(getPost(post._id, history));
+  const openPost = (e) => {
+    dispatch(getPost(post._id, history));
 
-  //   history.push(`/posts/${post._id}`);
-  // };
+    navigate(`/posts/${post._id}`);
+  };
+
 
   return (
     <Grid item xs={12} md={6}>
