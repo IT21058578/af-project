@@ -24,8 +24,7 @@ function FeaturedPost(post, setCurrentId) {
   const userId = user?.result.googleId || user?.result?._id;
   // const hasLikedPost = likes.find((like) => like === userId);
 
-  const { data: postDetails } = useLazyGetPostQuery(post._id);
-  const [likes, setLikes] = useState(postDetails?.likes);
+  // const [likes, setLikes] = useState(postDetails?.likes);
   // const hasLikedPost = likes.find((like) => like === userId);
   const [likeDislikePost] = useLikeDislikePostMutation();
 

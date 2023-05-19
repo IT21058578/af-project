@@ -24,7 +24,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 const newBlogSchema = yup.object({
 	title: yup.string().required("Please enter the title"),
-	content: yup.string().required("Please enter the content"),
+	text: yup.string().required("Please enter the text"),
 });
 
 const theme = createTheme();
@@ -37,16 +37,16 @@ export default function NewBlog({ currentId, setCurrentId }) {
 		handleSubmit,
 	} = useForm({ resolver: yupResolver(newBlogSchema) });
 
-  // const clear = () => {
-  //   setCurrentId(0);
-  //   setPostData({ title: '', content: '', tags: [], selectedFile: '' });
-  // };
+  const clear = () => {
+    setCurrentId(0);
+    setPostData({ title: '', text: '', tags: [], selectedFile: '' });
+  };
 
   const user = useSelector((state) => state.user); 
 
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [selectedFile, setSelectedFile] = useState('');
+  const [text, settext] = useState('');
+  const [imageData, setSelectedFile] = useState('');
 
   const [createBlog, { isLoading }] = useCreatePostMutation();
   const [updateBlog, { isLoading: isUpdating }] = useEditPostMutation();
@@ -63,14 +63,20 @@ export default function NewBlog({ currentId, setCurrentId }) {
 
   const handlePublish = () => {
 
-    const postData = { title, content, selectedFile: selectedFile};
+    const tags = ["tags", "tag2"];
+    const postData = { title, text, tags: tags, imageData: imageData.toString()};
 
-    if (postId) {
-      updateBlog({ id: postId, data: postData });
-    } else {
-      createBlog(postData);
-      console.log("done");
+    try{
+      if (postId) {
+        updateBlog({ id: postId, data: postData });
+      } else {
+        createBlog(postData);
+        console.log(postData);
+      }
+    }catch(error){
+      console.log(error);
     }
+
   };
 
   const handleAddChip = (tag) => {
@@ -107,20 +113,20 @@ export default function NewBlog({ currentId, setCurrentId }) {
                 </Grid>
                 <Grid item xs={12}>
                 <Typography component="h1" variant="h6">
-                  Content *
+                  text *
                 </Typography>
                 <TextareaAutosize 
                     required
-                    id="content"
-                    name="content"
-                    label="Content of the blog"
+                    id="text"
+                    name="text"
+                    label="text of the blog"
                     autoComplete="shipping address-line2"
                     variant="standard"
                     multiline minRows={8}
                     sx={{ backgroundColor: 'lightgray', width:'100%' }}
-                    error={errors.content}
+                    error={errors.text}
                     isLoading={isSubmitting || isLoading}
-                    {...register("content")}
+                    {...register("text")}
                 />
                 </Grid>
                 <Grid item xs={12}>
@@ -135,7 +141,7 @@ export default function NewBlog({ currentId, setCurrentId }) {
                 /> */}
                 </Grid>
                 <Grid item xs={12} >
-                <FileBase type="file" multiple={false} onDone={({ base64 }) => setSelectedFile({ selectedFile: base64 })} />
+                <FileBase type="file" multiple={false} onDone={({ base64 }) => setSelectedFile({ imageData: base64 })} />
                 </Grid>
                 
             </Grid>
