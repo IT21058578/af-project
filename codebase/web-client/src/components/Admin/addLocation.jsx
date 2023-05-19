@@ -31,9 +31,9 @@ const AddLocationPage = () => {
       address: {
         addressLine1:'',
         addressLine2:'',
+        city: '',
+        province: '',
       },
-      city: '',
-      province: '',
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {

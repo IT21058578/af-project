@@ -48,9 +48,9 @@ const EditLocationPage = () => {
         address: {
           addressLine1,
           addressLine2,
+          city,
+          province,
         },
-        city,
-        province,
       };
 
       await editLocation(updatedLocation).unwrap();

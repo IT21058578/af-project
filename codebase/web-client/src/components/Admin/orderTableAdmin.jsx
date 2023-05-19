@@ -63,83 +63,83 @@ const csvExporter = new ExportToCsv(csvOptions);
 
 const AdminOrder = () => {
 
-  const [fetchOrders , {data: bookings , isLoading , isError , error }] = useLazySearchBookingsQuery();
+  // const [fetchOrders , {data: bookings , isLoading , isError , error }] = useLazySearchBookingsQuery();
 
-  useEffect(() => {
-    fetchOrders({});
-  }, [fetchOrders]);
+  // useEffect(() => {
+  //   fetchOrders({});
+  // }, [fetchOrders]);
 
-  if(isLoading){
-    return <div>
-      <div className="loader-container">
-      	  <div className="spinner"></div>
-      </div>
-    </div>
-  }
+  // if(isLoading){
+  //   return <div>
+  //     <div className="loader-container">
+  //     	  <div className="spinner"></div>
+  //     </div>
+  //   </div>
+  // }
 
-  if(isError){
-    return<div>Error: {error.message}</div>
-  }
+  // if(isError){
+  //   return<div>Error: {error.message}</div>
+  // }
 
-  const handleExportRows = (rows) => {
-    csvExporter.generateCsv(rows.map((row) => row.original));
-  };
+  // const handleExportRows = (rows) => {
+  //   csvExporter.generateCsv(rows.map((row) => row.original));
+  // };
 
-  const handleExportData = () => {
-    csvExporter.generateCsv(bookings?.content);
-  };
+  // const handleExportData = () => {
+  //   csvExporter.generateCsv(bookings?.content);
+  // };
 
-  return (
+  // return (
     
-    <MaterialReactTable
-      columns={columns}
-      data={bookings?.content}
-      enableRowSelection
-      positionToolbarAlertBanner="bottom"
-      renderTopToolbarCustomActions={({ table }) => (
-        <Box
-          sx={{ display: 'flex', gap: '1rem', p: '0.5rem', flexWrap: 'wrap' }}
-        >
-          <Button
-            color="primary"
-            onClick={handleExportData}
-            startIcon={<FileDownloadIcon />}
-            variant="contained"
-          >
-            Export All Data
-          </Button>
-          <Button
-            disabled={table.getPrePaginationRowModel().rows.length === 0}
-            onClick={() =>
-              handleExportRows(table.getPrePaginationRowModel().rows)
-            }
-            startIcon={<FileDownloadIcon />}
-            variant="contained"
-          >
-            Export All Rows
-          </Button>
-          <Button
-            disabled={table.getRowModel().rows.length === 0}
-            onClick={() => handleExportRows(table.getRowModel().rows)}
-            startIcon={<FileDownloadIcon />}
-            variant="contained"
-          >
-            Export Page Rows
-          </Button>
-          <Button
-            disabled={
-              !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-            }
-            onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-            startIcon={<FileDownloadIcon />}
-            variant="contained"
-          >
-            Export Selected Rows
-          </Button>
-        </Box>
-      )}
-    />
-  );
+  //   <MaterialReactTable
+  //     columns={columns}
+  //     data={bookings?.content}
+  //     enableRowSelection
+  //     positionToolbarAlertBanner="bottom"
+  //     renderTopToolbarCustomActions={({ table }) => (
+  //       <Box
+  //         sx={{ display: 'flex', gap: '1rem', p: '0.5rem', flexWrap: 'wrap' }}
+  //       >
+  //         <Button
+  //           color="primary"
+  //           onClick={handleExportData}
+  //           startIcon={<FileDownloadIcon />}
+  //           variant="contained"
+  //         >
+  //           Export All Data
+  //         </Button>
+  //         <Button
+  //           disabled={table.getPrePaginationRowModel().rows.length === 0}
+  //           onClick={() =>
+  //             handleExportRows(table.getPrePaginationRowModel().rows)
+  //           }
+  //           startIcon={<FileDownloadIcon />}
+  //           variant="contained"
+  //         >
+  //           Export All Rows
+  //         </Button>
+  //         <Button
+  //           disabled={table.getRowModel().rows.length === 0}
+  //           onClick={() => handleExportRows(table.getRowModel().rows)}
+  //           startIcon={<FileDownloadIcon />}
+  //           variant="contained"
+  //         >
+  //           Export Page Rows
+  //         </Button>
+  //         <Button
+  //           disabled={
+  //             !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+  //           }
+  //           onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+  //           startIcon={<FileDownloadIcon />}
+  //           variant="contained"
+  //         >
+  //           Export Selected Rows
+  //         </Button>
+  //       </Box>
+  //     )}
+  //   />
+  // );
 };
 
 export default AdminOrder;
