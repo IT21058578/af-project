@@ -1,42 +1,49 @@
 import { Router } from "express";
 import { UserController } from "../controllers/user-controller.js";
 import validateSchema from "../middleware/validate-schema.js";
+import {
+	checkPageOptions,
+	checkUserDetails,
+	checkUserFields,
+	checkUserId,
+} from "../utils/schema-validation-utils.js";
+import authorizeRequest from "../middleware/authorize-request.js";
+import { Role } from "../constants/constants.js";
 
 const router = Router();
 
-router.delete(
-	"/:id",
-	...validateSchema(
-		{
-			email: { isEmail: true },
-			password: { isString: true },
-		},
-		["body"]
-	),
-	UserController.deleteUser
+router.route("/search").get(
+	...validateSchema({
+		...checkPageOptions,
+		...checkUserFields(true, "query"),
+	}),
+	UserController.searchUsers
 );
 
-router.put(
-	"/:id",
-	...validateSchema(
-		{
-			firstName: { isString: true },
-			lastName: { isString: true },
-			mobile: { isString: true },
-			dateOfBirth: { isDate: true },
-			isSubscribed: { isBoolean: true },
-			email: { isEmail: true },
-			password: { isString: true },
-		},
-		["body"]
-	),
-	UserController.editUser
-);
-
-router.get(
-	"/:id",
-	...validateSchema({ id: { isMongoId: true } }, ["params"]),
-	UserController.getUser
-);
+router
+	.route("/:userId")
+	.get(
+		...validateSchema({
+			...checkUserId,
+		}),
+		UserController.getUser
+	)
+	.put(
+		authorizeRequest([Role.USER]),
+		...validateSchema({
+			...checkUserDetails,
+			...checkUserId,
+			...checkUserFields(true, "body"),
+		}),
+		UserController.editUser
+	)
+	.delete(
+		authorizeRequest([Role.USER]),
+		...validateSchema({
+			...checkUserDetails,
+			...checkUserId,
+		}),
+		UserController.deleteUser
+	);
 
 export default router;

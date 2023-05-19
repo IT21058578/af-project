@@ -18,7 +18,7 @@ export const postsApi = baseApi.injectEndpoints({
 		createPost: builder.mutation({
 			query: (body) => ({
 				url: `${POSTS_URL}/`,
-				methood: "POST",
+				method: "POST",
 				body,
 			}),
 		}),

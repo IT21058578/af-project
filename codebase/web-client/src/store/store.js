@@ -1,9 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
-// Or from '@reduxjs/toolkit/query/react'
-import { setupListeners } from "@reduxjs/toolkit/query";
-import { pokemonApi } from "./services/pokemon";
 import { baseApi } from "./api/base-api-slice";
 import { authReducer } from "./slices/auth-slice";
+import { setupListeners } from "@reduxjs/toolkit/dist/query";
 
 export const store = configureStore({
 	reducer: {
@@ -12,3 +10,5 @@ export const store = configureStore({
 	},
 	middleware: (getDefaults) => getDefaults().concat(baseApi.middleware),
 });
+
+setupListeners(store.dispatch);

@@ -7,6 +7,7 @@ import {
 	checkLocationFields,
 	checkLocationId,
 	checkPageOptions,
+	checkUserDetails,
 } from "../utils/schema-validation-utils.js";
 
 const router = express.Router();
@@ -15,13 +16,14 @@ const router = express.Router();
 router.route("/search").get(
 	...validateSchema({
 		...checkPageOptions,
-		...checkLocationFields(true),
+		...checkLocationFields(true, "query"),
 	}),
 	LocationController.searchLocations
 );
 router.route("/").post(
 	authorizeRequest([Role.ADMIN]),
 	...validateSchema({
+		...checkUserDetails,
 		...checkLocationFields(),
 	}),
 	LocationController.createLocation
@@ -34,12 +36,19 @@ router
 	)
 	.put(
 		authorizeRequest([Role.ADMIN]),
-		...validateSchema({ ...checkLocationId, ...checkLocationFields(true) }),
+		...validateSchema({
+			...checkUserDetails,
+			...checkLocationId,
+			...checkLocationFields(true),
+		}),
 		LocationController.editLocation
 	)
 	.delete(
 		authorizeRequest([Role.ADMIN]),
-		...validateSchema({ ...checkLocationId }),
+		...validateSchema({
+			...checkUserDetails,
+			...checkLocationId,
+		}),
 		LocationController.deleteLocation
 	);
 

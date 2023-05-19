@@ -1,7 +1,6 @@
 import { Comment } from "../models/comment-model.js";
-import { Post } from "../models/post-model.js";
 import { ReasonPhrases } from "http-status-codes";
-import { buildPage, buildPaginationPipeline } from "../utils/mongoose-utils.js";
+import {  PageUtils, buildPaginationPipeline } from "../utils/mongoose-utils.js";
 import { TComment } from "../types/model-types.js";
 import {
 	IAuthorizedUser,
@@ -9,25 +8,45 @@ import {
 	TExtendedPageOptions,
 } from "../types/misc-types.js";
 import { Role } from "../constants/constants.js";
+import { CommentTransformer } from "../transformers/comment-transformer.js";
 
-const getComment = async (id: string) => {
-	const comment = await Comment.findById(id).exec();
+const getComment = async (id: string, authorizedUserId?: string) => {
+	const comment = await Comment.findById(id);
 	if (comment === null) throw Error(ReasonPhrases.NOT_FOUND);
-	return comment.toObject();
+	return await CommentTransformer.buildCommentVO(
+		comment.toObject(),
+		authorizedUserId
+	);
 };
 
-const searchCommentsByPost = async (
-	commentSearchOptions: TExtendedPageOptions<TComment>
+const searchComments = async (
+	commentSearchOptions: TExtendedPageOptions<TComment>,
+	authorizedUserId?: string
 ) => {
-	const paginationResult = (await Comment.aggregate(
-		buildPaginationPipeline(commentSearchOptions)
-	).exec()) as any as IPaginationResult<TComment>;
-	return buildPage(paginationResult, commentSearchOptions);
+	const { data, ...rest } = (
+		await Comment.aggregate(buildPaginationPipeline(commentSearchOptions))
+	)[0] as any as IPaginationResult<TComment>;
+	const commentVOs = await Promise.all(
+		data.map(async (comment) => {
+			return await CommentTransformer.buildCommentVO(comment, authorizedUserId);
+		})
+	);
+	return PageUtils.buildPage(
+		{ data: commentVOs, ...rest },
+		commentSearchOptions
+	);
 };
 
-const createComment = async (comment: Partial<TComment>) => {
+const createComment = async (
+	comment: Partial<TComment>,
+	authorizedUserId?: string
+) => {
 	const newComment = new Comment(comment);
-	return await newComment.save();
+	const savedComment = await newComment.save();
+	return await CommentTransformer.buildCommentVO(
+		savedComment.toObject(),
+		authorizedUserId
+	);
 };
 
 const editComment = async (
@@ -35,18 +54,20 @@ const editComment = async (
 	authorizedUser: IAuthorizedUser,
 	editedComment: Partial<TComment>
 ) => {
-	const existingComment = await Comment.findById(id).exec();
+	const existingComment = await Comment.findById(id);
 	if (existingComment === null) throw Error(ReasonPhrases.NOT_FOUND);
 
 	if (
-		authorizedUser.id !== existingComment.userId &&
+		authorizedUser.id !== existingComment.createdById &&
 		!authorizedUser.roles.includes(Role.ADMIN)
 	) {
 		throw Error(ReasonPhrases.UNAUTHORIZED);
 	}
 
-	existingComment.text = editedComment.text;
-	return (await existingComment.save()).toObject();
+	existingComment.text = editedComment.text || existingComment.text;
+	return CommentTransformer.buildCommentVO(
+		(await existingComment.save()).toObject()
+	);
 };
 
 const deleteComment = async (id: string, authorizedUser: IAuthorizedUser) => {
@@ -54,7 +75,7 @@ const deleteComment = async (id: string, authorizedUser: IAuthorizedUser) => {
 	if (existingComment === null) throw Error(ReasonPhrases.NOT_FOUND);
 
 	if (
-		authorizedUser.id !== existingComment.userId &&
+		authorizedUser.id !== existingComment.createdById &&
 		!authorizedUser.roles.includes("ADMIN")
 	) {
 		throw Error(ReasonPhrases.UNAUTHORIZED);
@@ -83,7 +104,10 @@ const createlikeDislikeComment = async (
 		existingComment[reactionType].push(userId);
 	}
 
-	return (await existingComment.save()).toObject();
+	return CommentTransformer.buildCommentVO(
+		(await existingComment.save()).toObject(),
+		userId
+	);
 };
 
 const deleteLikeDislikeComment = async (
@@ -91,7 +115,7 @@ const deleteLikeDislikeComment = async (
 	userId: string,
 	reactionType: "likes" | "dislikes"
 ) => {
-	const existingComment = await Post.findById(id);
+	const existingComment = await Comment.findById(id);
 	if (existingComment === null) throw Error(ReasonPhrases.NOT_FOUND);
 	if (!existingComment[reactionType].includes(userId))
 		throw Error(ReasonPhrases.NOT_FOUND);
@@ -103,7 +127,7 @@ const deleteLikeDislikeComment = async (
 
 export const CommentService = {
 	getComment,
-	searchCommentsByPost,
+	searchComments,
 	createComment,
 	editComment,
 	deleteComment,

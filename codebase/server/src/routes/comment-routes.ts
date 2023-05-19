@@ -2,7 +2,9 @@ import express from "express";
 import { CommentController } from "../controllers/comment-controller.js";
 import validateSchema from "../middleware/validate-schema.js";
 import {
+	checkCommentFields,
 	checkCommentId,
+	checkPageOptions,
 	checkReactionType,
 	checkUserDetails,
 } from "../utils/schema-validation-utils.js";
@@ -11,32 +13,13 @@ import { Role } from "../constants/constants.js";
 
 const router = express.Router();
 
-// TODO: Move these routes so they arent nested
-
-// Post Comments Routes
-router.post(
-	"/",
-	authorizeRequest([Role.USER]),
+router.route("/search").get(
 	...validateSchema({
-		postId: {
-			isMongoId: true,
-			errorMessage: "postId must be an ObjectId",
-			in: ["params"],
-		},
-		parentId: {
-			isMongoId: true,
-			optional: true,
-			errorMessage: "parentId must be an ObjectId",
-		},
-		text: {
-			isString: true,
-			errorMessage: "Text must be a string and not empty",
-		},
+		...checkPageOptions,
+		...checkCommentFields(true, false, "query"),
 	}),
-	CommentController.createComment
+	CommentController.searchComments
 );
-
-// TODO: Search comments
 
 router
 	.route("/:commentId")
@@ -49,17 +32,16 @@ router
 	.put(
 		authorizeRequest([Role.USER]),
 		...validateSchema({
+			...checkUserDetails,
 			...checkCommentId,
-			text: {
-				isString: true,
-				errorMessage: "Text must be a string and not empty",
-			},
+			...checkCommentFields(true, true),
 		}),
 		CommentController.editComment
 	)
 	.delete(
 		authorizeRequest([Role.USER]),
 		...validateSchema({
+			...checkUserDetails,
 			...checkCommentId,
 		}),
 		CommentController.deleteComment
@@ -72,6 +54,7 @@ router
 	.delete(
 		authorizeRequest([Role.USER]),
 		...validateSchema({
+			...checkUserDetails,
 			...checkCommentId,
 			...checkReactionType,
 			...checkUserDetails,
@@ -81,6 +64,7 @@ router
 	.post(
 		authorizeRequest([Role.USER]),
 		...validateSchema({
+			...checkUserDetails,
 			...checkCommentId,
 			...checkReactionType,
 			...checkUserDetails,

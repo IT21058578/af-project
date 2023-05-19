@@ -50,6 +50,15 @@ router.post(
 );
 
 router.put(
+	"/authorize",
+	...validateSchema({
+		email: { isEmail: true, in: ["query"] },
+		authorizationToken: { isUUID: true, in: ["query"] },
+	}),
+	AuthController.authorizeUser
+);
+
+router.put(
 	"/reset-password",
 	...validateSchema({
 		email: { isString: true },
