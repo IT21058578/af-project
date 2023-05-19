@@ -4,41 +4,24 @@ import info1 from "../../assets/info1.png";
 import info2 from "../../assets/info2.png";
 import info3 from "../../assets/info3.png";
 import { Link } from "react-router-dom";
+import { useLazyGetTripPackgeQuery } from "../../store/api/package-api-slice";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@mui/material";
 
-export default function Package() {
-  const data = [
-    {
-      image: "https://res.cloudinary.com/thrillophilia/image/upload/c_fill,f_auto,fl_progressive.strip_profile,g_auto,h_600,q_auto,w_auto/v1/filestore/7xvzjq6q8ch5a5ueq3rw9ng77k08_%5BDownloader.la%5D-619ca07794280.jpg",
-      title: "Mirissa",
-      subTitle: "1 Day Splendors of Sri Lanka with Mirissa",
-      cost: "1,100",
-      duration: "Approx 1 night trip",
-    },
-    {
-      image: "https://assets.traveltriangle.com/blog/wp-content/uploads/2015/02/Sea-Surfing-at-Arugam-Bay.jpg",
-      title: "Arugam Bay",
-      subTitle: "Turquoise Heaven For Adrenaline-Junkies",
-      cost: "1,400",
-      duration: "Approx 2 night 2 day trip",
-    },
-    {
-      image: "https://assets.traveltriangle.com/blog/wp-content/uploads/2015/02/Sigiriya-rock-fortress-in-Sri-Lanka.jpg",
-      title: "Sigiriya and Polonnaruwa",
-      subTitle: "Ruggedness Amidst The Greenery",
-      cost: "2,800",
-      duration: "Approx 3 night 2 day trip",
-    },
-  ];
-
-  const packages = [
-    "The Weekend Break",
-    "The Package Holiday",
-    "The Group Tour",
-    "Long Term Slow Travel",
-  ];
-
+const Package= ({ packages }) => {
+ 
+  const navigate = useNavigate();
+  const [getTripPackageQuery] = useLazyGetTripPackgeQuery();
   const [active, setActive] = useState(1);
-  const [tour, setTour] = useState(data);
+
+  const handleViewDetails = (tripPackageId) => {
+    getTripPackageQuery({ tripPackageId }).then((result) => {
+      if (!result.error) {
+        navigate(`/tour/details/${tripPackageId}`);
+      }
+    });
+  };
+
   return (
     <Section id="recommend">
       <div className="title">
@@ -49,24 +32,31 @@ export default function Package() {
         </ul>
       </div>
       <div className="destinations">
-        {tour.map((destination) => {
+        {packages.map((destination) => {
+
+          const lodging = new Number(destination?.price?.lodging?.threeStar);
+          const perPerson = new Number(destination?.price?.perPerson);
+          const perPersonFood = new Number(destination?.price?.perPersonFood);
+          const transport = new Number(destination?.price?.transport?.group);
+
+          const sum = lodging + perPerson + perPersonFood + transport;
+
           return (
-            <div className="destination" key={destination.title}>
-              <Link to={`/deatails`}>View details</Link>
-              <img src={destination.image} alt="" />
-              <h3>{destination.title}</h3>
-              <p>{destination.subTitle}</p>
+            <div className="destination" key={destination.id}>
+             <Button onClick={() => handleViewDetails(destination.id)}>View detail</Button>
+              <img src={destination.imageURl} alt="" />
+              <h3>{destination.name}</h3>
+              <p>{destination.description}</p>
               <div className="info">
                 <div className="services">
                   <img src={info1} alt="" />
                   <img src={info2} alt="" />
                   <img src={info3} alt="" />
                 </div>
-                <h4>{destination.cost}</h4>
+                <h4>LKR: {sum}</h4>
               </div>
               <div className="distance">
-                <span>1000 Kms</span>
-                <span>{destination.duration}</span>
+                <span>{destination.totalDistance} Kms</span>
               </div>
             </div>
           );
@@ -75,6 +65,8 @@ export default function Package() {
     </Section>
   );
 }
+
+export default Package;
 
 const Section = styled.section`
   padding: 2rem 0;

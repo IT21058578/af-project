@@ -1,9 +1,10 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import MaterialReactTable from 'material-react-table';
 import { Box, Button } from '@mui/material';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { ExportToCsv } from 'export-to-csv'; //or use your library of choice here
-import { data } from './orderData';
+import { useLazySearchBookingsQuery } from '../../store/api/booking-api-slice';
+import '../../pages/Tours/loading.css'
 
 //defining columns outside of the component is fine, is stable
 const columns = [
@@ -45,6 +46,7 @@ const columns = [
         accessorKey: 'totalPayment',
         header: 'Total Payment',
       },
+      
 ];
 
 const csvOptions = {
@@ -60,18 +62,38 @@ const csvOptions = {
 const csvExporter = new ExportToCsv(csvOptions);
 
 const AdminOrder = () => {
+
+  const [fetchOrders , {data: bookings , isLoading , isError , error }] = useLazySearchBookingsQuery();
+
+  useEffect(() => {
+    fetchOrders({});
+  }, [fetchOrders]);
+
+  if(isLoading){
+    return <div>
+      <div className="loader-container">
+      	  <div className="spinner"></div>
+      </div>
+    </div>
+  }
+
+  if(isError){
+    return<div>Error: {error.message}</div>
+  }
+
   const handleExportRows = (rows) => {
     csvExporter.generateCsv(rows.map((row) => row.original));
   };
 
   const handleExportData = () => {
-    csvExporter.generateCsv(data);
+    csvExporter.generateCsv(bookings?.content);
   };
 
   return (
+    
     <MaterialReactTable
       columns={columns}
-      data={data}
+      data={bookings?.content}
       enableRowSelection
       positionToolbarAlertBanner="bottom"
       renderTopToolbarCustomActions={({ table }) => (

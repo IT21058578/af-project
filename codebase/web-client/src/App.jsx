@@ -10,8 +10,10 @@ import TourDetails from "./pages/Tours/tourDetail";
 import AdminHome from "./pages/Admin/AdminHome";
 import Author from "./pages/Author";
 import UserOrder from "./pages/Tours/BookingHistory";
-import AddPackage from "./components/Admin/tourPlanManagment"
+import AddTripPackage from "./components/Admin/addTour";
 import EditTripPackage from "./components/Admin/editTour";
+import AddLocationPage from "./components/Admin/addLocation";
+import EditLocationPage from "./components/Admin/editLocation";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -35,10 +37,13 @@ const App = () => {
 					<Route exact path="/details" element={<TourDetails />} />
 					<Route exact path="/tour/details/:tripPackageId" element={<TourDetails />} />
 					<Route exact path="/admin" element={<AdminHome />} />
-					<Route exact path="/tour/add/:tripPackageId" element={<EditTripPackage />} />
+					<Route exact path="/tour/edit/:tripPackageId" element={<EditTripPackage />} />
+					<Route exact path="location/edit/:tripLocationId" element={<EditLocationPage />} />
 					<Route exact path="/blogdetail" element={<BlogDetail />} />
 					<Route exact path="/author" element={<Author />} />
+					<Route exact path="/addtrip" element={<AddTripPackage />} />
 					<Route exact path="/userbooking" element={<UserOrder />} />
+					<Route exact path="/addlocation" element={<AddLocationPage />} />
 				</Routes>
 			</div>
 			{/* <Footer /> */}

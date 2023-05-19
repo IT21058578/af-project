@@ -1,22 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useLazyGetTripPackgeQuery, useEditTripPackgeMutation } from '../../store/api/package-api-slice';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useCreateTripPackgeMutation } from '../../store/api/package-api-slice';
 import { TextField, Button, Container, Typography, Grid, Paper } from '@mui/material';
 import Navbar from '../NavBar/NavBar';
 import Footer from '../../components/Footer';
-import '../../pages/Tours/loading.css';
 
-const EditTripPackage = () => {
-  const { tripPackageId } = useParams();
+const AddTripPackage = () => {
   const history = useNavigate();
-
-  const [getTripPackageQuery,{ data: tripPackage, isFetching }] = useLazyGetTripPackgeQuery();
-  const [editTripPackage] = useEditTripPackgeMutation();
+  const [createTripPackage] = useCreateTripPackgeMutation();
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [createdById, setCreatedById] = useState('');
-  const [lastUpdatedById, setLastUpdatedById] = useState('');
   const [totalDistance, setTotalDistance] = useState(0);
   const [imageURLs, setImageURLs] = useState([]);
   const [price, setPrice] = useState({
@@ -50,43 +45,16 @@ const EditTripPackage = () => {
   const [views, setViews] = useState(0);
   const [isFeatured, setIsFeatured] = useState(false);
 
-  useEffect(() => {
-    console.log(tripPackage);
-    if (tripPackage) {
-      setName(tripPackage?.name);
-      setDescription(tripPackage?.description);
-      setCreatedById(tripPackage?.createdById);
-      setLastUpdatedById(tripPackage?.lastUpdatedById || '');
-      setTotalDistance(tripPackage?.totalDistance);
-      setImageURLs(tripPackage?.imageURLs);
-      setPrice(tripPackage?.price);
-      setDiscount(tripPackage?.discount);
-      setPlan(tripPackage?.plan);
-      setLimitedDateRange(tripPackage?.limitedDateRange);
-      setViews(tripPackage?.views);
-      setIsFeatured(tripPackage?.isFeatured);
-    }
-  }, [tripPackage]);
-  
-  useEffect(() => {
-    console.log(tripPackageId)
-    if (tripPackageId) {
-      getTripPackageQuery({ tripPackageId });
-    }
-  }, [getTripPackageQuery, tripPackageId]);
-
-  const handleEdit = async (e) => {
+  const handleAdd = async (e) => {
     e.preventDefault();
 
     try {
       // Perform any necessary validation on input fields
 
-      const updatedTripPackage = {
-        id: tripPackageId,
+      const newTripPackage = {
         name,
         description,
         createdById,
-        lastUpdatedById,
         totalDistance,
         imageURLs,
         price,
@@ -97,31 +65,23 @@ const EditTripPackage = () => {
         isFeatured,
       };
 
-      await editTripPackage(updatedTripPackage).unwrap();
-      // Perform any other necessary tasks upon successful edit
+      await createTripPackage(newTripPackage).unwrap();
+      // Perform any other necessary tasks upon successful creation
       history.push('/'); // Redirect back to the trip package list page
     } catch (error) {
-      console.log('Error editing trip package:', error);
+      console.log('Error adding trip package:', error);
     }
   };
-
-  if (isFetching) {
-    return <div>
-      <div className="loader-container">
-      	  <div className="spinner"></div>
-      </div>
-    </div>;
-  }
 
   return (
     <div>
     <Navbar/>
     <Container maxWidth="md" sx={{marginTop:'60px' , marginBottom:'70px'}}>
       <Typography variant="h4" align="center" gutterBottom>
-        Edit Trip Package
+        Add Trip Package
       </Typography>
       <Paper elevation={3} sx={{ p: 4 }}>
-        <form onSubmit={handleEdit}>
+        <form onSubmit={handleAdd}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -129,6 +89,7 @@ const EditTripPackage = () => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 fullWidth
+                required
               />
             </Grid>
             <Grid item xs={12}>
@@ -139,6 +100,7 @@ const EditTripPackage = () => {
                 multiline
                 rows={4}
                 fullWidth
+                required
               />
             </Grid>
             <Grid item xs={12}>
@@ -147,14 +109,7 @@ const EditTripPackage = () => {
                 value={createdById}
                 onChange={(e) => setCreatedById(e.target.value)}
                 fullWidth
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                label="Last Updated By"
-                value={lastUpdatedById}
-                onChange={(e) => setLastUpdatedById(e.target.value)}
-                fullWidth
+                required
               />
             </Grid>
             <Grid item xs={12}>
@@ -164,6 +119,7 @@ const EditTripPackage = () => {
                 value={totalDistance}
                 onChange={(e) => setTotalDistance(e.target.value)}
                 fullWidth
+                required
               />
             </Grid>
             <Grid item xs={12}>
@@ -185,6 +141,7 @@ const EditTripPackage = () => {
                   setPrice((prevPrice) => ({ ...prevPrice, perPerson: e.target.value }))
                 }
                 fullWidth
+                required
               />
             </Grid>
             <Grid item xs={12}>
@@ -276,14 +233,16 @@ const EditTripPackage = () => {
                 label="Per Person Food Price"
                 type="number"
                 value={price.perPersonFood}
-                onChange={(e) => setPrice((prevPrice) => ({ ...prevPrice, perPersonFood: e.target.value }))}
+                onChange={(e) =>
+                  setPrice((prevPrice) => ({ ...prevPrice, perPersonFood: e.target.value }))
+                }
                 fullWidth
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 label="Discount Type"
-                value={discount?.type?? "FLAT"}
+                value={discount.type}
                 onChange={(e) => setDiscount((prevDiscount) => ({ ...prevDiscount, type: e.target.value }))}
                 fullWidth
               />
@@ -292,7 +251,7 @@ const EditTripPackage = () => {
               <TextField
                 label="Discount Value"
                 type="number"
-                value={discount?.value?? "0"}
+                value={discount.value}
                 onChange={(e) => setDiscount((prevDiscount) => ({ ...prevDiscount, value: e.target.value }))}
                 fullWidth
               />
@@ -300,7 +259,7 @@ const EditTripPackage = () => {
             {/* Add TextField components for the remaining fields */}
             <Grid item xs={12} align="center">
               <Button type="submit" variant="contained" color="primary">
-                Save Changes
+                Add Trip Package
               </Button>
             </Grid>
           </Grid>
@@ -312,4 +271,4 @@ const EditTripPackage = () => {
   );
 };
 
-export default EditTripPackage;
+export default AddTripPackage;

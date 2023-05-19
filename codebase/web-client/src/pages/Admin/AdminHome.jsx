@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Dashboard from './AdminDash';
 import AdminTourHome from '../../components/Admin/tourPlanManagment';
+import AdminLocationHome from '../../components/Admin/tourLocationManagment';
 import Navbar from '../../components/NavBar/NavBar';
 import Footer from '../../components/Footer';
 import UserManagment from '../../components/Admin/userManagment';
@@ -23,7 +24,7 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ p: 4 }}>
           <Typography>{children}</Typography>
         </Box>
       )}
@@ -61,6 +62,7 @@ export default function AdminHome() {
           <Tab label="User Managment" {...a11yProps(1)} />
           <Tab label="Authors Managment" {...a11yProps(2)} />
           <Tab label="Tour Managment" {...a11yProps(3)} />
+          <Tab label="Location Managment" {...a11yProps(4)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -74,6 +76,9 @@ export default function AdminHome() {
       </TabPanel>
       <TabPanel value={value} index={3}>
        <AdminTourHome/>
+      </TabPanel>
+      <TabPanel value={value} index={4}>
+       <AdminLocationHome/>
       </TabPanel>
     </Box>
     <Footer />

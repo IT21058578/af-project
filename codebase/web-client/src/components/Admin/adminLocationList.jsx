@@ -1,48 +1,48 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { useLazyGetTripPackgeQuery } from "../../store/api/package-api-slice";
-import { useDeleteTripPackgeMutation } from "../../store/api/package-api-slice";
+import { useDeleteLocationsMutation } from "../../store/api/location-api-slice";
+import { useLazyGetLocationsQuery } from "../../store/api/location-api-slice";
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "@mui/material";
 
-const AdminPackage = ({packages}) =>{
+const AdminLocation = ({locations}) =>{
   
   const navigate = useNavigate();
-  const [getTripPackageQuery] = useLazyGetTripPackgeQuery();
-  const [deleteTripPackage] = useDeleteTripPackgeMutation();
+  const [getLocationQuery] = useLazyGetLocationsQuery();
+  const [deleteLocation] = useDeleteLocationsMutation();
   
   const handleDelete = async (id) => {
     try {
-      await deleteTripPackage({ tripPackageId: id });
+      await deleteLocation({ tripLocationId: id });
       // Perform any other necessary tasks upon successful deletion
-      navigate(`/`) // Navigate back to the trip package list page
+      navigate(`/`) // Navigate back to the trip Location list page
     } catch (error) {
-      console.log('Error deleting trip package:', error);
+      console.log('Error deleting Location:', error);
     }
   };
 
-  const handleEditDetails = (tripPackageId) => {
-    getTripPackageQuery({ tripPackageId }).then((result) => {
+  const handleEditDetails = (tripLocationId) => {
+    getLocationQuery({ tripLocationId }).then((result) => {
       if (!result.error) {
-        navigate(`/tour/edit/${tripPackageId}`);
+        navigate(`/location/edit/${tripLocationId}`);
       }
     });
   };
 
-  // const [tour, setTour] = useState(data);
+  // const [loc, setloc] = useState(data);
   return (
     <Section id="recommend">
       <div className="title" style={{marginBottom:'20px'}}>
-        <h2>Manage Destinations</h2>
+        <h2>Manage Locations</h2>
       </div>
       <div className="destinations">
-        {packages.map((tour) => {
+        {locations.map((location) => {
           return (
-            <div className="destination" key={tour.id}>
-              <h3>{tour.name}</h3>
-              <Button variant="outlined" color="success" onClick={() => handleEditDetails(tour.id)}>Edit Package</Button>
-              <Button variant="outlined" color="error" onClick={() => handleDelete(tour.id)}>Delete Package</Button>
+            <div className="destination" key={location.id}>
+              <h3>{location.name}</h3>
+              <Button variant="outlined" color="success" onClick={() => handleEditDetails(location.id)}>Edit Location</Button>
+              <Button variant="outlined" color="error" onClick={() => handleDelete(location.id)}>Delete Location</Button>
             </div>
           );
         })}
@@ -51,7 +51,7 @@ const AdminPackage = ({packages}) =>{
   );
 }
 
-export default AdminPackage;
+export default AdminLocation;
 
 const Section = styled.section`
   padding: 2rem 0;
@@ -59,7 +59,7 @@ const Section = styled.section`
     color:black;
     text-align: center;
   }
-  .packages {
+  .Locations {
     color:black;
     display: flex;
     justify-content: center;
@@ -122,7 +122,7 @@ const Section = styled.section`
     }
   }
   @media screen and (min-width: 280px) and (max-width: 768px) {
-    .packages {
+    .Locations {
       ul {
         li {
           padding: 0 0.5rem;

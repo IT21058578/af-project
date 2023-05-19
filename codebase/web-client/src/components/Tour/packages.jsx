@@ -8,10 +8,10 @@ import { useLazyGetTripPackgeQuery } from "../../store/api/package-api-slice";
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "@mui/material";
 
-const Package = ({packages}) =>{
-  
+const Package = ({ packages }) => {
   const navigate = useNavigate();
   const [getTripPackageQuery] = useLazyGetTripPackgeQuery();
+  const [active, setActive] = useState(1);
 
   const handleViewDetails = (tripPackageId) => {
     getTripPackageQuery({ tripPackageId }).then((result) => {
@@ -21,7 +21,6 @@ const Package = ({packages}) =>{
     });
   };
 
-
   const typepackages = [
     "New Packages",
     "Most Popular Packages",
@@ -29,8 +28,43 @@ const Package = ({packages}) =>{
     "Long Term Slow Travel",
   ];
 
-  const [active, setActive] = useState(1);
-  // const [tour, setTour] = useState(data);
+  // const endDatetime = new Date(packages?.limitedDateRange?.endDate);
+  // const startDatetime = new Date(packages?.limitedDateRange?.startDate);
+
+  // const timeDifference = endDatetime.getTime() - startDatetime.getTime();
+  // const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+  const targetTime = new Date("2023-05-16T08:08:17.097Z");
+
+  const filteredPackages = packages.filter((tour) => {
+    switch (active) {
+      case 1:
+        const createdAtTime = new Date(tour.createdAt);
+       return createdAtTime > targetTime;
+      case 2:
+        const createdAtTime1 = new Date(tour.createdAt);
+       return createdAtTime1 > targetTime;
+      case 3:
+        const endDatetime = new Date(tour?.limitedDateRange?.endDate);
+        const startDatetime = new Date(tour?.limitedDateRange?.startDate);
+
+        const timeDifference = endDatetime.getTime() - startDatetime.getTime();
+        const hours = Math.floor(timeDifference / (1000 * 60 * 60));
+
+        return hours < 24;
+      case 4:
+        const endDatetime1 = new Date(tour?.limitedDateRange?.endDate);
+        const startDatetime1 = new Date(tour?.limitedDateRange?.startDate);
+
+        const timeDifference1 = endDatetime1.getTime() - startDatetime1.getTime();
+        const hours1 = Math.floor(timeDifference1 / (1000 * 60 * 60));
+
+        return hours1 > 24;
+      default:
+        return true;
+    }
+  });
+
   return (
     <Section id="recommend">
       <div className="title">
@@ -38,46 +72,51 @@ const Package = ({packages}) =>{
       </div>
       <div className="packages">
         <ul>
-          {typepackages.map((pkg, index) => {
-            return (
-              <li
-                className={active === index + 1 ? "active" : ""}
-                onClick={() => setActive(index + 1)}
-              >
-                {pkg}
-              </li>
-            );
-          })}
+          {typepackages.map((pkg, index) => (
+            <li
+              className={active === index + 1 ? "active" : ""}
+              onClick={() => setActive(index + 1)}
+              key={index}
+            >
+              {pkg}
+            </li>
+          ))}
         </ul>
       </div>
       <div className="destinations">
-        {packages.map((tour) => {
-          return (
-            <div className="destination" key={tour.id}>
-              <Button onClick={() => handleViewDetails(tour.id)}>View detail</Button>
-              {/* <Link to={`/tour/details/${tour.name}`}>View details</Link> */}
-              <img src={packages.imageURLs} alt="" />
-              <h3>{tour.name}</h3>
-              {/* <p>{packages.subTitle}</p> */}
-              <div className="info">
-                <div className="services">
-                  <img src={info1} alt="" />
-                  <img src={info2} alt="" />
-                  <img src={info3} alt="" />
-                </div>
-                {/* <h4>{packages.cost}</h4> */}
+       {filteredPackages.map((destination) => {
+
+        const lodging = new Number(destination?.price?.lodging?.threeStar);
+        const perPerson = new Number(destination?.price?.perPerson);
+        const perPersonFood = new Number(destination?.price?.perPersonFood);
+        const transport = new Number(destination?.price?.transport?.group);
+
+        const sum = lodging + perPerson + perPersonFood + transport;
+
+        return (
+          <div className="destination" key={destination.id}>
+           <Button onClick={() => handleViewDetails(destination.id)}>View detail</Button>
+            <img src={destination.imageURls} alt="" />
+            <h3>{destination.name}</h3>
+            <div className="info">
+              <div className="services">
+                <img src={info1} alt="" />
+                <img src={info2} alt="" />
+                <img src={info3} alt="" />
               </div>
-              <div className="distance">
-                {/* <span>1000 Kms</span> */}
-                <span>{tour.totalDistance} Kms</span>
-              </div>
+              <h4>LKR: {sum}</h4>
             </div>
-          );
-        })}
+            <div className="distance">
+              <span>{destination.totalDistance} Kms</span>
+            </div>
+          </div>
+        );
+      })}
       </div>
     </Section>
   );
-}
+};
+
 
 export default Package;
 

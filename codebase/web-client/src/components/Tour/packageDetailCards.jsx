@@ -5,15 +5,15 @@ import { useParams, useNavigate} from "react-router-dom";
 import { useLazyGetTripPackgeQuery } from "../../store/api/package-api-slice";
 import '../../pages/Tours/loading.css';
 
-// const LocationList = ({ locations }) => {
-//   return (
-//     <ul className="list">
-//       {locations.map(location => (
-//         <li key={location}>{location}</li>
-//       ))}
-//     </ul>
-//   );
-// };
+const LocationList = ({ locations }) => {
+  return (
+    <ul className="list">
+      {locations.map(location => (
+        <li key={location}>{location}</li>
+      ))}
+    </ul>
+  );
+};
 
 const DetailCard = ({tripPackage}) => {
   // const data = [

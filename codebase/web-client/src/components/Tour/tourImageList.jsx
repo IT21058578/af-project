@@ -5,30 +5,30 @@ import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { useState } from "react";
 
-const Hotel = () => {
+const Hotel = ({tripPackage}) => {
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
 
-  const photos = [
-    {
-      src: "https://media.tacdn.com/media/attractions-splice-spp-674x446/06/6a/e4/df.jpg",
-    },
-    {
-      src: "https://www.trawell.in/admin/images/upload/1894272Yala_Jeep_Safari.jpg",
-    },
-    {
-      src: "https://travellersisle.com/wp-content/uploads/2021/06/Yala-national-park-closure.jpg",
-    },
-    {
-      src: "https://img.traveltriangle.com/blog/wp-content/uploads/2017/10/Traveler-Reviews-for-Yala-National-Park.jpg",
-    },
-    {
-      src: "https://www.astraltravelsrilanka.com/wp-content/uploads/2021/12/yala-safari-arugam-bay.jpg",
-    },
-    {
-      src: "https://flashpackingfamily.com/wp-content/uploads/2019/12/Yala-National-park-leopard-sighting.jpg",
-    },
-  ];
+  // const photos = [
+  //   {
+  //     src: "https://media.tacdn.com/media/attractions-splice-spp-674x446/06/6a/e4/df.jpg",
+  //   },
+  //   {
+  //     src: "https://www.trawell.in/admin/images/upload/1894272Yala_Jeep_Safari.jpg",
+  //   },
+  //   {
+  //     src: "https://travellersisle.com/wp-content/uploads/2021/06/Yala-national-park-closure.jpg",
+  //   },
+  //   {
+  //     src: "https://img.traveltriangle.com/blog/wp-content/uploads/2017/10/Traveler-Reviews-for-Yala-National-Park.jpg",
+  //   },
+  //   {
+  //     src: "https://www.astraltravelsrilanka.com/wp-content/uploads/2021/12/yala-safari-arugam-bay.jpg",
+  //   },
+  //   {
+  //     src: "https://flashpackingfamily.com/wp-content/uploads/2019/12/Yala-National-park-leopard-sighting.jpg",
+  //   },
+  // ];
 
   const handleOpen = (i) => {
     setSlideNumber(i);
@@ -70,7 +70,7 @@ const Hotel = () => {
           </div>
         )}
         <div className="hotelWrapper">
-          <h1 className="hotelTitle">Yala national park</h1>
+          <h1 className="hotelTitle">{tripPackage?.name}</h1>
           <div className="hotelAddress">
             <LocationOnIcon/>
             <span>Sri Lanka</span>
@@ -78,15 +78,20 @@ const Hotel = () => {
           <span className="hotelDistance">
             Excellent location to visit
           </span>
-          <span className="hotelPriceHighlight">
-            Famous For: Wildlife, Flora & Fauna
-          </span>
+          {/* <span className="hotelPriceHighlight">
+            Famous For: 
+            <ul className="list">
+              {tripPackage?.plan?.map(location => (
+                <li key={location.id}>{location?.activities}</li>
+              ))}
+            </ul>
+          </span> */}
           <div className="hotelImages">
-            {photos.map((photo, i) => (
+            {tripPackage?.imageUrls?.map((photo, i) => (
               <div className="hotelImgWrapper" key={i}>
                 <img
                   onClick={() => handleOpen(i)}
-                  src={photo.src}
+                  src={photo.imageUrls}
                   alt=""
                   className="hotelImg"
                 />

@@ -1,24 +1,24 @@
 import React, { useEffect } from "react";
-import AdminPackage from "./adminPackageList";
+import AdminLocation from "./adminLocationList";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import '../../pages/Tours/loading.css';
-import { useLazySearchTripPackgesQuery } from "../../store/api/package-api-slice";
+import { useLazySearchLocationsQuery } from "../../store/api/location-api-slice";
 import AddIcon from '@mui/icons-material/Add';
 
-function AdminTourHome(){
+function AdminLocationHome(){
 
-  const [fetchPackages , {data: packages , isLoading , isError , error }] = useLazySearchTripPackgesQuery();
+  const [fetchLocations , {data: locations , isLoading , isError , error }] = useLazySearchLocationsQuery();
 
   const navigate = useNavigate();
 
   const handleAddButtonClick = () => {
-    navigate("/addtrip");
+    navigate("/addlocation");
   };
 
   useEffect(() => {
-    fetchPackages({});
-  }, [fetchPackages]);
+    fetchLocations({});
+  }, [fetchLocations]);
 
   if(isLoading){
     return <div>
@@ -34,15 +34,15 @@ function AdminTourHome(){
     return (
         <div>
         <Button variant="contained" color="success" sx={{marginLeft:'70px'}} onClick={handleAddButtonClick} startIcon={<AddIcon />}>
-            Add Package
+            Add Location
         </Button>
-          {packages?.content && packages?.content?.length > 0 ? (
-            <AdminPackage packages={packages?.content} />
+          {locations?.content && locations?.content?.length > 0 ? (
+            <AdminLocation locations={locations?.content} />
           ) : (
-            <div>No packages found.</div>
+            <div>No locations found.</div>
           )}
         </div>
       );
 }
 
-export default AdminTourHome;
+export default AdminLocationHome;

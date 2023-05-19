@@ -11,11 +11,18 @@ import TourGuid from '../../components/Tour/tourGuidMassage';
 import './loading.css';
 import { useParams} from "react-router-dom";
 import { useLazyGetTripPackgeQuery } from "../../store/api/package-api-slice";
+import { useLazySearchTripPackgesQuery } from "../../store/api/package-api-slice";
 
 const TourDetails = () => {
 
   const { tripPackageId } = useParams();
   const [getTripPackageQuery, { data: tripPackage, isLoading, isError }] = useLazyGetTripPackgeQuery();
+
+  const [fetchPackages , {data: packages }] = useLazySearchTripPackgesQuery();
+
+  useEffect(() => {
+    fetchPackages({});
+  }, [fetchPackages]);
 
 
   useEffect(() => {
@@ -45,7 +52,7 @@ const TourDetails = () => {
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={1}>
         <Grid item xs={6} md={12}>
-          <Hotel/>
+          <Hotel tripPackage={tripPackage}/>
         </Grid>
         <Grid item xs={6} md={6}>
           <DetailCard tripPackage={tripPackage}/>
@@ -57,7 +64,11 @@ const TourDetails = () => {
           <TourGuid/>
         </Grid>
         <Grid item xs={6} md={12}>
-          <Recomended/>
+          {packages?.content && packages?.content?.length > 0 ? (
+            <Recomended packages={packages?.content} />
+          ) : (
+            <div>No packages found.</div>
+          )}
         </Grid>
       </Grid>
     </Box>
