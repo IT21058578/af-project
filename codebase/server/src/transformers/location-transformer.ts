@@ -4,25 +4,17 @@ import { TLocation } from "../types/model-types.js";
 import { TLocationVO, TUserVO } from "../types/vo-types.js";
 import { UserTransformer } from "./user-transformer.js";
 
-const buildLocationVO = async (location: TLocation): Promise<TLocationVO> => {
-	const [createdByUser, lastUpdatedByUser] = await Promise.all([
-		User.findById(location.createdById),
-		User.findById(location.lastUpdatedById),
-	]);
+const buildLocationVO = async (location: TLocation | null): Promise<TLocationVO | {}> => {
+	if (location === null) return {};
 
-	let createdBy: TUserVO | {};
-	if (createdByUser !== null) {
-		createdBy = UserTransformer.buildUserVO(createdByUser);
-	} else {
-		throw Error(EUserError.NOT_FOUND);
-	}
+	const users = await Promise.all([
+    User.findById(location.createdById),
+    User.findById(location.lastUpdatedById),
+  ]);
 
-	let lastUpdatedBy: TUserVO | {};
-	if (lastUpdatedByUser !== null) {
-		lastUpdatedBy = UserTransformer.buildUserVO(lastUpdatedByUser);
-	} else {
-		throw Error(EUserError.NOT_FOUND);
-	}
+	const [createdBy, lastUpdatedBy] = users.map((user) =>
+    UserTransformer.buildUserVO(user)
+  );
 
 	return {
 		id: location._id,

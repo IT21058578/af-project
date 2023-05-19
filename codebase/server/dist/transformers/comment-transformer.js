@@ -1,6 +1,8 @@
 import { User } from "../models/user-model.js";
 import { UserTransformer } from "./user-transformer.js";
 const buildCommentVO = async (comment, authorizedUserId = "") => {
+    if (comment === null)
+        return {};
     const users = await Promise.all([
         User.findById(comment.createdById),
         User.findById(comment.lastUpdatedById),
