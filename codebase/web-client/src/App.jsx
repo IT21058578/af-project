@@ -1,6 +1,4 @@
 import "./App.css";
-import NavBar from "./components/NavBar/NavBar";
-import Footer from "./components/Footer";
 import Auth from "./pages/Auth/Auth";
 import Blogs from "./pages/Blog/Blogs";
 import BlogDetail from "./pages/Blog/BlogDetails";
@@ -15,23 +13,16 @@ import EditTripPackage from "./components/Admin/editTour";
 import AddLocationPage from "./components/Admin/addLocation";
 import EditLocationPage from "./components/Admin/editLocation";
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route ,Navigate } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
 
 function App() {
 	return (
 			<BrowserRouter>
-				{/* <NavBar /> */}
 				<div className="App">
 					<Routes>
-						{/* 
-          <Route path="/posts" exact component={Home} />
-          <Route path="/posts/search" exact component={Home} />
-          <Route path="/posts/:id" exact component={PostDetails} />
-          <Route path={['/creators/:name', '/tags/:name']} component={CreatorOrTag} /> */}
-					{/* <Route path="/auth" exact component={() => (!user ? <Auth /> : <Redirect to="/blogs" />)} /> */}
-					<Route path="/" exact component={() => <Redirect to="/blog" />} />
+					<Route path="/" element={<Navigate to="/blog" />} />
 					<Route exact path="/auth" element={<Auth />} />
 					<Route exact path="/blog" element={<Blogs />} />
 					<Route exact path="/new" element={<NewBlog />} />
@@ -48,7 +39,6 @@ function App() {
 					<Route exact path="/addlocation" element={<AddLocationPage />} />
 				</Routes>
 			</div>
-			{/* <Footer /> */}
 		</BrowserRouter>
 	);
 }

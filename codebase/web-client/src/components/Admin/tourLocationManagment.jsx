@@ -17,7 +17,7 @@ function AdminLocationHome(){
   };
 
   useEffect(() => {
-    fetchLocations({});
+    fetchLocations({pageSize: 100});
   }, [fetchLocations]);
 
   if(isLoading){

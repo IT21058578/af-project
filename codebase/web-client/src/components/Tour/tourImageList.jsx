@@ -61,7 +61,7 @@ const Hotel = ({tripPackage}) => {
               onClick={() => handleMove("l")}
             />
             <div className="sliderWrapper">
-              <img src={photos[slideNumber].src} alt="" className="sliderImg" />
+              <img src={tripPackage?.imageURLs[slideNumber]} alt="" className="sliderImg" />
             </div>
             <ArrowCircleRightIcon
               className="arrow"
@@ -87,11 +87,11 @@ const Hotel = ({tripPackage}) => {
             </ul>
           </span> */}
           <div className="hotelImages">
-            {tripPackage?.imageUrls?.map((photo, i) => (
+            {tripPackage?.imageURLs?.map((photo,i) => (
               <div className="hotelImgWrapper" key={i}>
                 <img
                   onClick={() => handleOpen(i)}
-                  src={photo.imageUrls}
+                  src={photo}
                   alt=""
                   className="hotelImg"
                 />

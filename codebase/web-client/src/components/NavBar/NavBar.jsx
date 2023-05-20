@@ -20,6 +20,8 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { removeUser } from '../../store/slices/auth-slice';
 
 const settings = ['Dashboard', 'Logout'];
 import Image from '../../assets/navBg.png';
@@ -74,6 +76,15 @@ const Navbar = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector(state => state.auth.user !== undefined);
+
+  const handleLogout = () => {
+    // localStorage.removeItem('token');
+    // localStorage.removeItem('user');
+    dispatch(removeUser());
+  };
+
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -88,6 +99,9 @@ const Navbar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const users = useSelector(state => state.auth.user);
+  const isAdmin = users !== undefined && users.roles.includes('ADMIN');
 
   return (
     <AppBar position="static" sx={{ backgroundColor: 'transparent !important', backgroundImage:`url(${Image})`, backgroundSize:'cover',backgroundRepeat:'no-repeat', opacity:"1.0", color:'black' , padding:'30px', minHeight:'480px' , boxShadow:'none'}}>
@@ -121,9 +135,11 @@ const Navbar = () => {
               <Button variant="outlined" color="inherit" sx={{color:'white'}} onClick={() => navigate("/tour")}>
                 Packages
               </Button>
+              {isAdmin && (
               <Button variant="outlined" color="inherit" sx={{color:'white'}} onClick={() => navigate("/admin")}>
                 Admin Dash
               </Button>
+              )}
             </Stack>
           </Box>
 
@@ -149,11 +165,17 @@ const Navbar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
+             {settings.map((setting) => (
               <MenuItem key={setting}>
-                <Link to={setting === 'Dashboard' ? '/userbooking' : '/auth'} style={{ textDecoration: 'none' }}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </Link>
+                {setting === 'Logout' && isLoggedIn ? (
+                  <Link to="/auth" style={{ textDecoration: 'none' }}>
+                    <Typography textAlign="center" onClick={handleLogout}>{setting}</Typography>
+                  </Link>
+                ) : (
+                  <Link to="/userbooking" style={{ textDecoration: 'none' }}>
+                    <Typography textAlign="center">{setting}</Typography>
+                  </Link>
+                )}
               </MenuItem>
             ))}
             </Menu>

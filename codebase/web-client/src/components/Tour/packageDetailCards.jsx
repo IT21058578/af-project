@@ -78,7 +78,7 @@ const DetailCard = ({tripPackage}) => {
             </div>
             <h3 className="hed">Description</h3>
             <p className="description">{tripPackage?.description}</p>
-            <h3 className="hed">Locations That you can visit</h3>
+            {/* <h3 className="hed">Locations That you can visit</h3> */}
             {/* <LocationList locations={tripPackage?.plan}></LocationList> */}
             <div className="hed">
               <h3>Days of tour: </h3>

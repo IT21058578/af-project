@@ -96,7 +96,7 @@ const Package = ({ packages }) => {
         return (
           <div className="destination" key={destination.id}>
            <Button onClick={() => handleViewDetails(destination.id)}>View detail</Button>
-            <img src={destination.imageURls} alt="" />
+            <img src={destination.imageURLs[0]} alt="" />
             <h3>{destination.name}</h3>
             <div className="info">
               <div className="services">

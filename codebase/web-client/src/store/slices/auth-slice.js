@@ -24,9 +24,7 @@ export const authSlice = createSlice({
 		setTokens: (state, { payload }) => {
 			state.tokens = payload;
 		},
-		removeUser: (state) => {
-			state = initialState;
-		},
+		removeUser: () => initialState,
 	},
 });
 
