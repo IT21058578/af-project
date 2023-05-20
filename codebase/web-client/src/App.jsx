@@ -16,37 +16,33 @@ import { Provider } from "react-redux";
 import { store } from "./store/store";
 
 function App() {
-	return (
-			<BrowserRouter>
-				{/* <NavBar /> */}
-				<div className="App">
-					<Routes>
-						{/* 
+  return (
+    <BrowserRouter>
+      {/* <NavBar /> */}
+      <div className="App">
+        <Routes>
+          {/* 
           <Route path="/posts" exact component={Home} />
           <Route path="/posts/search" exact component={Home} />
           <Route path="/posts/:id" exact component={PostDetails} />
           <Route path={['/creators/:name', '/tags/:name']} component={CreatorOrTag} /> */}
-						{/* <Route path="/auth" exact component={() => (!user ? <Auth /> : <Redirect to="/blogs" />)} /> */}
-						<Route path="/" exact component={() => <Redirect to="/blog" />} />
-						<Route exact path="/auth" element={<Auth />} />
-						<Route exact path="/blog" element={<Blogs />} />
-						<Route exact path="/blog/new" element={<NewBlog />} />
-						<Route exact path="/tour" element={<TourHome />} />
-						<Route exact path="/details" element={<TourDetails />} />
-						<Route
-							exact
-							path="/tour/details/:title"
-							element={<TourDetails />}
-						/>
-						<Route exact path="/admin" element={<AdminHome />} />
-						<Route exact path="/blogdetail" element={<BlogDetail />} />
-						<Route exact path="/blog/author" element={<Author />} />
-						<Route exact path="/userbooking" element={<UserOrder />} />
-					</Routes>
-				</div>
-				{/* <Footer /> */}
-			</BrowserRouter>
-	);
+          {/* <Route path="/auth" exact component={() => (!user ? <Auth /> : <Redirect to="/blogs" />)} /> */}
+          <Route path="/" exact component={() => <Redirect to="/blog" />} />
+          <Route exact path="/auth" element={<Auth />} />
+          <Route exact path="/blog" element={<Blogs />} />
+          <Route exact path="/blog/new" element={<NewBlog />} />
+          <Route exact path="/tour" element={<TourHome />} />
+          <Route exact path="/details" element={<TourDetails />} />
+          <Route exact path="/tour/details/:title" element={<TourDetails />} />
+          <Route exact path="/admin" element={<AdminHome />} />
+          <Route exact path="/blog/:id" element={<BlogDetail />} />
+          <Route exact path="/blog/author" element={<Author />} />
+          <Route exact path="/userbooking" element={<UserOrder />} />
+        </Routes>
+      </div>
+      {/* <Footer /> */}
+    </BrowserRouter>
+  );
 }
 
 export default App;
