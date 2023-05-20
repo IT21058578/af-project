@@ -39,3 +39,9 @@ export const EPaymentErrors = {
 export const EBookingError = {
     NOT_FOUND: "Booking not found",
 };
+export const ECommentError = {
+    NOT_FOUND: "Comment not found",
+};
+export const EPostError = {
+    NOT_FOUND: "Post not found",
+};

@@ -56,8 +56,16 @@ export const ETripPackageError = {
 export const EPaymentErrors = {
 	SESSION_URL_UNAVAILABLE: "Session URL unavailable",
 	UNAUTHORIZED_WEBHOOK: "Unauthorized Webhook endpoints access",
-};
+} as const;
 
 export const EBookingError = {
 	NOT_FOUND: "Booking not found",
+} as const;
+
+export const ECommentError = {
+	NOT_FOUND: "Comment not found",
 };
+
+export const EPostError = {
+	NOT_FOUND: "Post not found",
+} as const;

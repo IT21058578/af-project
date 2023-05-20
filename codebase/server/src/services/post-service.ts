@@ -10,12 +10,12 @@ import {
 	IPostPageOptions,
 } from "../types/misc-types.js";
 import { TPost } from "../types/model-types.js";
-import { Role } from "../constants/constants.js";
+import { EPostError, EUserError, Role } from "../constants/constants.js";
 import { PostTransformer } from "../transformers/post-transformer.js";
 
 const getPost = async (id: string, authorizedUserId?: string) => {
 	const post = await Post.findById(id);
-	if (post === null) throw Error(ReasonPhrases.NOT_FOUND);
+	if (post === null) throw Error(EPostError.NOT_FOUND);
 	post.views += 1;
 	post.save();
 	const postVO = await PostTransformer.buildPostVO(
@@ -58,13 +58,13 @@ const editPost = async (
 	editedPost: Partial<TPost>
 ) => {
 	const existingPost = await Post.findById(id);
-	if (existingPost === null) throw Error(ReasonPhrases.NOT_FOUND);
+	if (existingPost === null) throw Error(EPostError.NOT_FOUND);
 
 	if (
 		authorizedUser.id !== existingPost.createdById &&
 		!authorizedUser.roles.includes(Role.ADMIN)
 	) {
-		throw Error(ReasonPhrases.UNAUTHORIZED);
+		throw Error(EUserError.UNAUTHORIZED);
 	}
 
 	Object.entries(editedPost).forEach(([key, value]) => {
@@ -82,13 +82,13 @@ const editPost = async (
 // Returns whether a post was found and deleted or not
 const deletePost = async (id: string, authorizedUser: IAuthorizedUser) => {
 	const existingPost = await Post.findById(id);
-	if (existingPost === null) throw Error(ReasonPhrases.NOT_FOUND);
+	if (existingPost === null) throw Error(EPostError.NOT_FOUND);
 
 	if (
 		authorizedUser.id !== existingPost.createdById &&
 		!authorizedUser.roles.includes(Role.ADMIN)
 	) {
-		throw Error(ReasonPhrases.UNAUTHORIZED);
+		throw Error(EUserError.UNAUTHORIZED);
 	}
 
 	await existingPost.deleteOne();
@@ -101,7 +101,7 @@ const createlikeDislikePost = async (
 	reactionType: "likes" | "dislikes"
 ) => {
 	const existingPost = await Post.findById(postId);
-	if (existingPost === null) throw Error(ReasonPhrases.NOT_FOUND);
+	if (existingPost === null) throw Error(EPostError.NOT_FOUND);
 	const oppositeReactionType = reactionType === "likes" ? "dislikes" : "likes";
 
 	if (existingPost[reactionType].includes(userId)) {
@@ -129,9 +129,9 @@ const deleteLikeDislikePost = async (
 	reactionType: "likes" | "dislikes"
 ) => {
 	const existingPost = await Post.findById(postId);
-	if (existingPost === null) throw Error(ReasonPhrases.NOT_FOUND);
+	if (existingPost === null) throw Error(EPostError.NOT_FOUND);
 	if (!existingPost[reactionType].includes(userId))
-		throw Error(ReasonPhrases.NOT_FOUND);
+		throw Error(EPostError.NOT_FOUND);
 	existingPost[reactionType] = existingPost[reactionType].filter(
 		(item) => item !== userId
 	);

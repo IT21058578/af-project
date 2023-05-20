@@ -121,7 +121,7 @@ mongoose.connect(MONGODB_URI || "", { dbName: "af-project" }).then(async () => {
 			lastUpdatedById,
 			name: faker.lorem.words(),
 			description: faker.lorem.paragraph(),
-			imageURLs: [faker.internet.url()],
+			imageURLs: ["https://picsum.photos/500/500"],
 			price: {
 				perPerson: faker.datatype.number({ min: 0 }),
 				lodging: {
