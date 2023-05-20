@@ -10,6 +10,10 @@ import TourDetails from "./pages/Tours/tourDetail";
 import AdminHome from "./pages/Admin/AdminHome";
 import Author from "./pages/Blog/Author";
 import UserOrder from "./pages/Tours/BookingHistory";
+import AddTripPackage from "./components/Admin/addTour";
+import EditTripPackage from "./components/Admin/editTour";
+import AddLocationPage from "./components/Admin/addLocation";
+import EditLocationPage from "./components/Admin/editLocation";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
@@ -26,26 +30,26 @@ function App() {
           <Route path="/posts/search" exact component={Home} />
           <Route path="/posts/:id" exact component={PostDetails} />
           <Route path={['/creators/:name', '/tags/:name']} component={CreatorOrTag} /> */}
-						{/* <Route path="/auth" exact component={() => (!user ? <Auth /> : <Redirect to="/blogs" />)} /> */}
-						<Route path="/" exact component={() => <Redirect to="/blog" />} />
-						<Route exact path="/auth" element={<Auth />} />
-						<Route exact path="/blog" element={<Blogs />} />
-						<Route exact path="/blog/new" element={<NewBlog />} />
-						<Route exact path="/tour" element={<TourHome />} />
-						<Route exact path="/details" element={<TourDetails />} />
-						<Route
-							exact
-							path="/tour/details/:title"
-							element={<TourDetails />}
-						/>
-						<Route exact path="/admin" element={<AdminHome />} />
-						<Route exact path="/blogdetail" element={<BlogDetail />} />
-						<Route exact path="/blog/author" element={<Author />} />
-						<Route exact path="/userbooking" element={<UserOrder />} />
-					</Routes>
-				</div>
-				{/* <Footer /> */}
-			</BrowserRouter>
+					{/* <Route path="/auth" exact component={() => (!user ? <Auth /> : <Redirect to="/blogs" />)} /> */}
+					<Route path="/" exact component={() => <Redirect to="/blog" />} />
+					<Route exact path="/auth" element={<Auth />} />
+					<Route exact path="/blog" element={<Blogs />} />
+					<Route exact path="/new" element={<NewBlog />} />
+					<Route exact path="/tour" element={<TourHome />} />
+					<Route exact path="/details" element={<TourDetails />} />
+					<Route exact path="/tour/details/:tripPackageId" element={<TourDetails />} />
+					<Route exact path="/admin" element={<AdminHome />} />
+					<Route exact path="/tour/edit/:tripPackageId" element={<EditTripPackage />} />
+					<Route exact path="location/edit/:locationId" element={<EditLocationPage />} />
+					<Route exact path="/blogdetail" element={<BlogDetail />} />
+					<Route exact path="/author" element={<Author />} />
+					<Route exact path="/addtrip" element={<AddTripPackage />} />
+					<Route exact path="/userbooking" element={<UserOrder />} />
+					<Route exact path="/addlocation" element={<AddLocationPage />} />
+				</Routes>
+			</div>
+			{/* <Footer /> */}
+		</BrowserRouter>
 	);
 }
 

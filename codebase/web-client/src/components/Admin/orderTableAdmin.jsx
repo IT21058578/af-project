@@ -1,22 +1,13 @@
-import React from 'react';
+import React,{useEffect, useState} from 'react';
 import MaterialReactTable from 'material-react-table';
 import { Box, Button } from '@mui/material';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { ExportToCsv } from 'export-to-csv'; //or use your library of choice here
-import { data } from './orderData';
+import { useLazySearchBookingsQuery } from '../../store/api/booking-api-slice';
+import '../../pages/Tours/loading.css'
 
 //defining columns outside of the component is fine, is stable
 const columns = [
-      {
-        accessorKey: 'customerName',
-        header: 'Customer Name',
-        size: 150,
-      },
-      {
-        accessorKey: 'packageName',
-        header: 'Middle Name',
-        size: 170,
-      },
       {
         accessorKey: 'bookingDate',
         header: 'Booking Date',
@@ -24,12 +15,12 @@ const columns = [
       },
       {
         accessorKey: 'persons',
-        header: 'Persons',
+        header: 'Person ID',
         size: 150,
       },
       {
         accessorKey: 'tourType',
-        header: 'Tour Type',
+        header: 'Payment Done',
         size: 150,
       },
       {
@@ -41,10 +32,7 @@ const columns = [
         accessorKey: 'hotelType',
         header: 'Hotel Type',
       },
-      {
-        accessorKey: 'totalPayment',
-        header: 'Total Payment',
-      },
+      
 ];
 
 const csvOptions = {
@@ -60,18 +48,57 @@ const csvOptions = {
 const csvExporter = new ExportToCsv(csvOptions);
 
 const AdminOrder = () => {
+
+  const [fetchOrders , {data: bookings , isLoading , isError , error,isSuccess }] = useLazySearchBookingsQuery();
+
+  const [formatedBookings , setFormatedBookings] = useState([])
+
+  useEffect(() => {
+    fetchOrders({});
+  }, [fetchOrders]);
+
+  useEffect(() =>{
+    if(bookings?.content){
+      const newData = bookings.content.map((booking) => {
+        return {
+          bookingDate: booking.createdAt,
+          persons: booking.createdById,
+          tourType: booking.paymentMadeAt,
+          vehicle: booking.package.transport,
+          hotelType: booking.package.lodging,
+        };
+      });
+  
+      // Update the formatedBookings state with the new data array
+      setFormatedBookings(newData);
+    }
+  },[isSuccess,bookings])
+
+  if(isLoading){
+    return <div>
+      <div className="loader-container">
+      	  <div className="spinner"></div>
+      </div>
+    </div>
+  }
+
+  if(isError){
+    return<div>Error: {error.message}</div>
+  }
+
   const handleExportRows = (rows) => {
     csvExporter.generateCsv(rows.map((row) => row.original));
   };
 
   const handleExportData = () => {
-    csvExporter.generateCsv(data);
+    csvExporter.generateCsv(bookings?.content);
   };
 
   return (
+    
     <MaterialReactTable
       columns={columns}
-      data={data}
+      data={formatedBookings}
       enableRowSelection
       positionToolbarAlertBanner="bottom"
       renderTopToolbarCustomActions={({ table }) => (

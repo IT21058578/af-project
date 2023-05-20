@@ -1,18 +1,20 @@
 import React, { useEffect } from "react";
-import Hero from "../../components/Tour/BookingImgPost";
-import Navbar from "../../components/NavBar/NavBar";
-import Footer from "../../components/Footer";
-import Services from "../../components/Tour/Services";
-import Package from "../../components/Tour/packages";
-import './loading.css';
-
-import { Box } from "@mui/material";
+import AdminPackage from "./adminPackageList";
+import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import '../../pages/Tours/loading.css';
 import { useLazySearchTripPackgesQuery } from "../../store/api/package-api-slice";
+import AddIcon from '@mui/icons-material/Add';
 
-
-function TourHome(){
+function AdminTourHome(){
 
   const [fetchPackages , {data: packages , isLoading , isError , error }] = useLazySearchTripPackgesQuery();
+
+  const navigate = useNavigate();
+
+  const handleAddButtonClick = () => {
+    navigate("/addtrip");
+  };
 
   useEffect(() => {
     fetchPackages({});
@@ -31,19 +33,16 @@ function TourHome(){
   }
     return (
         <div>
-          <Navbar/>
-          <Hero />
-          <Box sx={{marginLeft:'30px', marginRight:'30px'}}>
-            <Services/>
-          </Box>
+        <Button variant="contained" color="success" sx={{marginLeft:'70px'}} onClick={handleAddButtonClick} startIcon={<AddIcon />}>
+            Add Package
+        </Button>
           {packages?.content && packages?.content?.length > 0 ? (
-            <Package packages={packages?.content} />
+            <AdminPackage packages={packages?.content} />
           ) : (
             <div>No packages found.</div>
           )}
-          <Footer />
         </div>
       );
 }
 
-export default TourHome;
+export default AdminTourHome;

@@ -40,7 +40,7 @@ export const locationsApi = baseApi.injectEndpoints({
 
 export const {
 	useLazyGetLocationsQuery,
-	useLazySearchLocationssQuery,
+	useLazySearchLocationsQuery,
 	useCreateLocationsMutation,
 	useEditLocationsMutation,
 	useDeleteLocationsMutation,

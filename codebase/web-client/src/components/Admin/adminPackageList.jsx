@@ -1,63 +1,48 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import info1 from "../../assets/info1.png";
-import info2 from "../../assets/info2.png";
-import info3 from "../../assets/info3.png";
-import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { useLazyGetTripPackgeQuery } from "../../store/api/package-api-slice";
-import { useNavigate } from "react-router-dom";
+import { useDeleteTripPackgeMutation } from "../../store/api/package-api-slice";
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "@mui/material";
 
-const Package= ({ packages }) => {
- 
+const AdminPackage = ({packages}) =>{
+  
   const navigate = useNavigate();
   const [getTripPackageQuery] = useLazyGetTripPackgeQuery();
-  const [active, setActive] = useState(1);
+  const [deleteTripPackage] = useDeleteTripPackgeMutation();
+  
+  const handleDelete = async (id) => {
+    try {
+      await deleteTripPackage({ tripPackageId: id });
+      // Perform any other necessary tasks upon successful deletion
+      navigate(`/admin`) // Navigate back to the trip package list page
+    } catch (error) {
+      console.log('Error deleting trip package:', error);
+    }
+  };
 
-  const handleViewDetails = (tripPackageId) => {
+  const handleEditDetails = (tripPackageId) => {
     getTripPackageQuery({ tripPackageId }).then((result) => {
       if (!result.error) {
-        navigate(`/tour/details/${tripPackageId}`);
+        navigate(`/tour/edit/${tripPackageId}`);
       }
     });
   };
 
+  // const [tour, setTour] = useState(data);
   return (
     <Section id="recommend">
-      <div className="title">
-        <h2>Recommended Destinations</h2>
-      </div>
-      <div className="packages">
-        <ul>
-        </ul>
+      <div className="title" style={{marginBottom:'20px'}}>
+        <h2>Manage Destinations</h2>
       </div>
       <div className="destinations">
-        {packages.map((destination) => {
-
-          const lodging = new Number(destination?.price?.lodging?.threeStar);
-          const perPerson = new Number(destination?.price?.perPerson);
-          const perPersonFood = new Number(destination?.price?.perPersonFood);
-          const transport = new Number(destination?.price?.transport?.group);
-
-          const sum = lodging + perPerson + perPersonFood + transport;
-
+        {packages.map((tour) => {
           return (
-            <div className="destination" key={destination.id}>
-             <Button onClick={() => handleViewDetails(destination.id)}>View detail</Button>
-              <img src={destination.imageURl} alt="" />
-              <h3>{destination.name}</h3>
-              <p>{destination.description}</p>
-              <div className="info">
-                <div className="services">
-                  <img src={info1} alt="" />
-                  <img src={info2} alt="" />
-                  <img src={info3} alt="" />
-                </div>
-                <h4>LKR: {sum}</h4>
-              </div>
-              <div className="distance">
-                <span>{destination.totalDistance} Kms</span>
-              </div>
+            <div className="destination" key={tour.id}>
+              <h3>{tour.name}</h3>
+              <Button variant="outlined" color="success" onClick={() => handleEditDetails(tour.id)}>Edit Package</Button>
+              <Button variant="outlined" color="error" onClick={() => handleDelete(tour.id)}>Delete Package</Button>
             </div>
           );
         })}
@@ -66,7 +51,7 @@ const Package= ({ packages }) => {
   );
 }
 
-export default Package;
+export default AdminPackage;
 
 const Section = styled.section`
   padding: 2rem 0;

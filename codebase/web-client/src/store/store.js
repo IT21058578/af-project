@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { baseApi } from "./api/base-api-slice";
 import { authReducer } from "./slices/auth-slice";
+import { packageReducer } from "./slices/package-slice";
 import { setupListeners } from "@reduxjs/toolkit/dist/query";
 import {
   persistStore,

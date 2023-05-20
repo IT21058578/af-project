@@ -18,9 +18,9 @@ import TextareaAutosize from '@mui/base/TextareaAutosize';
 import { useSelector } from 'react-redux';
 import { useCreatePostMutation, useEditPostMutation } from "../../store/api/posts-api-slice";
 // import ChipInput from 'material-ui-chip-input';
-import * as yup from "yup";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from "yup";
 
 const newBlogSchema = yup.object({
 	title: yup.string().required("Please enter the title"),
