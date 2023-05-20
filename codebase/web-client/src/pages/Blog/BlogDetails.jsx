@@ -3,22 +3,21 @@ import { Paper, Typography, CircularProgress, Divider } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { useParams, Link } from 'react-router-dom';
-
-// import { getPost, getPostsBySearch } from '../../actions/posts';
 import CommentSection from './CommentSection';
 import Footer from '../../components/Footer';
 import NavBar from '../../components/NavBar/NavBar';
 import TourGuideLink from '../../components/TourGuideLink';
-// import useStyles from './styles';
+import { useLazyGetPostQuery } from '../../store/api/posts-api-slice';
 
 const BlogDetail = () => {
   // const { post, posts, isLoading } = useSelector((state) => state.posts);
-  // const dispatch = useDispatch();
-  // const { id } = useParams();
+  const [getPost, { data: post, isSuccess: isFetchPostSuccess }] = useLazyGetPostQuery();
+  const dispatch = useDispatch();
+  const { id } = useParams();
 
-  // useEffect(() => {
-  //   dispatch(getPost(id));
-  // }, [id]);
+  useEffect(() => {
+    dispatch(getPost(id));
+  }, [id]);
 
   // useEffect(() => {
   //   if (post) {
@@ -39,17 +38,17 @@ const BlogDetail = () => {
   // }
 
   // const recommendedPosts = posts.filter(({ _id }) => _id !== post._id);
-  const post = {
-    title: 'When can we travel to Sri Lanka in 2022?',
-    description:
-      "Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents. Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents. Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents. Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents. Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents. Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.   Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.     Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.",
-    image: 'https://d3k9ljo62xl25w.cloudfront.net/media/images/WhenCanWeTravelTo_SriLanka_22.original.jpg',
-    imageText: 'main image description',
-    linkText: 'Continue reading…',
-    tags: 'tag',
-    author: 'Jane Doe',
-    createdAt: 'Jan 12, 2022'
-  };
+  // const post = {
+  //   title: 'When can we travel to Sri Lanka in 2022?',
+  //   description:
+  //     "Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents. Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents. Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents. Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents. Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents. Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.   Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.     Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.",
+  //   image: 'https://d3k9ljo62xl25w.cloudfront.net/media/images/WhenCanWeTravelTo_SriLanka_22.original.jpg',
+  //   imageText: 'main image description',
+  //   linkText: 'Continue reading…',
+  //   tags: 'tag',
+  //   author: 'Jane Doe',
+  //   createdAt: 'Jan 12, 2022'
+  // };
   
   const recommendedPosts = [
     {
@@ -83,14 +82,14 @@ const BlogDetail = () => {
             </Link>
           ))}
           </Typography> */}
-          <Typography gutterBottom variant="body1" component="p">{post.message}</Typography>
+          <Typography gutterBottom variant="body1" component="p">{post.text}</Typography>
           <Typography variant="h6">
             Written by:
             <Link to={`/creators/${post.author}`} style={{ textDecoration: 'none', color: '#3f51b5' }}>
               {` ${post.author}`}
             </Link>
           </Typography>
-          <Typography variant="body1">{moment(post.createdAt).fromNow()}</Typography>
+          <Typography variant="body1">{moment(post.date).fromNow()}</Typography>
           <Divider style={{ margin: '20px 0' }} />
           <div style={{ display: 'flex' }}>
             <img style={{ width: '50%', maxHeight: '500px', float: 'left', marginRight: '1rem' }} src={post.image || 'https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png'} alt={post.title} />

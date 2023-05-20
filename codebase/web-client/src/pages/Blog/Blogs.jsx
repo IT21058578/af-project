@@ -29,18 +29,6 @@ import { Link } from "react-router-dom";
 import TourGuideLink from "../../components/TourGuideLink";
 import { useLazySearchPostsQuery } from "../../store/api/posts-api-slice";
 
-const sections = [
-  { title: "Technology", url: "#" },
-  { title: "Design", url: "#" },
-  { title: "Culture", url: "#" },
-  { title: "Business", url: "#" },
-  { title: "Politics", url: "#" },
-  { title: "Opinion", url: "#" },
-  { title: "Science", url: "#" },
-  { title: "Health", url: "#" },
-  { title: "Style", url: "#" },
-  { title: "Travel", url: "#" },
-];
 
 const mainFeaturedPost = {
   title: "When can we travel to Sri Lanka in 2022?",

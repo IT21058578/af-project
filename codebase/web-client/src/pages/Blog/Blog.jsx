@@ -8,19 +8,20 @@ import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import { Button } from '@mui/material';
-// import { useDispatch } from 'react-redux';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import { useDispatch } from 'react-redux';
 import { useLazyGetPostQuery, useLikeDislikePostMutation } from "../../store/api/posts-api-slice";
 import { useNavigate } from 'react-router-dom';
+import moment from 'moment';
+import Link from '@mui/material/Link';
 
-function FeaturedPost(post, setCurrentId) {
+function FeaturedPost({post, setCurrentId}) {
   const user = JSON.parse(localStorage.getItem('profile'));
-  // const [likes, setLikes] = useState(post?.likes);
+  const [likes, setLikes] = useState(post?.likes);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const [getPost, { data: postData, isSuccess: isFetchPostSuccess }] = useLazyGetPostQuery();
   const userId = user?.result.googleId || user?.result?._id;
   // const hasLikedPost = likes.find((like) => like === userId);
 
@@ -31,7 +32,7 @@ function FeaturedPost(post, setCurrentId) {
   const handleLike = async () => {
     await likeDislikePost({ postId: post._id });
 
-    if (hasLikedPost) {
+    if (post.isLiked) {
       setLikes(likes.filter((id) => id !== userId));
     } else {
       setLikes([...likes, userId]);
@@ -39,38 +40,37 @@ function FeaturedPost(post, setCurrentId) {
   };
 
   const Likes = () => {
-  //   if (likes.length > 0) {
-  //     return likes.find((like) => like === userId)
-  //       ? (
-  //         <><ThumbUpAltIcon fontSize="small" />&nbsp;{likes.length}</>
-  //       ) : (
-  //         <><ThumbUpOffAltIcon fontSize="small" />&nbsp;{likes.length} </>
-  //       );
-  //   }
+    if (likes.length > 0) {
+      return likes.find((like) => like === userId)
+        ? (
+          <><ThumbUpAltIcon fontSize="small" />&nbsp;{likes.length}</>
+        ) : (
+          <><ThumbUpOffAltIcon fontSize="small" />&nbsp;{likes.length} </>
+        );
+    }
 
-  //   return <><ThumbUpOffAltIcon fontSize="small" />&nbsp;</>;
+    return <><ThumbUpOffAltIcon fontSize="small" />&nbsp;</>;
   };
 
-  const openPost = (e) => {
-    dispatch(getPost(post._id, history));
-
-    navigate(`/posts/${post._id}`);
+  const openPost = () => {
+    dispatch(getPost(postData._id));
+    navigate(`/blog/${post._id}`);
   };
 
 
   return (
     <Grid item xs={12} md={6}>
-      <CardActionArea component="a" href="#">
+      <CardActionArea component="a" onClick={openPost}>
         <Card sx={{ display: 'flex', borderRadius: '20px', backgroundColor: '#F1DEC9', height:'300px' }}>
           <CardContent sx={{ flex: 1 }}>
-            <Typography component="h2" variant="h5">
-              {post.title}
-            </Typography>
+          <Typography component="h2" variant="h5">
+            {post.title.length > 30 ? `${post.title.substring(0, 30)}...` : post.title}
+          </Typography>
             <Typography variant="subtitle1" color="text.secondary">
-              {post.date}
+              {moment(post.date).fromNow()}
             </Typography>
             <Typography variant="subtitle1" paragraph>
-              {post.description}
+              {post.description.length > 65 ? `${post.description.substring(0, 65)}...` : post.description}
             </Typography>
             <Typography variant="subtitle1" color="primary">
               Continue reading...
@@ -87,7 +87,7 @@ function FeaturedPost(post, setCurrentId) {
             sx={{ width: 400, display: { xs: 'none', sm: 'block' }, transition: 'transform .2s', '&:hover': {
               transform: 'scale(1.1)', 
             }, }}
-            image={post.image}
+            image={post.image || "https://www.backpackerbanter.com/blog/wp-content/uploads/2018/11/best-places-to-visit-in-sri-lanka-backpacker-travel-sigiriya-kandy-dambulla-elephants-1920x1014.jpg"}
             alt={post.imageLabel}
           />
         </Card>
